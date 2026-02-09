@@ -2,11 +2,10 @@ import { MenuOption } from '@/types';
 import { ListChecks } from 'lucide-react';
 import styles from './MenuOptions.module.css';
 
-interface MenuOptionsProps {
-    options: MenuOption[];
-}
 
-export default function MenuOptions({ options }: MenuOptionsProps) {
+
+export default function MenuOptions() {
+    let options: MenuOption[] = [];
     if (!options || options.length === 0) {
         return (
             <section className={styles.card}>

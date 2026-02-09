@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +38,7 @@ public class NewMenuImageRepository implements MenuImageRepository {
                             .id(rs.getLong("id"))
                             .menuId(rs.getLong("menu_id"))
                             .srcUrl(rs.getString("src_url"))
-                            .createdAt(rs.getTimestamp("created_at").toLocalDateTime())
+                            .createdAt(getLocalDateTime(rs, "created_at"))
                             .sortOrder(rs.getInt("sort_order"))
                             .build());
                 }
@@ -46,5 +48,10 @@ public class NewMenuImageRepository implements MenuImageRepository {
         }
 
         return list;
+    }
+
+    private LocalDateTime getLocalDateTime(ResultSet rs, String columnLabel) throws SQLException {
+        Timestamp timestamp = rs.getTimestamp(columnLabel);
+        return (timestamp != null) ? timestamp.toLocalDateTime() : null;
     }
 }

@@ -1,19 +1,61 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { MenuImage } from '@/types';
 import { ImageIcon } from 'lucide-react';
 import styles from './MenuImages.module.css';
 
 interface MenuImagesProps {
-    images: MenuImage[];
-    altText: string;
+    menuId: number | string;
 }
 
-export default function MenuImages({ images, altText }: MenuImagesProps) {
-    const primaryImage = images.find(img => img.isPrimary) || images[0];
-    const [selectedImage, setSelectedImage] = useState<MenuImage | undefined>(primaryImage);
+export default function MenuImages({ menuId }: MenuImagesProps) {
+    const [images, setImages] = useState<MenuImage[]>([]);
+    const [selectedImage, setSelectedImage] = useState<MenuImage | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        if (!menuId) return;
+
+        const fetchImages = async () => {
+            try {
+                const response = await fetch(`http://localhost:8080/admin/menus/${menuId}/menu-images`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch menu images');
+                }
+                const data = await response.json();
+                setImages(data.images);
+                if (data.images && data.images.length > 0) {
+                    // sortOrder: 1 혹은 가장 첫 번째 이미지를 기본 선택
+                    const primary = data.images.find((img: MenuImage) => img.isPrimary) || data.images[0];
+                    setSelectedImage(primary);
+                }
+            } catch (error) {
+                console.error("Error loading menu images:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchImages();
+    }, [menuId]);
+
+    const getImageUrl = (url: string) => {
+        if (!url) return '';
+        if (url.startsWith('http') || url.startsWith('/')) return url;
+        return `http://localhost:8080/${url}`;
+    };
+
+    if (isLoading) {
+        return (
+            <section className={styles.card}>
+                <div className={styles.emptyState}>
+                    <span>이미지를 불러오는 중...</span>
+                </div>
+            </section>
+        );
+    }
 
     if (!images || images.length === 0) {
         return (
@@ -40,8 +82,8 @@ export default function MenuImages({ images, altText }: MenuImagesProps) {
             <div className={styles.primaryImageWrapper}>
                 {selectedImage && (
                     <Image
-                        src={selectedImage.url}
-                        alt={`${altText} 상세 이미지`}
+                        src={getImageUrl(selectedImage.url)}
+                        alt={selectedImage.altText || "메뉴 상세 이미지"}
                         fill
                         className={styles.primaryImage}
                         priority
@@ -60,12 +102,12 @@ export default function MenuImages({ images, altText }: MenuImagesProps) {
                         className={styles.thumbnailWrapper}
                         onClick={() => setSelectedImage(image)}
                         style={{
-                            borderColor: selectedImage?.id === image.id ? 'var(--color-primary-500)' : undefined
+                            borderColor: selectedImage?.id === image.id ? 'var(--color-primary-500)' : 'transparent'
                         }}
                     >
                         <Image
-                            src={image.url}
-                            alt="썸네일"
+                            src={getImageUrl(image.url)}
+                            alt={image.altText || "썸네일"}
                             fill
                             className={styles.thumbnailImage}
                             sizes="100px"

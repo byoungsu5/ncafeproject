@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,8 +56,8 @@ public class NewMenuRepository implements MenuRepository {
                         rs.getInt("price"),
                         rs.getLong("category_id"),
                         rs.getBoolean("is_available"),
-                        rs.getTimestamp("created_at").toLocalDateTime(),
-                        rs.getTimestamp("updated_at").toLocalDateTime(),
+                        getLocalDateTime(rs, "created_at"),
+                        getLocalDateTime(rs, "updated_at"),
                         null));
             }
 
@@ -71,30 +73,24 @@ public class NewMenuRepository implements MenuRepository {
         List<Menu> list = new ArrayList<>();
         String sql = "SELECT * FROM menus WHERE kor_name LIKE '%" + name + "%'";
 
-        try {
-            Class.forName("org.postgresql.Driver");
-            try (Connection conn = DriverManager.getConnection(
-                    "jdbc:postgresql://aws-1-ap-south-1.pooler.supabase.com:5432/postgres",
-                    "postgres.qcqecucgtjpbolmzfgdk",
-                    "skdi_newlec");
-                    Statement stmt = conn.createStatement();
-                    ResultSet rs = stmt.executeQuery(sql)) {
+        try (Connection conn = dataSource.getConnection();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
 
-                while (rs.next()) {
-                    list.add(new Menu(
-                            rs.getLong("id"),
-                            rs.getString("kor_name"),
-                            rs.getString("eng_name"),
-                            rs.getString("description"),
-                            rs.getInt("price"),
-                            rs.getLong("category_id"),
-                            rs.getBoolean("is_available"),
-                            rs.getTimestamp("created_at").toLocalDateTime(),
-                            rs.getTimestamp("updated_at").toLocalDateTime(),
-                            null));
-                }
+            while (rs.next()) {
+                list.add(new Menu(
+                        rs.getLong("id"),
+                        rs.getString("kor_name"),
+                        rs.getString("eng_name"),
+                        rs.getString("description"),
+                        rs.getInt("price"),
+                        rs.getLong("category_id"),
+                        rs.getBoolean("is_available"),
+                        getLocalDateTime(rs, "created_at"),
+                        getLocalDateTime(rs, "updated_at"),
+                        null));
             }
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -126,8 +122,8 @@ public class NewMenuRepository implements MenuRepository {
                             rs.getInt("price"),
                             rs.getLong("category_id"),
                             rs.getBoolean("is_available"),
-                            rs.getTimestamp("created_at").toLocalDateTime(),
-                            rs.getTimestamp("updated_at").toLocalDateTime(),
+                            getLocalDateTime(rs, "created_at"),
+                            getLocalDateTime(rs, "updated_at"),
                             null));
                 }
             }
@@ -138,4 +134,38 @@ public class NewMenuRepository implements MenuRepository {
         return list;
     }
 
+    @Override
+    public Menu findById(Long id) {
+        String sql = "SELECT * FROM menus WHERE id=" + id;
+
+        try (Connection conn = dataSource.getConnection();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
+
+            if (rs.next()) {
+                return new Menu(
+                        rs.getLong("id"),
+                        rs.getString("kor_name"),
+                        rs.getString("eng_name"),
+                        rs.getString("description"),
+                        rs.getInt("price"),
+                        rs.getLong("category_id"),
+                        rs.getBoolean("is_available"),
+                        getLocalDateTime(rs, "created_at"),
+                        getLocalDateTime(rs, "updated_at"),
+                        null);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+    private LocalDateTime getLocalDateTime(ResultSet rs, String columnLabel) throws SQLException {
+        Timestamp timestamp = rs.getTimestamp(columnLabel);
+        return (timestamp != null) ? timestamp.toLocalDateTime() : null;
+    }
 }

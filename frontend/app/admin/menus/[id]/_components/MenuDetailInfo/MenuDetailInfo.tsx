@@ -2,12 +2,12 @@ import { Menu } from '@/types';
 import { Info } from 'lucide-react';
 import styles from './MenuDetailInfo.module.css';
 import { format } from 'date-fns';
+import { useMenuDetail } from './useMenuDetail';
 
-interface MenuDetailInfoProps {
-    menu: Menu;
-}
+export default function MenuDetailInfo({ id }: { id: number }) {
 
-export default function MenuDetailInfo({ menu }: MenuDetailInfoProps) {
+    const { menu } = useMenuDetail(id);
+
     return (
         <section className={styles.card}>
             <h2 className={styles.sectionTitle}>
@@ -16,37 +16,42 @@ export default function MenuDetailInfo({ menu }: MenuDetailInfoProps) {
             </h2>
 
             <div className={styles.row}>
+                <span className={styles.label}>한글명</span>
+                <span className={styles.value}>{menu?.korName}</span>
+            </div>
+
+            <div className={styles.row}>
                 <span className={styles.label}>영문명</span>
-                <span className={styles.value}>{menu.engName}</span>
+                <span className={styles.value}>{menu?.engName}</span>
             </div>
 
             <div className={styles.row}>
                 <span className={styles.label}>카테고리</span>
                 <span className={styles.value}>
-                    {menu.category.icon} {menu.category.korName}
+                    {menu?.categoryName}
                 </span>
             </div>
 
             <div className={styles.row}>
                 <span className={styles.label}>가격</span>
-                <span className={styles.value}>{menu.price.toLocaleString()}원</span>
+                <span className={styles.value}>{menu?.price?.toLocaleString()}원</span>
             </div>
 
             <div className={styles.row}>
                 <span className={styles.label}>판매 상태</span>
-                <span className={`${styles.badge} ${menu.isSoldOut ? styles.badgeSoldOut : styles.badgeAvailable}`}>
-                    {menu.isSoldOut ? '품절' : '판매중'}
+                <span className={`${styles.badge} ${menu?.isAvailable ? styles.badgeAvailable : styles.badgeSoldOut}`}>
+                    {menu?.isAvailable ? '판매중' : '품절'}
                 </span>
             </div>
 
             <div className={styles.row}>
                 <span className={styles.label}>등록일</span>
-                <span className={styles.value}>{format(menu.createdAt, 'yyyy.MM.dd')}</span>
+                <span className={styles.value}>{menu?.createdAt ? format(new Date(menu.createdAt), 'yyyy-MM-dd') : ''}</span>
             </div>
 
             <div className={styles.descriptionWrapper}>
                 <span className={styles.descriptionLabel}>설명</span>
-                <p className={styles.description}>{menu.description}</p>
+                <p className={styles.description}>{menu?.description}</p>
             </div>
         </section>
     );

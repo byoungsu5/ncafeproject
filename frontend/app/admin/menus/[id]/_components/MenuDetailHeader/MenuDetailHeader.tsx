@@ -6,11 +6,9 @@ import styles from './MenuDetailHeader.module.css';
 
 interface MenuDetailHeaderProps {
     title: string;
-    menuId: string;
-    onDelete: () => void;
 }
 
-export default function MenuDetailHeader({ title, menuId, onDelete }: MenuDetailHeaderProps) {
+export default function MenuDetailHeader({ title }: MenuDetailHeaderProps) {
     return (
         <header className={styles.header}>
             <div className={styles.left}>
@@ -22,14 +20,14 @@ export default function MenuDetailHeader({ title, menuId, onDelete }: MenuDetail
 
             <div className={styles.actions}>
                 <Link
-                    href={`/admin/menus/${menuId}/edit`}
+                    href={`/admin/menus/${1}/edit`}
                     className={`${styles.actionButton} ${styles.editButton}`}
                 >
                     <Edit2 size={16} />
                     수정
                 </Link>
                 <button
-                    onClick={onDelete}
+                    onClick={() => { }}
                     className={`${styles.actionButton} ${styles.deleteButton}`}
                 >
                     <Trash2 size={16} />

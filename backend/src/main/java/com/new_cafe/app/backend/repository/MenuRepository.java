@@ -12,4 +12,6 @@ public interface MenuRepository {
     List<Menu> findAllByCategoryId(Integer categoryId);
 
     List<Menu> findAllByCategoryAndSearchQuery(Integer categoryId, String searchQuery);
+
+    Menu findById(Long id);
 }

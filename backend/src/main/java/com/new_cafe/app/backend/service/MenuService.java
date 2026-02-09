@@ -6,6 +6,7 @@ import com.new_cafe.app.backend.dto.MenuDetailResponse;
 import com.new_cafe.app.backend.dto.MenuListRequest;
 import com.new_cafe.app.backend.dto.MenuListResponse;
 import com.new_cafe.app.backend.dto.MenuUpdateRequest;
+import com.new_cafe.app.backend.dto.MenuImageListResponse;
 import com.new_cafe.app.backend.dto.MenuUpdateResponse;
 
 public interface MenuService {
@@ -18,4 +19,6 @@ public interface MenuService {
     void deleteMenu(Long id);
 
     MenuUpdateResponse updateMenu(MenuUpdateRequest request);
+
+    MenuImageListResponse getMenuImages(Long id);
 }

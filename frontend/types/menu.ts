@@ -4,6 +4,7 @@ export interface MenuImage {
   url: string;
   isPrimary: boolean;
   sortOrder: number;
+  altText?: string;
   file?: File; // 프론트엔드 업로드용
 }
 
