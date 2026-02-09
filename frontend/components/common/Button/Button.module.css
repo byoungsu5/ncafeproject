@@ -10,6 +10,11 @@
     cursor: pointer;
 }
 
+.icon {
+    display: flex;
+    align-items: center;
+}
+
 .button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
