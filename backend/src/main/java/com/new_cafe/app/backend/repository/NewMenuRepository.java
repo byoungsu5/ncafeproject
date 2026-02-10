@@ -2,6 +2,7 @@ package com.new_cafe.app.backend.repository;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -136,26 +137,28 @@ public class NewMenuRepository implements MenuRepository {
 
     @Override
     public Menu findById(Long id) {
-        String sql = "SELECT * FROM menus WHERE id=" + id;
+        String sql = "SELECT * FROM menus WHERE id = ?";
 
         try (Connection conn = dataSource.getConnection();
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            if (rs.next()) {
-                return new Menu(
-                        rs.getLong("id"),
-                        rs.getString("kor_name"),
-                        rs.getString("eng_name"),
-                        rs.getString("description"),
-                        rs.getInt("price"),
-                        rs.getLong("category_id"),
-                        rs.getBoolean("is_available"),
-                        getLocalDateTime(rs, "created_at"),
-                        getLocalDateTime(rs, "updated_at"),
-                        null);
+            pstmt.setLong(1, id);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Menu(
+                            rs.getLong("id"),
+                            rs.getString("kor_name"),
+                            rs.getString("eng_name"),
+                            rs.getString("description"),
+                            rs.getInt("price"),
+                            rs.getLong("category_id"),
+                            rs.getBoolean("is_available"),
+                            getLocalDateTime(rs, "created_at"),
+                            getLocalDateTime(rs, "updated_at"),
+                            null);
+                }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }

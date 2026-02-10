@@ -20,7 +20,7 @@ export default function MenuImages({ menuId }: MenuImagesProps) {
 
         const fetchImages = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/admin/menus/${menuId}/menu-images`);
+                const response = await fetch(`/api/v1/admin/menus/${menuId}/menu-images`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch menu images');
                 }
@@ -44,7 +44,7 @@ export default function MenuImages({ menuId }: MenuImagesProps) {
     const getImageUrl = (url: string) => {
         if (!url) return '';
         if (url.startsWith('http') || url.startsWith('/')) return url;
-        return `http://localhost:8080/${url}`;
+        return `/api/v1/${url}`;
     };
 
     if (isLoading) {

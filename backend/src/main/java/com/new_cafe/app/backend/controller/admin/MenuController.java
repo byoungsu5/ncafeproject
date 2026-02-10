@@ -36,7 +36,7 @@ public class MenuController {
 
     // 상세 조회 데이터 반환
     @GetMapping("/admin/menus/{id}")
-    public MenuDetailResponse editMenu(@PathVariable("id") Long id) {
+    public MenuDetailResponse getMenu(@PathVariable("id") Long id) {
         return menuService.getMenu(id);
     }
 
@@ -48,7 +48,7 @@ public class MenuController {
     }
 
     @PutMapping("/admin/menus/{id}")
-    public MenuUpdateResponse editMenu(@PathVariable("id") Long id, Menu menu) {
+    public MenuUpdateResponse updateMenu(@PathVariable("id") Long id, Menu menu) {
         // TODO: implement properly
         return MenuUpdateResponse.builder().id(id).build();
     }

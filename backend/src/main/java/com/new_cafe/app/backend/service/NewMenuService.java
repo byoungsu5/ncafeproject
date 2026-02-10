@@ -118,7 +118,7 @@ public class NewMenuService implements MenuService {
     public MenuDetailResponse getMenu(Long id) {
         Menu menu = menuRepository.findById(id);
         if (menu == null) {
-            throw new RuntimeException("Menu not found");
+            throw new RuntimeException("Menu not found with id: " + id);
         }
 
         String categoryName = "Unknown";
@@ -129,17 +129,6 @@ public class NewMenuService implements MenuService {
             }
         }
 
-        List<MenuImage> images = menuImageRepository.findAllByMenuId(id);
-        List<MenuImageResponse> imageResponses = images.stream()
-                .map(img -> MenuImageResponse.builder()
-                        .id(img.getId())
-                        .url(img.getSrcUrl())
-                        .sortOrder(img.getSortOrder())
-                        .isPrimary(img.getSortOrder() != null && img.getSortOrder() == 1)
-                        .altText(menu.getKorName())
-                        .build())
-                .toList();
-
         return MenuDetailResponse.builder()
                 .id(menu.getId())
                 .korName(menu.getKorName())
@@ -149,7 +138,6 @@ public class NewMenuService implements MenuService {
                 .isAvailable(menu.getIsAvailable())
                 .createdAt(menu.getCreatedAt())
                 .description(menu.getDescription())
-                .images(imageResponses)
                 .build();
     }
 

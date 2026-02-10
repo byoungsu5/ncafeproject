@@ -1,4 +1,3 @@
-import { Menu } from '@/types';
 import styles from './MenuCard.module.css';
 import Image from 'next/image';
 import Button from '@/components/common/Button';
@@ -17,7 +16,7 @@ export default function MenuCard({ menu }: MenuCardProps) {
                 <Link href={`/admin/menus/${menu.id}`}>
                     {menu.imageSrc ? (
                         <Image
-                            src={`http://localhost:8080/${menu.imageSrc}`}
+                            src={`/api/v1/${menu.imageSrc}`}
                             alt={menu.korName}
                             fill
                             className={styles.image}

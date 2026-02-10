@@ -10,7 +10,6 @@ export interface MenuDetail {
     isAvailable: boolean;
     createdAt: string;
     description: string;
-    images: MenuImage[];
 }
 
 export function useMenuDetail(id: number | string) {
@@ -21,7 +20,7 @@ export function useMenuDetail(id: number | string) {
 
         const fetchMenu = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/admin/menus/${id}`);
+                const response = await fetch(`/api/v1/admin/menus/${id}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch menu detail');
                 }

@@ -21,5 +21,4 @@ public class MenuDetailResponse {
     private Boolean isAvailable;
     private LocalDateTime createdAt;
     private String description;
-    private List<MenuImageResponse> images;
 }
