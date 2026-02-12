@@ -5,9 +5,15 @@ const nextConfig: NextConfig = {
     return [
       {
         // 1. 브라우저가 호출하는 주소
-        source: '/api/v1/:path*',
+        source: '/api/:path*',
         // 2. 실제로 데이터를 가져올 주소 (로컬 스프링 부트)
-        destination: 'http://localhost:8080/:path*',
+        destination: 'http://localhost:8036/:path*',
+      },
+      {
+        // 1. 브라우저가 호출하는 주소
+        source: '/images/:path*',
+        // 2. 실제로 데이터를 가져올 주소 (로컬 스프링 부트)
+        destination: 'http://localhost:8036/:path*',
       },
     ];
   },

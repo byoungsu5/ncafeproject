@@ -16,7 +16,7 @@ export default function MenuCard({ menu }: MenuCardProps) {
                 <Link href={`/admin/menus/${menu.id}`}>
                     {menu.imageSrc ? (
                         <Image
-                            src={`/api/v1/${menu.imageSrc}`}
+                            src={`/images/${menu.imageSrc}`}
                             alt={menu.korName}
                             fill
                             className={styles.image}
