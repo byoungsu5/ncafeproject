@@ -20,9 +20,6 @@ export default function MenusPageHeader({ searchQuery, setSearchQuery }: { searc
                     <p className={styles.subtitle}>카페의 모든 메뉴를 등록하고 관리합니다.</p>
                 </div>
                 <div className={styles.actions}>
-                    <Button variant="outline" size="sm">
-                        엑셀 다운로드
-                    </Button>
                     <Link href="/admin/menus/new">
                         <Button icon={<Plus size={16} />}>
                             메뉴 등록
