@@ -3,7 +3,7 @@
 services:
   db:
     image: postgres:15-alpine
-    container_name: ncafe-db
+    container_name: kang-ncafe-db
     environment:
       - POSTGRES_DB=ncafedb
       - POSTGRES_USER=ncafe
@@ -17,7 +17,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: ncafe-backend
+    container_name: kang-ncafe-backend
     ports:
       - "8036:8036"
     environment:
@@ -33,7 +33,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: ncafe-frontend
+    container_name: kang-ncafe-frontend
     ports:
       - "3036:3000"
     environment:
