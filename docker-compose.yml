@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: ncafe-db
+    environment:
+      - POSTGRES_DB=ncafedb
+      - POSTGRES_USER=ncafe
+      - POSTGRES_PASSWORD=new_ibm2
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ncafe-backend
+    ports:
+      - "8036:8036"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/ncafedb?useSSL=false
+      - SPRING_DATASOURCE_USERNAME=ncafe
+      - SPRING_DATASOURCE_PASSWORD=new_ibm2
+    depends_on:
+      - db
+    volumes:
+      - /home/kang/dist/ncafeproject/upload:/app/upload
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ncafe-frontend
+    ports:
+      - "3036:3000"
+    environment:
+      - BACKEND_URL=http://backend:8036
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
