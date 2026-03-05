@@ -1,0 +1,22 @@
+﻿{
+    "id": 1,
+    "korName": "아메리카노",
+    "engName": "americano",
+    "categoryName": "커피",
+    "price": "3500",
+    "createdAt": "2026-01-26T20:49:57.307704",
+    "description": "진한 에스프레소의 맛",
+    "images": [
+        {
+            "id": 101,
+            "url": "americano.png",
+            "sortOrder": 1
+        },
+        {
+            "id": 121,
+            "url": "espresso.png",
+            "sortOrder": 2
+        }
+    ],
+    "available": true
+}
