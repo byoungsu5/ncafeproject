@@ -1,45 +1,50 @@
-
-
 services:
-  db:
-    image: postgres:15-alpine
-    container_name: kang-ncafe-db
-    environment:
-      - POSTGRES_DB=ncafedb
-      - POSTGRES_USER=ncafe
-      - POSTGRES_PASSWORD=new_ibm2
-    ports:
-      - "5438:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
   backend:
+    image: ${BACKEND_IMAGE:-ncafe-backend:latest}
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: kang-ncafe-backend
+    container_name: ${USER_ID:-kang}-backend
     ports:
-      - "8036:8036"
+      # - "${BACKEND_PORT:-8036}:8080"
+    volumes:
+      - ./backend-upload:/app/upload
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/ncafedb?useSSL=false
-      - SPRING_DATASOURCE_USERNAME=ncafe
-      - SPRING_DATASOURCE_PASSWORD=new_ibm2
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRATION=${JWT_EXPIRATION}
+    restart: unless-stopped
     depends_on:
       - db
-    volumes:
-      - /home/kang/dist/ncafeproject/upload:/app/upload
 
   frontend:
+    image: ${FRONTEND_IMAGE:-ncafe-frontend:latest}
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: kang-ncafe-frontend
+    container_name: ${USER_ID:-kang}-frontend
     ports:
-      - "3036:3000"
+      - "${FRONTEND_PORT:-3036}:3036"
     environment:
-      - BACKEND_URL=http://backend:8036
+      - API_BASE_URL=http://backend:8080
+      - SESSION_SECRET=${SESSION_SECRET:-JQvH/BoClMe32u3gbIXxmf+VBxRisvakVC/HbrihT+s=}
     depends_on:
       - backend
+    restart: unless-stopped
 
-volumes:
-  postgres_data:
+  db:
+    image: postgres:17
+    profiles: [ "with-db" ]
+    container_name: ${USER_ID:-kang}-db
+    environment:
+      POSTGRES_DB: ${SPRING_DATASOURCE_DB:-mydb}
+      POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME}
+      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    ports:
+      # - "${DB_PORT:-5436}:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    restart: unless-stopped

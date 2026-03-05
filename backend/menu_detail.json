@@ -1,0 +1,17 @@
+﻿{
+    "id": 16,
+    "korName": "초코칩쿠키",
+    "engName": "Choco Chip Cookie",
+    "categoryName": "쿠키",
+    "price": "3500",
+    "createdAt": "2026-01-26T20:49:57.322995",
+    "description": "고소한 초코칩 쿠키",
+    "images": [
+        {
+            "id": 116,
+            "url": "chocoChipCookie.png",
+            "sortOrder": 1
+        }
+    ],
+    "available": true
+}

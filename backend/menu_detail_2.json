@@ -1,0 +1,17 @@
+﻿{
+    "id": 2,
+    "korName": "카페 라떼",
+    "engName": "caffe latte",
+    "categoryName": "커피",
+    "price": "4000",
+    "createdAt": "2026-01-26T20:49:57.307704",
+    "description": "부드러운 우유의 맛",
+    "images": [
+        {
+            "id": 102,
+            "url": "cafelatte.png",
+            "sortOrder": 1
+        }
+    ],
+    "available": true
+}

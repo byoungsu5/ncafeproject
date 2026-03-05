@@ -1,11 +1,40 @@
-import { MenuOption } from '@/types';
 import { ListChecks } from 'lucide-react';
 import styles from './MenuOptions.module.css';
-
-
+import { MenuOption } from '@/types';
 
 export default function MenuOptions() {
-    let options: MenuOption[] = [];
+    // 부모로부터 받던 props를 끊고 컴포넌트 내부에서 자체적으로 데이터를 관리하거나 
+    // 정적인 스타일 구조를 유지합니다.
+    const options: MenuOption[] = [{
+        id: 1,
+        name: '크기',
+        type: 'single',
+        required: true,
+        items: [
+            { id: 1, name: 'small', priceDelta: 0 },
+            { id: 2, name: 'large', priceDelta: 0 },
+        ]
+    }, {
+        id: 2,
+        name: '샷 추가',
+        type: 'multiple',
+        required: false,
+        items: [
+            { id: 1, name: '샷 추가', priceDelta: 0 },
+            { id: 2, name: '휘핑 추가', priceDelta: 0 },
+        ]
+    },
+    {
+        id: 3,
+        name: '온도',
+        type: 'single',
+        required: false,
+        items: [
+            { id: 1, name: 'hot', priceDelta: 0 },
+            { id: 2, name: 'ice', priceDelta: 0 },
+        ]
+    }];
+
     if (!options || options.length === 0) {
         return (
             <section className={styles.card}>
@@ -33,7 +62,7 @@ export default function MenuOptions() {
                         <span>{option.name}</span>
                         <div className={styles.badges}>
                             <span className={styles.optionType}>
-                                {option.type === 'radio' ? '단일 선택' : '다중 선택'}
+                                {option.type === 'single' ? '단일 선택' : '다중 선택'}
                             </span>
                             {option.required && (
                                 <span className={`${styles.optionBadge} ${styles.requiredBadge}`}>필수</span>

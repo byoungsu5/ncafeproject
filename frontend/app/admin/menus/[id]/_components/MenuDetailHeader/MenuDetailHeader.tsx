@@ -5,22 +5,23 @@ import { ArrowLeft, Edit2, Trash2 } from 'lucide-react';
 import styles from './MenuDetailHeader.module.css';
 
 interface MenuDetailHeaderProps {
-    title: string;
+    id: string;
+    title?: string;
 }
 
-export default function MenuDetailHeader({ title }: MenuDetailHeaderProps) {
+export default function MenuDetailHeader({ id, title }: MenuDetailHeaderProps) {
     return (
         <header className={styles.header}>
             <div className={styles.left}>
                 <Link href="/admin/menus" className={styles.backButton} aria-label="목록으로 돌아가기">
                     <ArrowLeft size={24} />
                 </Link>
-                <h1 className={styles.title}>{title}</h1>
+                <h1 className={styles.title}>{title || '메뉴 상세'}</h1>
             </div>
 
             <div className={styles.actions}>
                 <Link
-                    href={`/admin/menus/${1}/edit`}
+                    href={`/admin/menus/${id}/edit`}
                     className={`${styles.actionButton} ${styles.editButton}`}
                 >
                     <Edit2 size={16} />

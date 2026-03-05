@@ -44,8 +44,8 @@ export default function OptionGroupItem({ index, onRemove }: OptionGroupItemProp
                                 {...register(`options.${index}.type` as const)}
                                 className={styles.typeSelect}
                             >
-                                <option value="radio">단일 선택 (Radio)</option>
-                                <option value="checkbox">다중 선택 (Checkbox)</option>
+                                <option value="single">단일 선택 (Radio)</option>
+                                <option value="multiple">다중 선택 (Checkbox)</option>
                             </select>
                         </div>
                     </div>
@@ -98,7 +98,7 @@ export default function OptionGroupItem({ index, onRemove }: OptionGroupItemProp
 
                 <button
                     type="button"
-                    onClick={() => append({ id: crypto.randomUUID(), name: '', priceDelta: 0 })}
+                    onClick={() => append({ id: Date.now(), name: '', priceDelta: 0 })}
                     className={styles.addItemButton}
                 >
                     <Plus size={14} />

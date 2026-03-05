@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class MenuImage {
     private Long id;
     private Long menuId;
-    private String srcUrl;
-    private LocalDateTime createdAt;
+    private String url;
     private Integer sortOrder;
+    private LocalDateTime createdAt;
 }

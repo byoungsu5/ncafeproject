@@ -1,0 +1,109 @@
+.card {
+    display: block;
+    background: white;
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.12), 0 8px 16px rgba(139, 92, 246, 0.08);
+}
+
+.card:hover .image {
+    transform: scale(1.05);
+}
+
+.card:hover .overlay {
+    opacity: 1;
+}
+
+.imageWrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: var(--color-gray-100);
+    overflow: hidden;
+}
+
+.image {
+    object-fit: cover;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(109, 40, 217, 0.4) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+}
+
+.noImage {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-gray-400);
+    font-size: 0.875rem;
+    background: linear-gradient(135deg, var(--color-gray-100) 0%, var(--color-gray-50) 100%);
+}
+
+.badgeSoldOut {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    padding: 0.3rem 0.75rem;
+    background: rgba(0, 0, 0, 0.65);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 50px;
+    backdrop-filter: blur(8px);
+    z-index: 2;
+}
+
+.content {
+    padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.category {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #7c3aed;
+    background: #f5f3ff;
+    padding: 0.3rem 0.8rem;
+    border-radius: 50px;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.02em;
+    border: 1px solid #ddd6fe;
+}
+
+.name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-gray-900);
+    margin-bottom: 0.15rem;
+    letter-spacing: -0.01em;
+}
+
+.engName {
+    font-size: 0.8rem;
+    color: var(--color-gray-400);
+    margin-bottom: 0.75rem;
+    font-weight: 400;
+}
+
+.price {
+    font-size: 1.2rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #8b5cf6 0%, #d1a7e9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}

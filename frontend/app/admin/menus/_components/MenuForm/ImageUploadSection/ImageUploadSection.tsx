@@ -30,18 +30,21 @@ export default function ImageUploadSection() {
 
         if (imageFiles.length === 0) return;
 
-        imageFiles.forEach((file) => {
+        const newImages = imageFiles.map((file, index) => {
             const previewUrl = URL.createObjectURL(file);
-            const isFirstImage = fields.length === 0; // 첫 번째 이미지는 자동으로 대표로 설정
+            // 기존 이미지가 없고, 현재 배치의 첫 번째 이미지인 경우 대표 이미지로 설정
+            const isFirstImage = fields.length === 0 && index === 0;
 
-            append({
-                id: crypto.randomUUID(),
+            return {
+                id: Date.now() + index,
                 url: previewUrl,
                 isPrimary: isFirstImage,
-                sortOrder: fields.length,
+                sortOrder: fields.length + index,
                 file: file
-            });
+            };
         });
+
+        append(newImages);
     };
 
     const handleDragOver = (e: React.DragEvent) => {

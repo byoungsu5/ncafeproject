@@ -32,7 +32,7 @@ public class NewCategoryRepository implements CategoryRepository {
 
             while (rs.next()) {
                 Category category = new Category(
-                        rs.getInt("id"),
+                        rs.getLong("id"),
                         rs.getString("name"));
 
                 // Category category = Category.builder()
@@ -61,7 +61,7 @@ public class NewCategoryRepository implements CategoryRepository {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     category = new Category(
-                            rs.getInt("id"),
+                            rs.getLong("id"),
                             rs.getString("name"));
                 }
             }
@@ -94,7 +94,7 @@ public class NewCategoryRepository implements CategoryRepository {
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, category.getName());
-            pstmt.setInt(2, category.getId());
+            pstmt.setLong(2, category.getId());
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -103,6 +103,17 @@ public class NewCategoryRepository implements CategoryRepository {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
+        String sql = "DELETE FROM categories WHERE id = ?";
+
+        try (Connection conn = dataSource.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setLong(1, id);
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

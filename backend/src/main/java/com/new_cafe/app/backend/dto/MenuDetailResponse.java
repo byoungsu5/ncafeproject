@@ -17,8 +17,9 @@ public class MenuDetailResponse {
     private String korName;
     private String engName;
     private String categoryName;
-    private Integer price;
+    private String price;
     private Boolean isAvailable;
     private LocalDateTime createdAt;
     private String description;
+    private List<MenuImageResponse> images;
 }

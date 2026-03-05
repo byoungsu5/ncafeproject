@@ -15,7 +15,7 @@ export interface MenuResponse {
     isSoldOut: boolean,
     sortOrder: number,
     createdAt: string,
-    updatedAt: string
+    updatedAt: string,
 }
 
 export interface MenuListResponse {
@@ -30,7 +30,7 @@ export function useMenus(selectedCategory: number | undefined, searchQuery: stri
     useEffect(() => {
         const fetchMenus = async () => {
 
-            const url = new URL('/api/admin/menus', window.location.origin);
+            const url = new URL(`/api/admin/menus`, window.location.origin);
 
             const params = url.searchParams;
             if (selectedCategory) {

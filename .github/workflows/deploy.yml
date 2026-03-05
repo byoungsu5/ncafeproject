@@ -1,0 +1,50 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create .env file
+        run: |
+          echo "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME}" > .env
+          echo "USER_ID=${USER_ID}" >> .env
+          echo "FRONTEND_PORT=${FRONTEND_PORT}" >> .env
+          echo "SESSION_SECRET=${SESSION_SECRET}" >> .env
+          echo "SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}" >> .env
+          echo "SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}" >> .env
+          echo "SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}" >> .env
+          echo "JWT_SECRET=${JWT_SECRET}" >> .env
+        env:
+          COMPOSE_PROJECT_NAME: ${{ secrets.COMPOSE_PROJECT_NAME }}
+          USER_ID: ${{ secrets.USER_ID }}
+          FRONTEND_PORT: ${{ secrets.FRONTEND_PORT }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+      - name: Build and Deploy
+        run: docker compose --profile with-db up --build -d
+
+      - name: Verify deployment
+        run: |
+          echo "=== Container Status ==="
+          docker compose ps
+          sleep 15
+          echo ""
+          echo "=== Health Check ==="
+          curl -sf --max-time 10 -o /dev/null -w "Frontend : HTTP %{http_code}\n" http://localhost:${FRONTEND_PORT:-3036} || echo "Frontend : not responding"
+        env:
+          FRONTEND_PORT: ${{ secrets.FRONTEND_PORT }}
+
+      - name: Clean up old images
+        run: docker image prune -f

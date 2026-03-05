@@ -1,0 +1,17 @@
+﻿{
+    "id": 68,
+    "korName": "두바이 쫀득 쿠키",
+    "engName": "Dubai Zzondeuk Cookie",
+    "categoryName": "디저트",
+    "price": "6500",
+    "createdAt": "2026-02-02T17:45:41.892388",
+    "description": "나만의 나 태그 태그 매니아 두바이 쫀득 쿠키입니다.",
+    "images": [
+        {
+            "id": 120,
+            "url": "DubaiZzondeukCookie.png",
+            "sortOrder": 1
+        }
+    ],
+    "available": true
+}

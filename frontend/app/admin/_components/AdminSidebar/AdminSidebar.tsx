@@ -9,8 +9,10 @@ import {
     Settings,
     Users,
     BarChart3,
-    Package
+    Package,
+    LogOut
 } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 import styles from './AdminSidebar.module.css';
 
 const navItems = [
@@ -43,6 +45,8 @@ const navItems = [
 export default function AdminSidebar() {
     const pathname = usePathname();
 
+    const { user, logout } = useAuth();
+
     const isActive = (href: string) => {
         if (href === '/admin') {
             return pathname === '/admin';
@@ -55,7 +59,7 @@ export default function AdminSidebar() {
             {/* Logo */}
             <div className={styles.logo}>
                 <div className={styles.logoText}>
-                    <span className={styles.logoIcon}>☕</span>
+                    <span className={styles.logoIcon}>🟣</span>
                     NCafe Admin
                 </div>
             </div>
@@ -64,7 +68,7 @@ export default function AdminSidebar() {
             <nav className={styles.nav}>
                 {navItems.map((section) => (
                     <div key={section.section} className={styles.navSection}>
-                        <div className={styles.navSectionTitle}>{section.section}</div>
+                        <div className={section.section !== '메인' ? styles.navSectionTitle : styles.hiddenTitle}>{section.section}</div>
                         <ul className={styles.navList}>
                             {section.items.map((item) => {
                                 const Icon = item.icon;
@@ -86,15 +90,19 @@ export default function AdminSidebar() {
                 ))}
             </nav>
 
-            {/* Footer - Cafe Info */}
+            {/* Footer - Cafe Info & Logout */}
             <div className={styles.footer}>
                 <div className={styles.cafeInfo}>
-                    <div className={styles.cafeAvatar}>🏪</div>
+                    <div className={styles.cafeAvatar}>💜</div>
                     <div>
-                        <div className={styles.cafeName}>행복한 커피</div>
-                        <div className={styles.cafeRole}>사장님</div>
+                        <div className={styles.cafeName}>{user?.username || '관리자'}</div>
+                        <div className={styles.cafeRole}>{user?.roles.some(r => r.authority === 'ROLE_ADMIN') ? '수퍼바이저' : '스태프'}</div>
                     </div>
                 </div>
+                <button onClick={logout} className={styles.logoutButton}>
+                    <LogOut size={16} />
+                    <span>로그아웃</span>
+                </button>
             </div>
         </aside>
     );

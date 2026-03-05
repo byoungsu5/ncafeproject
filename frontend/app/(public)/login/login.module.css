@@ -1,0 +1,128 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - var(--header-height) - 100px);
+    padding: 2rem 1rem;
+    background-color: #faf5ff;
+    /* 메타몽 배경색 */
+}
+
+.loginCard {
+    background-color: white;
+    padding: 3rem;
+    border-radius: 2.5rem;
+    box-shadow: 0 15px 35px rgba(139, 92, 246, 0.1);
+    width: 100%;
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    border: 2px solid #f3e8ff;
+    animation: dittoPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes dittoPop {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.title {
+    color: #5b21b6;
+    font-size: 2.25rem;
+    font-weight: 900;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.05em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #7c3aed;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.label {
+    font-size: 0.95rem;
+    color: #6d28d9;
+    font-weight: 700;
+    margin-left: 0.5rem;
+}
+
+.input {
+    padding: 1rem 1.25rem;
+    border: 2px solid #f3e8ff;
+    border-radius: 1.25rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #faf5ff;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #d1a7e9;
+    background-color: white;
+    box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.15);
+}
+
+.input::placeholder {
+    color: #a78bfa;
+    opacity: 0.5;
+}
+
+.button {
+    background: linear-gradient(135deg, #d1a7e9 0%, #a78bfa 100%);
+    color: white;
+    border: none;
+    padding: 1.1rem;
+    border-radius: 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-top: 1rem;
+    box-shadow: 0 8px 16px rgba(167, 139, 250, 0.3);
+}
+
+.button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(167, 139, 250, 0.4);
+    background: linear-gradient(135deg, #c084fc 0%, #a78bfa 100%);
+}
+
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.errorMessage {
+    color: #dc2626;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: 0.5rem;
+    background-color: #fef2f2;
+    padding: 0.75rem;
+    border-radius: 1rem;
+    border: 1px solid #fee2e2;
+    font-weight: 500;
+}

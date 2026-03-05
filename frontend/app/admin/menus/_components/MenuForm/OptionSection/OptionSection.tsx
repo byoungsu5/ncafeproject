@@ -35,15 +35,18 @@ export default function OptionSection() {
             <button
                 type="button"
                 className={styles.addButton}
-                onClick={() => append({
-                    id: crypto.randomUUID(),
-                    name: '',
-                    type: 'radio',
-                    required: true,
-                    items: [
-                        { id: crypto.randomUUID(), name: '기본', priceDelta: 0 }
-                    ]
-                })}
+                onClick={() => {
+                    const timestamp = Date.now();
+                    append({
+                        id: timestamp,
+                        name: '',
+                        type: 'single',
+                        required: true,
+                        items: [
+                            { id: timestamp + 1, name: '기본', priceDelta: 0 }
+                        ]
+                    });
+                }}
             >
                 <Plus size={16} />
                 옵션 그룹 추가

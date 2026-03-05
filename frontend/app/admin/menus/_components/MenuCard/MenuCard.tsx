@@ -1,3 +1,4 @@
+import { Menu } from '@/types';
 import styles from './MenuCard.module.css';
 import Image from 'next/image';
 import Button from '@/components/common/Button';
@@ -10,13 +11,15 @@ interface MenuCardProps {
 }
 
 export default function MenuCard({ menu }: MenuCardProps) {
+    const baseUrl = '/images';
+
     return (
         <div className={styles.card}>
             <div className={styles.imageWrapper}>
                 <Link href={`/admin/menus/${menu.id}`}>
-                    {menu.imageSrc ? (
+                    {menu.imageSrc && menu.imageSrc !== 'blank.png' ? (
                         <Image
-                            src={`/images/${menu.imageSrc}`}
+                            src={`${baseUrl}/${menu.imageSrc}`}
                             alt={menu.korName}
                             fill
                             className={styles.image}

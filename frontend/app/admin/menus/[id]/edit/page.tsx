@@ -30,7 +30,7 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
                 engName: menu.engName,
                 description: menu.description,
                 price: menu.price,
-                categoryId: menu.category.id,
+                categoryId: String(menu.category.id),
                 images: menu.images,
                 isAvailable: menu.isAvailable,
                 isSoldOut: menu.isSoldOut,

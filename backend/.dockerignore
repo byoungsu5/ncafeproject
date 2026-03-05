@@ -1,9 +1,0 @@
-.git
-.gradle
-build
-bin
-out
-.idea
-.vscode
-*.log
-.DS_Store

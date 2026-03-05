@@ -1,0 +1,66 @@
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tab {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    border: 1.5px solid var(--color-gray-200);
+    border-radius: 50px;
+    background: white;
+    color: var(--color-gray-600);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.25s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.tab:hover {
+    border-color: #d1a7e9;
+    color: #8b5cf6;
+    background: #f5f3ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.12);
+}
+
+.tabActive {
+    background: linear-gradient(135deg, #d1a7e9 0%, #a78bfa 100%);
+    border-color: transparent;
+    color: white;
+    box-shadow: 0 4px 14px rgba(167, 139, 250, 0.3);
+}
+
+.tabActive:hover {
+    background: linear-gradient(135deg, #c084fc 0%, #a78bfa 100%);
+    border-color: transparent;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(167, 139, 250, 0.4);
+}
+
+.tabIcon {
+    font-size: 1.05rem;
+}
+
+.skeleton {
+    width: 100px;
+    height: 40px;
+    border-radius: 50px;
+    background: linear-gradient(90deg, var(--color-gray-100) 25%, var(--color-gray-200) 50%, var(--color-gray-100) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}

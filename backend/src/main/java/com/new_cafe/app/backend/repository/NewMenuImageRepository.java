@@ -4,14 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.new_cafe.app.backend.entity.MenuImage;
@@ -19,8 +16,11 @@ import com.new_cafe.app.backend.entity.MenuImage;
 @Repository
 public class NewMenuImageRepository implements MenuImageRepository {
 
-    @Autowired
-    private DataSource dataSource;
+    private final DataSource dataSource;
+
+    public NewMenuImageRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Override
     public List<MenuImage> findAllByMenuId(Long menuId) {
@@ -37,21 +37,48 @@ public class NewMenuImageRepository implements MenuImageRepository {
                     list.add(MenuImage.builder()
                             .id(rs.getLong("id"))
                             .menuId(rs.getLong("menu_id"))
-                            .srcUrl(rs.getString("src_url"))
-                            .createdAt(getLocalDateTime(rs, "created_at"))
+                            .url(rs.getString("src_url"))
                             .sortOrder(rs.getInt("sort_order"))
+                            .createdAt(rs.getTimestamp("created_at") != null
+                                    ? rs.getTimestamp("created_at").toLocalDateTime()
+                                    : null)
                             .build());
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("NewMenuImageRepository.findAllByMenuId Error: " + e.getMessage());
         }
-
         return list;
     }
 
-    private LocalDateTime getLocalDateTime(ResultSet rs, String columnLabel) throws SQLException {
-        Timestamp timestamp = rs.getTimestamp(columnLabel);
-        return (timestamp != null) ? timestamp.toLocalDateTime() : null;
+    @Override
+    public MenuImage save(MenuImage menuImage) {
+        String sql = "INSERT INTO menu_images (menu_id, src_url, sort_order) VALUES (?, ?, ?)";
+        try (Connection conn = dataSource.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setLong(1, menuImage.getMenuId());
+            pstmt.setString(2, menuImage.getUrl());
+            pstmt.setInt(3, menuImage.getSortOrder());
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println("NewMenuImageRepository.save Error: " + e.getMessage());
+        }
+        return menuImage;
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        String sql = "DELETE FROM menu_images WHERE id = ?";
+        try (Connection conn = dataSource.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setLong(1, id);
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println("NewMenuImageRepository.deleteById Error: " + e.getMessage());
+        }
     }
 }

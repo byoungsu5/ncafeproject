@@ -1,5 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
-import { Menu } from '@/types';
+import { useState, useEffect } from 'react';
 import { useMenus } from './useMenus';
 import MenuCard from '../MenuCard';
 import Pagination from '@/app/_components/Pagination';
@@ -14,10 +13,7 @@ interface MenuListProps {
 
 export default function MenuList({ selectedCategory, searchQuery }: MenuListProps) {
 
-
-    // http://localhost:8080/admin/menus?categoryId=1&searchQuery=coffee&page=0&size=10
-
-    const { menus, setMenus } = useMenus(selectedCategory, searchQuery);
+    const { menus } = useMenus(selectedCategory, searchQuery);
 
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -30,7 +26,6 @@ export default function MenuList({ selectedCategory, searchQuery }: MenuListProp
         <div>
             <div className={styles.grid}>
                 {menus.map((menu) => (
-                    // <div key={menu.id}>{menu.korName}</div>
                     <MenuCard
                         key={menu.id}
                         menu={menu}

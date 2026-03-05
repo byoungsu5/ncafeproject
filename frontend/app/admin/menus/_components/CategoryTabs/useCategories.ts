@@ -13,9 +13,6 @@ export interface CategoryListResponseDto {
     totalCount: number;
 }
 
-// http://localhost:8080/admin/categories
-
-
 export function useCategories() {
     const [categories, setCategories] = useState<CategoryResponseDto[]>([]);
 

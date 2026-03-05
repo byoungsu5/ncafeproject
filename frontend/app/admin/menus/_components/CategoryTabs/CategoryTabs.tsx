@@ -11,7 +11,8 @@ export default function CategoryTabs({ selectedCategory, setSelectedCategory }: 
         <div className={styles.tabs}>
             {/* 전체 탭 */}
             <button
-                className={`${styles.tab} ${selectedCategory === null ? styles.tabActive : ''}`}
+                className={`${styles.tab} ${selectedCategory === undefined ? styles.tabActive : ''}`}
+                onClick={() => setSelectedCategory(undefined as any)}
             >
                 <span className={styles.tabIcon}>📋</span>
                 전체
