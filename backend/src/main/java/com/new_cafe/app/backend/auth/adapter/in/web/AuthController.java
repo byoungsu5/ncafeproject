@@ -1,6 +1,7 @@
 package com.new_cafe.app.backend.auth.adapter.in.web;
 
 import com.new_cafe.app.backend.auth.application.port.in.LoginUseCase;
+import com.new_cafe.app.backend.auth.application.port.in.SignupUseCase;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,9 +13,11 @@ import java.util.Map;
 public class AuthController {
 
     private final LoginUseCase loginUseCase;
+    private final SignupUseCase signupUseCase;
 
-    public AuthController(LoginUseCase loginUseCase) {
+    public AuthController(LoginUseCase loginUseCase, SignupUseCase signupUseCase) {
         this.loginUseCase = loginUseCase;
+        this.signupUseCase = signupUseCase;
     }
 
     @PostMapping("/login")
@@ -23,6 +26,16 @@ public class AuthController {
         String token = loginUseCase.login(command);
         
         return ResponseEntity.ok(new LoginResponse(token));
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> signup(@RequestBody SignupRequest request) {
+        try {
+            signupUseCase.signup(new SignupUseCase.SignupCommand(request.username(), request.password()));
+            return ResponseEntity.ok(Map.of("message", "회원가입 성공"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
     }
 
     @GetMapping("/me")
@@ -41,4 +54,5 @@ public class AuthController {
     // DTOs (Inner records or separate files)
     public record LoginRequest(String username, String password) {}
     public record LoginResponse(String token) {}
+    public record SignupRequest(String username, String password) {}
 }

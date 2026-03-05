@@ -48,3 +48,7 @@ services:
     volumes:
       - ./data:/var/lib/postgresql/data
     restart: unless-stopped
+
+volumes:
+  db-data:
+    name: ${USER_ID:-kang}-db-data
