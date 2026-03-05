@@ -1,5 +1,6 @@
 package com.new_cafe.app.backend.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,6 +11,9 @@ public class DataInitializer implements CommandLineRunner {
 
     private final JdbcTemplate jdbc;
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${INITIAL_DATA_PASSWORD}")
+    private String initialPassword;
 
     public DataInitializer(JdbcTemplate jdbc, PasswordEncoder passwordEncoder) {
         this.jdbc = jdbc;
@@ -40,21 +44,21 @@ public class DataInitializer implements CommandLineRunner {
             Integer count = jdbc.queryForObject("SELECT COUNT(*) FROM users WHERE nickname = ?", Integer.class, "admin");
             if (count != null && count > 0) {
                 jdbc.update("UPDATE users SET password = ?, role = ? WHERE nickname = ?", 
-                    passwordEncoder.encode("1234"), "ROLE_ADMIN", "admin");
+                    passwordEncoder.encode(initialPassword), "ROLE_ADMIN", "admin");
             } else {
                 // 테이블 구조에 따라 다를 수 있으므로 안전하게 처리 (id는 자동생성 가정)
                 jdbc.update("INSERT INTO users (nickname, password, role) VALUES (?, ?, ?)",
-                    "admin", passwordEncoder.encode("1234"), "ROLE_ADMIN");
+                    "admin", passwordEncoder.encode(initialPassword), "ROLE_ADMIN");
             }
 
             // user/newlec 계정 (비밀번호: 1234)
             count = jdbc.queryForObject("SELECT COUNT(*) FROM users WHERE nickname = ?", Integer.class, "newlec");
             if (count != null && count > 0) {
                 jdbc.update("UPDATE users SET password = ?, role = ? WHERE nickname = ?", 
-                    passwordEncoder.encode("1234"), "ROLE_USER", "newlec");
+                    passwordEncoder.encode(initialPassword), "ROLE_USER", "newlec");
             } else {
                 jdbc.update("INSERT INTO users (nickname, password, role) VALUES (?, ?, ?)",
-                    "newlec", passwordEncoder.encode("1234"), "ROLE_USER");
+                    "newlec", passwordEncoder.encode(initialPassword), "ROLE_USER");
             }
         } catch (Exception e) {
             System.err.println("사용자 초기화 중 오류 발생 (테이블이 아직 생성되지 않았을 수 있음): " + e.getMessage());
