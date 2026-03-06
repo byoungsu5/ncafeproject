@@ -2,6 +2,7 @@ package com.new_cafe.app.backend.controller;
 
 import com.new_cafe.app.backend.dto.ChatMessageRequest;
 import com.new_cafe.app.backend.dto.ChatMessageResponse;
+import com.new_cafe.app.backend.service.GeminiService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,23 +16,20 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @RequestMapping("/api/chat")
 public class ChatController {
 
-    // Using CopyOnWriteArrayList for thread-safe in-memory storage
+    private final GeminiService geminiService;
     private static final List<ChatMessageResponse> messages = new CopyOnWriteArrayList<>();
 
     static {
-        // Adding some dummy data
         messages.add(ChatMessageResponse.builder()
                 .id(UUID.randomUUID().toString())
                 .sender("시스템")
-                .content("NCafe 채팅방에 오신 것을 환영합니다!")
-                .timestamp(LocalDateTime.now().minusMinutes(10))
+                .content("Gemini 기능이 추가되었습니다! 메시지를 보내면 Gemini가 답변합니다.")
+                .timestamp(LocalDateTime.now())
                 .build());
-        messages.add(ChatMessageResponse.builder()
-                .id(UUID.randomUUID().toString())
-                .sender("메타몽")
-                .content("무엇을 도와드릴까요?")
-                .timestamp(LocalDateTime.now().minusMinutes(5))
-                .build());
+    }
+
+    public ChatController(GeminiService geminiService) {
+        this.geminiService = geminiService;
     }
 
     @GetMapping
@@ -43,17 +41,34 @@ public class ChatController {
     public ResponseEntity<ChatMessageResponse> sendMessage(@RequestBody ChatMessageRequest request) {
         ChatMessageResponse newMessage = ChatMessageResponse.builder()
                 .id(UUID.randomUUID().toString())
-                .sender(request.getSender() != null ? request.getSender() : "익명")
+                .sender(request.getSender() != null && !request.getSender().trim().isEmpty() ? request.getSender() : "익명")
                 .content(request.getContent())
                 .timestamp(LocalDateTime.now())
                 .build();
         
-        // Keep only last 50 messages to prevent memory issues
+        addMessage(newMessage);
+
+        // Asynchronously call Gemini if the sender is not Gemini itself
+        if (!"Gemini".equalsIgnoreCase(newMessage.getSender())) {
+            geminiService.getChatResponse(request.getContent())
+                .subscribe(aiResponse -> {
+                    ChatMessageResponse geminiMsg = ChatMessageResponse.builder()
+                            .id(UUID.randomUUID().toString())
+                            .sender("Gemini")
+                            .content(aiResponse)
+                            .timestamp(LocalDateTime.now())
+                            .build();
+                    addMessage(geminiMsg);
+                });
+        }
+        
+        return ResponseEntity.ok(newMessage);
+    }
+
+    private void addMessage(ChatMessageResponse msg) {
         if (messages.size() >= 50) {
             messages.remove(0);
         }
-        messages.add(newMessage);
-        
-        return ResponseEntity.ok(newMessage);
+        messages.add(msg);
     }
 }
