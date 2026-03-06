@@ -13,9 +13,10 @@ async function proxyRequest(req: NextRequest) {
         const targetUrl = `${API_BASE}${pathname}${search}`;
 
         const headers = new Headers();
+        const skipHeaders = new Set(['host', 'cookie', 'connection', 'upgrade', 'keep-alive', 'transfer-encoding']);
 
         req.headers.forEach((value, key) => {
-            if (key.toLowerCase() !== 'host' && key.toLowerCase() !== 'cookie') {
+            if (!skipHeaders.has(key.toLowerCase())) {
                 headers.set(key, value);
             }
         });
