@@ -28,6 +28,12 @@ export default function SiteHeader() {
                     >
                         메뉴
                     </Link>
+                    <Link
+                        href="/chat"
+                        className={`${styles.navLink} ${pathname.startsWith('/chat') ? styles.navLinkActive : ''}`}
+                    >
+                        채팅
+                    </Link>
                     {!isLoading && (
                         user ? (
                             <>
