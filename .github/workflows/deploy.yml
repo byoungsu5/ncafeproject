@@ -38,7 +38,7 @@ jobs:
       - name: Verify deployment
         run: |
           echo "=== Container Status ==="
-          docker compose ps --profile with-db
+          docker compose --profile with-db ps
           sleep 15
           echo ""
           echo "=== Health Check ==="
