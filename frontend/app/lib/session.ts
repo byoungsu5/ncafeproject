@@ -14,8 +14,15 @@ export interface SessionData {
     user: SessionUser;  // 사용자 정보
 }
 
+const DEFAULT_SECRET = 'JQvH/BoClMe32u3gbIXxmf+VBxRisvakVC/HbrihT+s=';
+const secret = process.env.SESSION_SECRET || DEFAULT_SECRET;
+
+if (secret.length < 32) {
+    console.error(`[Session] SESSION_SECRET is too short (${secret.length} chars). Must be >= 32. Using default.`);
+}
+
 export const sessionOptions: SessionOptions = {
-    password: process.env.SESSION_SECRET as string,
+    password: secret.length >= 32 ? secret : DEFAULT_SECRET,
     cookieName: 'app_session',
     cookieOptions: {
         httpOnly: true,
