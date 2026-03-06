@@ -8,7 +8,7 @@ services:
     #ports:
       # - "${BACKEND_PORT:-8036}:8080"
     volumes:
-      - ./backend/upload:/app/upload
+      - upload-data:/app/upload
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
@@ -52,3 +52,10 @@ services:
 volumes:
   db-data:
     name: ${USER_ID:-kang}-db-data
+  upload-data:
+    name: ${USER_ID:-kang}-upload-data
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/kang/workspace/upload

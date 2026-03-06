@@ -9,6 +9,12 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
+      - name: Setup upload directory
+        run: |
+          mkdir -p /home/kang/workspace/upload
+          chmod 755 /home/kang/workspace/upload
+        continue-on-error: true
+
       - name: Cleanup problematic data directory
         run: |
           sudo rm -rf ${{ github.workspace }}/data
