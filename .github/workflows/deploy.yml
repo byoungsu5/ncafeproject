@@ -9,15 +9,16 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-      - name: Setup upload directory
+      - name: Remove mismatched volumes if needed
         run: |
-          mkdir -p /home/kang/workspace/upload
-          chmod 755 /home/kang/workspace/upload
-        continue-on-error: true
-
-      - name: Cleanup problematic data directory
-        run: |
-          sudo rm -rf ${{ github.workspace }}/data
+          docker compose down 2>/dev/null || true
+          for vol in $(docker volume ls -q --filter "name=-upload-data"); do
+            CONFIG=$(docker volume inspect "$vol" --format '{{.Options.type}}' 2>/dev/null)
+            if [ "$CONFIG" = "none" ]; then
+              echo "Removing old bind-mount volume: $vol"
+              docker volume rm "$vol" 2>/dev/null || true
+            fi
+          done
         continue-on-error: true
 
       - name: Checkout
@@ -58,8 +59,10 @@ jobs:
           echo ""
           echo "=== Health Check ==="
           curl -sf --max-time 10 -o /dev/null -w "Frontend : HTTP %{http_code}\n" http://localhost:${FRONTEND_PORT:-3036} || echo "Frontend : not responding"
+          curl --max-time 10 -o /dev/null -w "Backend  : HTTP %{http_code}\n" http://localhost:${BACKEND_PORT:-8036}/api/menus || echo "Backend  : not responding"
         env:
           FRONTEND_PORT: ${{ vars.FRONTEND_PORT }}
+          BACKEND_PORT: ${{ vars.BACKEND_PORT }}
 
       - name: Clean up old images
         run: docker image prune -f

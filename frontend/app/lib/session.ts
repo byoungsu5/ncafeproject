@@ -19,7 +19,7 @@ export const sessionOptions: SessionOptions = {
     cookieName: 'app_session',
     cookieOptions: {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: process.env.COOKIE_SECURE === 'true',
         sameSite: 'lax' as const,
         path: '/',
         maxAge: 60 * 60 * 24,
