@@ -1,7 +1,9 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Edit2, Trash2 } from 'lucide-react';
+import { fetchAPI } from '@/app/lib/api';
 import styles from './MenuDetailHeader.module.css';
 
 interface MenuDetailHeaderProps {
@@ -10,6 +12,19 @@ interface MenuDetailHeaderProps {
 }
 
 export default function MenuDetailHeader({ id, title }: MenuDetailHeaderProps) {
+    const router = useRouter();
+
+    const handleDelete = async () => {
+        if (!confirm('정말로 이 메뉴를 삭제하시겠습니까?')) return;
+
+        try {
+            await fetchAPI(`/admin/menus/${id}`, { method: 'DELETE' });
+            router.push('/admin/menus');
+        } catch (error) {
+            alert(error instanceof Error ? error.message : '메뉴 삭제에 실패했습니다.');
+        }
+    };
+
     return (
         <header className={styles.header}>
             <div className={styles.left}>
@@ -28,7 +43,7 @@ export default function MenuDetailHeader({ id, title }: MenuDetailHeaderProps) {
                     수정
                 </Link>
                 <button
-                    onClick={() => { }}
+                    onClick={handleDelete}
                     className={`${styles.actionButton} ${styles.deleteButton}`}
                 >
                     <Trash2 size={16} />

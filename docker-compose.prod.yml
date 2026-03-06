@@ -1,8 +1,0 @@
-services:
-  backend:
-    image: ghcr.io/${GITHUB_REPOSITORY_LOWER}/backend:latest
-    restart: always
-
-  frontend:
-    image: ghcr.io/${GITHUB_REPOSITORY_LOWER}/frontend:latest
-    restart: always

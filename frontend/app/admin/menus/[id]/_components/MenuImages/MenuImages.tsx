@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { ImageIcon } from 'lucide-react';
 import styles from './MenuImages.module.css';
-import { useMenuImages, MenuImage } from './useMenuImages';
+import { useMenuImages, type MenuImage } from './useMenuImages';
 
 export default function MenuImages({ menuId }: { menuId: string }) {
     const { images, loading, error } = useMenuImages(menuId);

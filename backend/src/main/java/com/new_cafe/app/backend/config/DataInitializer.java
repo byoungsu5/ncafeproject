@@ -1,5 +1,6 @@
 package com.new_cafe.app.backend.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,6 +11,9 @@ public class DataInitializer implements CommandLineRunner {
 
     private final JdbcTemplate jdbc;
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${INITIAL_DATA_PASSWORD:1234}")
+    private String initialPassword;
 
     public DataInitializer(JdbcTemplate jdbc, PasswordEncoder passwordEncoder) {
         this.jdbc = jdbc;
@@ -35,19 +39,19 @@ public class DataInitializer implements CommandLineRunner {
             Integer count = jdbc.queryForObject("SELECT COUNT(*) FROM users WHERE nickname = ?", Integer.class, "admin");
             if (count != null && count > 0) {
                 jdbc.update("UPDATE users SET password = ?, role = ? WHERE nickname = ?", 
-                    passwordEncoder.encode("1234"), "ROLE_ADMIN", "admin");
+                    passwordEncoder.encode(initialPassword), "ROLE_ADMIN", "admin");
             } else {
                 jdbc.update("INSERT INTO users (id, nickname, password, role) VALUES (?, ?, ?, ?)",
-                    java.util.UUID.randomUUID().toString(), "admin", passwordEncoder.encode("1234"), "ROLE_ADMIN");
+                    java.util.UUID.randomUUID().toString(), "admin", passwordEncoder.encode(initialPassword), "ROLE_ADMIN");
             }
 
             count = jdbc.queryForObject("SELECT COUNT(*) FROM users WHERE nickname = ?", Integer.class, "newlec");
             if (count != null && count > 0) {
                 jdbc.update("UPDATE users SET password = ?, role = ? WHERE nickname = ?", 
-                    passwordEncoder.encode("1234"), "ROLE_USER", "newlec");
+                    passwordEncoder.encode(initialPassword), "ROLE_USER", "newlec");
             } else {
                 jdbc.update("INSERT INTO users (id, nickname, password, role) VALUES (?, ?, ?, ?)",
-                    java.util.UUID.randomUUID().toString(), "newlec", passwordEncoder.encode("1234"), "ROLE_USER");
+                    java.util.UUID.randomUUID().toString(), "newlec", passwordEncoder.encode(initialPassword), "ROLE_USER");
             }
         } catch (Exception e) {
             System.err.println("사용자 초기화 중 오류 발생: " + e.getMessage());

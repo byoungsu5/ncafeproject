@@ -1,5 +1,6 @@
 package com.new_cafe.app.backend.admin.menu.adapter.in.web;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -48,7 +49,7 @@ public class MenuController {
     }
 
     @PostMapping
-    public ResponseEntity<MenuResponse> createMenu(@RequestBody CreateMenuCommand command) {
+    public ResponseEntity<MenuResponse> createMenu(@Valid @RequestBody CreateMenuCommand command) {
         MenuResult result = createMenuUseCase.createMenu(command);
         return ResponseEntity.status(HttpStatus.CREATED).body(MenuResponse.from(result));
     }
@@ -70,7 +71,7 @@ public class MenuController {
     @PutMapping("/{id}")
     public ResponseEntity<MenuResponse> updateMenu(
             @PathVariable Long id,
-            @RequestBody UpdateMenuCommand command) {
+            @Valid @RequestBody UpdateMenuCommand command) {
         UpdateMenuCommand commandWithId = new UpdateMenuCommand(
                 id,
                 command.korName(),

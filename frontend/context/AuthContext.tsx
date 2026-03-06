@@ -3,9 +3,19 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
+interface Role {
+    authority: string;
+}
+
 interface User {
     username: string;
-    roles: { authority: string }[];
+    roles: (string | Role)[];
+}
+
+function hasAdminRole(roles?: (string | Role)[]): boolean {
+    return roles?.some(role =>
+        typeof role === 'string' ? role === 'ROLE_ADMIN' : role.authority === 'ROLE_ADMIN'
+    ) ?? false;
 }
 
 interface AuthContextType {
@@ -72,11 +82,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         // 권한에 따른 라우팅
         if (data.user) {
-            const isAdmin = data.user.roles?.some((role: any) =>
-                typeof role === 'string' ? role === 'ROLE_ADMIN' : role.authority === 'ROLE_ADMIN'
-            );
-
-            if (isAdmin) {
+            if (hasAdminRole(data.user.roles)) {
                 router.push('/admin/menus');
             } else {
                 router.push('/menus');

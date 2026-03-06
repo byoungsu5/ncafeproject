@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import MenuForm from '../../_components/MenuForm';
-import { getMenuById } from '@/mocks/menuData';
 import { MenuFormData } from '@/types';
+import { fetchAPI } from '@/app/lib/api';
 import styles from './page.module.css';
 
 interface EditMenuPageProps {
@@ -18,38 +18,54 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
     const router = useRouter();
     const [initialData, setInitialData] = useState<Partial<MenuFormData> | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
-        // 실제로는 API 호출이 들어갈 곳
-        const menu = getMenuById(id);
-
-        if (menu) {
-            // Menu 타입 -> MenuFormData 타입 변환
-            setInitialData({
-                korName: menu.korName,
-                engName: menu.engName,
-                description: menu.description,
-                price: menu.price,
-                categoryId: String(menu.category.id),
-                images: menu.images,
-                isAvailable: menu.isAvailable,
-                isSoldOut: menu.isSoldOut,
-                options: menu.options
-            });
-        }
-
-        setIsLoading(false);
+        const fetchMenu = async () => {
+            try {
+                const data = await fetchAPI(`/admin/menus/${id}`);
+                if (data) {
+                    setInitialData({
+                        korName: data.korName,
+                        engName: data.engName,
+                        description: data.description,
+                        price: data.price,
+                        categoryId: String(data.categoryId),
+                        isAvailable: data.isAvailable,
+                        isSoldOut: false,
+                        images: [],
+                        options: [],
+                    });
+                }
+            } catch {
+                setInitialData(null);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchMenu();
     }, [id]);
 
     const handleSubmit = async (data: MenuFormData) => {
-        // TODO: 실제 API 수정 로직
-        console.log('Modified menu data:', data);
-
-        // 로딩 시늉
-        await new Promise(resolve => setTimeout(resolve, 800));
-
-        alert('메뉴가 수정되었습니다.');
-        router.push(`/admin/menus/${id}`);
+        setIsSubmitting(true);
+        try {
+            await fetchAPI(`/admin/menus/${id}`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    korName: data.korName,
+                    engName: data.engName,
+                    description: data.description,
+                    price: data.price,
+                    categoryId: Number(data.categoryId),
+                    isAvailable: data.isAvailable,
+                }),
+            });
+            router.push(`/admin/menus/${id}`);
+        } catch (error) {
+            alert(error instanceof Error ? error.message : '메뉴 수정에 실패했습니다.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     if (isLoading) {
@@ -82,6 +98,7 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
             <MenuForm
                 defaultValues={initialData}
                 onSubmit={handleSubmit}
+                isSubmitting={isSubmitting}
                 submitLabel="수정사항 저장"
             />
         </main>

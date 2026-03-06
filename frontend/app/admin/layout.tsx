@@ -21,7 +21,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             if (!user) {
                 router.push('/login');
             } else {
-                const isAdmin = user.roles?.some((role: any) =>
+                const isAdmin = user.roles?.some(role =>
                     typeof role === 'string' ? role === 'ROLE_ADMIN' : role.authority === 'ROLE_ADMIN'
                 );
                 if (!isAdmin) {

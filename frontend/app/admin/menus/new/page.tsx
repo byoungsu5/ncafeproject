@@ -1,24 +1,37 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import MenuForm from '../_components/MenuForm';
 import { MenuFormData } from '@/types';
+import { fetchAPI } from '@/app/lib/api';
 import styles from './page.module.css';
 
 export default function NewMenuPage() {
     const router = useRouter();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = async (data: MenuFormData) => {
-        // TODO: 실제 API 연동 필요
-        console.log('New menu data:', data);
-
-        // 임시 로딩 시늉 및 성공 처리
-        await new Promise(resolve => setTimeout(resolve, 800));
-
-        alert('메뉴가 성공적으로 등록되었습니다.');
-        router.push('/admin/menus');
+        setIsSubmitting(true);
+        try {
+            await fetchAPI('/admin/menus', {
+                method: 'POST',
+                body: JSON.stringify({
+                    korName: data.korName,
+                    engName: data.engName,
+                    description: data.description,
+                    price: data.price,
+                    categoryId: Number(data.categoryId),
+                }),
+            });
+            router.push('/admin/menus');
+        } catch (error) {
+            alert(error instanceof Error ? error.message : '메뉴 등록에 실패했습니다.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -32,6 +45,7 @@ export default function NewMenuPage() {
 
             <MenuForm
                 onSubmit={handleSubmit}
+                isSubmitting={isSubmitting}
                 submitLabel="메뉴 등록하기"
             />
         </main>

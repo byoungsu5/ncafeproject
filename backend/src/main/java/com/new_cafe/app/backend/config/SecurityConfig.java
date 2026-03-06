@@ -36,7 +36,6 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/me").authenticated()
                 .anyRequest().permitAll()
             )
-            .httpBasic(Customizer.withDefaults()) // 내부 테스트용
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

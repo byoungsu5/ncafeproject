@@ -96,7 +96,7 @@ export default function AdminSidebar() {
                     <div className={styles.cafeAvatar}>💜</div>
                     <div>
                         <div className={styles.cafeName}>{user?.username || '관리자'}</div>
-                        <div className={styles.cafeRole}>{user?.roles.some(r => r.authority === 'ROLE_ADMIN') ? '수퍼바이저' : '스태프'}</div>
+                        <div className={styles.cafeRole}>{user?.roles.some(r => typeof r === 'string' ? r === 'ROLE_ADMIN' : r.authority === 'ROLE_ADMIN') ? '수퍼바이저' : '스태프'}</div>
                     </div>
                 </div>
                 <button onClick={logout} className={styles.logoutButton}>

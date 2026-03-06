@@ -33,6 +33,8 @@ jobs:
           echo "SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}" >> .env
           echo "SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}" >> .env
           echo "JWT_SECRET=${JWT_SECRET}" >> .env
+          echo "JWT_EXPIRATION=${JWT_EXPIRATION:-3600000}" >> .env
+          echo "INITIAL_DATA_PASSWORD=${INITIAL_DATA_PASSWORD}" >> .env
         env:
           COMPOSE_PROJECT_NAME: ${{ secrets.COMPOSE_PROJECT_NAME }}
           USER_ID: ${{ secrets.USER_ID }}
@@ -42,14 +44,16 @@ jobs:
           SPRING_DATASOURCE_USERNAME: ${{ vars.SPRING_DATASOURCE_USERNAME }}
           SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_EXPIRATION: ${{ vars.JWT_EXPIRATION }}
+          INITIAL_DATA_PASSWORD: ${{ secrets.INITIAL_DATA_PASSWORD }}
 
       - name: Build and Deploy
-        run: docker compose --profile with-db up --build -d
+        run: docker compose up --build -d
 
       - name: Verify deployment
         run: |
           echo "=== Container Status ==="
-          docker compose --profile with-db ps
+          docker compose ps
           sleep 15
           echo ""
           echo "=== Health Check ==="

@@ -1,7 +1,6 @@
 package com.new_cafe.app.backend.auth.config;
 
 import com.new_cafe.app.backend.auth.application.port.out.LoadUserPort;
-import com.new_cafe.app.backend.auth.domain.AuthUser;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,35 +18,36 @@ import java.util.Collections;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final LoadUserPort loadUserPort;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public JwtAuthenticationFilter(LoadUserPort loadUserPort) {
+    public JwtAuthenticationFilter(LoadUserPort loadUserPort, JwtTokenProvider jwtTokenProvider) {
         this.loadUserPort = loadUserPort;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        
+
         String authHeader = request.getHeader("Authorization");
-        
+
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
-            
-            // Dummy token logic: "dummy-jwt-token-for-{username}"
-            if (token.startsWith("dummy-jwt-token-for-")) {
-                String username = token.replace("dummy-jwt-token-for-", "");
-                
+
+            if (jwtTokenProvider.validateToken(token)) {
+                String username = jwtTokenProvider.getUsername(token);
+
                 loadUserPort.loadUserByUsername(username).ifPresent(user -> {
                     SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole());
-                    
-                    UsernamePasswordAuthenticationToken authentication = 
+
+                    UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(user.getUsername(), null, Collections.singletonList(authority));
-                    
+
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 });
             }
         }
-        
+
         filterChain.doFilter(request, response);
     }
 }
