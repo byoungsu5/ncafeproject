@@ -9,9 +9,9 @@ RUN ./gradlew bootJar --no-daemon -x test --max-workers=1 -Dorg.gradle.jvmargs="
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar app.jar
-EXPOSE 8081
+EXPOSE 8080
 
 RUN mkdir -p /app/upload
 VOLUME /app/upload
 # 내부 실행 포트를 8081로 지정하는 옵션 추가
-ENTRYPOINT ["java", "-Dserver.port=8081", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Dserver.port=8080", "-jar", "app.jar"]
