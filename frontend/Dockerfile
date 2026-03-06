@@ -49,6 +49,7 @@ USER nextjs
 EXPOSE 3036
 
 ENV PORT 3036
+ENV NODE_OPTIONS="--dns-result-order=ipv4first"
 # set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
 
