@@ -9,18 +9,6 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-      - name: Remove mismatched volumes if needed
-        run: |
-          docker compose down 2>/dev/null || true
-          for vol in $(docker volume ls -q --filter "name=-upload-data"); do
-            CONFIG=$(docker volume inspect "$vol" --format '{{.Options.type}}' 2>/dev/null)
-            if [ "$CONFIG" = "none" ]; then
-              echo "Removing old bind-mount volume: $vol"
-              docker volume rm "$vol" 2>/dev/null || true
-            fi
-          done
-        continue-on-error: true
-
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -55,11 +43,22 @@ jobs:
         run: |
           echo "=== Container Status ==="
           docker compose ps
-          sleep 15
+          echo ""
+          echo "=== Waiting for backend to start (30s) ==="
+          for i in $(seq 1 30); do
+            if curl -sf --max-time 2 http://localhost:${BACKEND_PORT:-8036}/api/menus > /dev/null 2>&1; then
+              echo "Backend ready after ${i}s"
+              break
+            fi
+            sleep 1
+          done
           echo ""
           echo "=== Health Check ==="
           curl -sf --max-time 10 -o /dev/null -w "Frontend : HTTP %{http_code}\n" http://localhost:${FRONTEND_PORT:-3036} || echo "Frontend : not responding"
           curl --max-time 10 -o /dev/null -w "Backend  : HTTP %{http_code}\n" http://localhost:${BACKEND_PORT:-8036}/api/menus || echo "Backend  : not responding"
+          echo ""
+          echo "=== Backend Logs (last 30 lines) ==="
+          docker compose logs backend --tail 30 2>&1 || true
         env:
           FRONTEND_PORT: ${{ vars.FRONTEND_PORT }}
           BACKEND_PORT: ${{ vars.BACKEND_PORT }}
