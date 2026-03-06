@@ -35,5 +35,11 @@ export const sessionOptions: SessionOptions = {
 
 export async function getSession() {
     const cookieStore = await cookies();
-    return getIronSession<SessionData>(cookieStore, sessionOptions);
+    try {
+        return await getIronSession<SessionData>(cookieStore, sessionOptions);
+    } catch {
+        // 쿠키 복호화 실패 시 기존 쿠키 삭제 후 새 세션 생성
+        cookieStore.delete(sessionOptions.cookieName);
+        return getIronSession<SessionData>(cookieStore, sessionOptions);
+    }
 }

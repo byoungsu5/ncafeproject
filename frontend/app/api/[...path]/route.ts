@@ -6,6 +6,8 @@ const API_BASE = process.env.API_BASE_URL || 'http://localhost:8036';
 async function proxyRequest(req: NextRequest) {
     try {
         const session = await getSession();
+        const token = session.token;
+
         const { pathname, search } = req.nextUrl;
 
         const targetUrl = `${API_BASE}${pathname}${search}`;
@@ -18,8 +20,8 @@ async function proxyRequest(req: NextRequest) {
             }
         });
 
-        if (session.token) {
-            headers.set('Authorization', `Bearer ${session.token}`);
+        if (token) {
+            headers.set('Authorization', `Bearer ${token}`);
         }
 
         let body: BodyInit | null = null;
@@ -38,7 +40,7 @@ async function proxyRequest(req: NextRequest) {
             body,
         });
 
-        if (proxyRes.status === 401 && session.token) {
+        if (proxyRes.status === 401 && token) {
             session.destroy();
         }
 
