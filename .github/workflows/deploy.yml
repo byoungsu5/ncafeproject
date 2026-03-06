@@ -9,6 +9,11 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
+      - name: Cleanup problematic data directory
+        run: |
+          sudo rm -rf ${{ github.workspace }}/data
+        continue-on-error: true
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -25,10 +30,10 @@ jobs:
         env:
           COMPOSE_PROJECT_NAME: ${{ secrets.COMPOSE_PROJECT_NAME }}
           USER_ID: ${{ secrets.USER_ID }}
-          FRONTEND_PORT: ${{ secrets.FRONTEND_PORT }}
+          FRONTEND_PORT: ${{ vars.FRONTEND_PORT }}
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
-          SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
-          SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
+          SPRING_DATASOURCE_URL: ${{ vars.SPRING_DATASOURCE_URL }}
+          SPRING_DATASOURCE_USERNAME: ${{ vars.SPRING_DATASOURCE_USERNAME }}
           SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
@@ -44,7 +49,7 @@ jobs:
           echo "=== Health Check ==="
           curl -sf --max-time 10 -o /dev/null -w "Frontend : HTTP %{http_code}\n" http://localhost:${FRONTEND_PORT:-3036} || echo "Frontend : not responding"
         env:
-          FRONTEND_PORT: ${{ secrets.FRONTEND_PORT }}
+          FRONTEND_PORT: ${{ vars.FRONTEND_PORT }}
 
       - name: Clean up old images
         run: docker image prune -f
