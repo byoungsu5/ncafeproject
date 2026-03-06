@@ -9,6 +9,13 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
+      - name: Reset DB volume (password mismatch fix)
+        run: |
+          docker compose down 2>/dev/null || true
+          docker volume rm kang-db-data 2>/dev/null || true
+          echo "DB volume removed - will reinitialize with correct password"
+        continue-on-error: true
+
       - name: Checkout
         uses: actions/checkout@v4
 
