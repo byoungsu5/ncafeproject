@@ -57,8 +57,17 @@ jobs:
           curl -sf --max-time 10 -o /dev/null -w "Frontend : HTTP %{http_code}\n" http://localhost:${FRONTEND_PORT:-3036} || echo "Frontend : not responding"
           curl --max-time 10 -o /dev/null -w "Backend  : HTTP %{http_code}\n" http://localhost:${BACKEND_PORT:-8036}/api/menus || echo "Backend  : not responding"
           echo ""
-          echo "=== Backend Logs (last 30 lines) ==="
-          docker compose logs backend --tail 30 2>&1 || true
+          echo "=== Frontend Proxy Test ==="
+          curl -s --max-time 10 http://localhost:${FRONTEND_PORT:-3036}/api/menus 2>&1 | head -c 300 || echo "Frontend proxy : not responding"
+          echo ""
+          echo "=== Frontend Env Check ==="
+          docker exec kang-frontend sh -c 'echo "API_BASE_URL=$API_BASE_URL"; echo "SESSION_SECRET length=$(echo -n $SESSION_SECRET | wc -c)"' 2>&1 || true
+          echo ""
+          echo "=== Backend Logs (last 20 lines) ==="
+          docker compose logs backend --tail 20 2>&1 || true
+          echo ""
+          echo "=== Frontend Logs (last 20 lines) ==="
+          docker compose logs frontend --tail 20 2>&1 || true
         env:
           FRONTEND_PORT: ${{ vars.FRONTEND_PORT }}
           BACKEND_PORT: ${{ vars.BACKEND_PORT }}
