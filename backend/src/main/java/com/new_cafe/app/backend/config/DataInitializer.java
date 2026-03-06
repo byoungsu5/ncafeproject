@@ -31,33 +31,26 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void initUsers() {
-        // 기존 'users' 테이블이 있으면 데이터를 업데이트하거나 부족한 정보를 채웁니다.
-        // 만약 'users' 테이블이 없다면 (JPA ddl-auto=create 등에 의해 생성됨), 초기 데이터를 넣습니다.
-        
         try {
-            // admin 계정 (비밀번호: 1234)
-            // 기존 admin 계정이 있으면 비밀번호를 BCrypt로 업데이트합니다.
             Integer count = jdbc.queryForObject("SELECT COUNT(*) FROM users WHERE nickname = ?", Integer.class, "admin");
             if (count != null && count > 0) {
                 jdbc.update("UPDATE users SET password = ?, role = ? WHERE nickname = ?", 
                     passwordEncoder.encode("1234"), "ROLE_ADMIN", "admin");
             } else {
-                // 테이블 구조에 따라 다를 수 있으므로 안전하게 처리 (id는 자동생성 가정)
-                jdbc.update("INSERT INTO users (nickname, password, role) VALUES (?, ?, ?)",
-                    "admin", passwordEncoder.encode("1234"), "ROLE_ADMIN");
+                jdbc.update("INSERT INTO users (id, nickname, password, role) VALUES (?, ?, ?, ?)",
+                    java.util.UUID.randomUUID().toString(), "admin", passwordEncoder.encode("1234"), "ROLE_ADMIN");
             }
 
-            // user/newlec 계정 (비밀번호: 1234)
             count = jdbc.queryForObject("SELECT COUNT(*) FROM users WHERE nickname = ?", Integer.class, "newlec");
             if (count != null && count > 0) {
                 jdbc.update("UPDATE users SET password = ?, role = ? WHERE nickname = ?", 
                     passwordEncoder.encode("1234"), "ROLE_USER", "newlec");
             } else {
-                jdbc.update("INSERT INTO users (nickname, password, role) VALUES (?, ?, ?)",
-                    "newlec", passwordEncoder.encode("1234"), "ROLE_USER");
+                jdbc.update("INSERT INTO users (id, nickname, password, role) VALUES (?, ?, ?, ?)",
+                    java.util.UUID.randomUUID().toString(), "newlec", passwordEncoder.encode("1234"), "ROLE_USER");
             }
         } catch (Exception e) {
-            System.err.println("사용자 초기화 중 오류 발생 (테이블이 아직 생성되지 않았을 수 있음): " + e.getMessage());
+            System.err.println("사용자 초기화 중 오류 발생: " + e.getMessage());
         }
     }
 
