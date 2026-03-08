@@ -838,3 +838,239 @@ Validation:        400 + 에러 메시지
 6. `docker-compose.yml` — `INITIAL_DATA_PASSWORD` 전달
 
 ---
+
+## 배포 후 502 에러 수정 (2026-03-07)
+
+배포 환경에서 모든 API 호출이 502 에러를 반환하는 문제를 해결했습니다.
+서버 내부 `curl localhost:3036/api/menus`는 정상이지만, nginx를 통한 `https://kang.newlecture.com/api/menus`에서만 실패하는 현상이었습니다.
+
+---
+
+### 1. Node.js DNS IPv6 해석 순서 문제
+
+**문제:**
+Node.js 18+는 DNS 조회 시 IPv6를 먼저 시도합니다. Docker 내부 네트워크는 IPv6를 지원하지 않아 `fetch("http://backend:8080/...")`이 실패합니다.
+
+**증상:**
+```
+# wget (시스템 DNS) — 정상
+docker exec kang-frontend sh -c 'wget -qO- http://backend:8080/api/menus' → 200 OK
+
+# Node.js fetch — 실패
+[API Proxy] GET /api/menus -> http://backend:8080 failed: fetch failed
+```
+
+**수정 파일:** `frontend/Dockerfile`
+
+**수정 전:**
+```dockerfile
+ENV PORT 3036
+ENV HOSTNAME "0.0.0.0"
+```
+
+**수정 후:**
+```dockerfile
+ENV PORT 3036
+ENV NODE_OPTIONS="--dns-result-order=ipv4first"
+ENV HOSTNAME "0.0.0.0"
+```
+
+`--dns-result-order=ipv4first` 옵션으로 Node.js가 IPv4를 먼저 사용하도록 변경합니다.
+
+---
+
+### 2. Nginx `Connection: upgrade` 헤더로 인한 fetch 실패
+
+**문제:**
+nginx 설정에서 WebSocket 지원을 위해 모든 요청에 `Connection: upgrade` 헤더를 설정합니다:
+
+```nginx
+location / {
+    proxy_pass http://localhost:3036;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';   # ⚠️ 항상 전송
+}
+```
+
+API 프록시 코드가 이 헤더를 그대로 백엔드 `fetch()`에 전달하면서, `Connection`은 HTTP hop-by-hop 헤더이므로 Node.js의 fetch(undici) 구현에서 요청이 실패합니다.
+
+**증상:**
+```bash
+# Connection 헤더 없이 — 정상
+curl -s http://localhost:3036/api/menus → 200 OK (메뉴 JSON)
+
+# Connection: upgrade 포함 — 실패 (nginx 경유와 동일)
+curl -s -H "Connection: upgrade" http://localhost:3036/api/menus
+→ {"message":"Backend connection failed: fetch failed"}
+```
+
+**수정 파일:** `frontend/app/api/[...path]/route.ts`
+
+**수정 전:**
+```typescript
+const headers = new Headers();
+
+req.headers.forEach((value, key) => {
+    if (key.toLowerCase() !== 'host' && key.toLowerCase() !== 'cookie') {
+        headers.set(key, value);
+    }
+});
+```
+
+**수정 후:**
+```typescript
+const headers = new Headers();
+const skipHeaders = new Set(['host', 'cookie', 'connection', 'upgrade', 'keep-alive', 'transfer-encoding']);
+
+req.headers.forEach((value, key) => {
+    if (!skipHeaders.has(key.toLowerCase())) {
+        headers.set(key, value);
+    }
+});
+```
+
+hop-by-hop 헤더(`connection`, `upgrade`, `keep-alive`, `transfer-encoding`)를 필터링하여 백엔드로 전달하지 않습니다.
+
+---
+
+### 3. 세션 쿠키 복호화 실패 처리
+
+**문제:**
+`SESSION_SECRET`이 배포 간에 변경되면, 브라우저에 남아있는 이전 쿠키를 복호화하지 못해 `getSession()`이 예외를 던지고 모든 API 프록시 요청이 실패합니다.
+
+**수정 파일:** `frontend/app/lib/session.ts`
+
+**수정 전:**
+```typescript
+export async function getSession() {
+    const cookieStore = await cookies();
+    return getIronSession<SessionData>(cookieStore, sessionOptions);
+}
+```
+
+**수정 후:**
+```typescript
+export async function getSession() {
+    const cookieStore = await cookies();
+    try {
+        return await getIronSession<SessionData>(cookieStore, sessionOptions);
+    } catch {
+        // 쿠키 복호화 실패 시 기존 쿠키 삭제 후 새 세션 생성
+        cookieStore.delete(sessionOptions.cookieName);
+        return getIronSession<SessionData>(cookieStore, sessionOptions);
+    }
+}
+```
+
+---
+
+### 4. Cookie Secure 플래그 유연화
+
+**문제:**
+`secure: process.env.NODE_ENV === 'production'`으로 설정하면 Docker 내부 HTTP 통신에서도 Secure 쿠키가 설정되어 세션이 작동하지 않을 수 있습니다. (nginx가 HTTPS를 종료하고 내부는 HTTP)
+
+**수정 파일:** `frontend/app/lib/session.ts`
+
+**수정 전:**
+```typescript
+cookieOptions: {
+    secure: process.env.NODE_ENV === 'production',
+}
+```
+
+**수정 후:**
+```typescript
+cookieOptions: {
+    secure: process.env.COOKIE_SECURE === 'true',
+}
+```
+
+환경변수 `COOKIE_SECURE`로 명시적으로 제어할 수 있게 변경했습니다.
+
+---
+
+### 5. API 프록시 에러 핸들링 추가
+
+**문제:**
+기존 프록시 코드에 try/catch가 없어 백엔드 연결 실패 시 원인 파악이 불가능했습니다.
+
+**수정 파일:**
+- `frontend/app/api/[...path]/route.ts` — catch-all 프록시
+- `frontend/app/api/auth/login/route.ts` — 로그인 라우트
+
+**추가된 에러 핸들링:**
+```typescript
+} catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    console.error(`[API Proxy] ${req.method} ${req.nextUrl.pathname} -> ${API_BASE} failed:`, message);
+    return NextResponse.json(
+        { message: `Backend connection failed: ${message}` },
+        { status: 502 }
+    );
+}
+```
+
+502 응답에 에러 메시지를 포함하여 디버깅을 용이하게 했습니다.
+
+---
+
+### 6. BFF 패턴에 맞는 포트 노출 정리
+
+**문제:**
+BFF 패턴에서는 프론트엔드만 외부에 노출하면 되는데, 백엔드(8036)와 DB(5436)도 호스트에 포트 매핑되어 불필요한 보안 노출이 있었습니다.
+
+**수정 파일:** `docker-compose.yml`
+
+**수정 전:**
+```yaml
+backend:
+    ports:
+      - "${BACKEND_PORT:-8036}:8080"
+
+db:
+    ports:
+      - "${DB_PORT:-5436}:5432"
+```
+
+**수정 후:**
+```yaml
+backend:
+    expose:
+      - "8080"
+
+db:
+    expose:
+      - "5432"
+```
+
+`ports` → `expose`로 변경하여 Docker 내부 네트워크에서만 접근 가능하도록 했습니다. 외부에서는 프론트엔드(3036)만 접근할 수 있습니다.
+
+---
+
+### 검증 결과
+
+**배포 서버에서 확인:**
+```
+=== Container Status ===
+kang-backend    Up 18 minutes    (expose 8080, 외부 미노출)
+kang-db         Up 18 minutes    (expose 5432, 외부 미노출)
+kang-frontend   Up About a minute (0.0.0.0:3036->3036)
+
+=== Health Check ===
+Frontend : HTTP 200
+Backend  : HTTP 200 (내부)
+
+=== Frontend Proxy Test ===
+curl localhost:3036/api/menus → 메뉴 JSON 정상 반환
+curl https://kang.newlecture.com/api/menus → 메뉴 JSON 정상 반환
+```
+
+### 수정 파일 목록 (4개)
+
+1. `frontend/Dockerfile` — `NODE_OPTIONS="--dns-result-order=ipv4first"` 추가
+2. `frontend/app/api/[...path]/route.ts` — hop-by-hop 헤더 필터링 + 에러 핸들링
+3. `frontend/app/lib/session.ts` — 쿠키 복호화 에러 처리 + Secure 플래그 유연화
+4. `docker-compose.yml` — 백엔드/DB 외부 포트 제거 (`ports` → `expose`)
+
+---
