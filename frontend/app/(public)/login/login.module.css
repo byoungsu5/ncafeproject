@@ -4,7 +4,7 @@
     align-items: center;
     min-height: calc(100vh - var(--header-height) - 100px);
     padding: 2rem 1rem;
-    background-color: #faf5ff;
+    background-color: #dd8959;
     /* 파이리 배경색 */
 }
 
@@ -18,7 +18,7 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    border: 2px solid #f3e8ff;
+    border: 2px solid #ed8004;
     animation: dittoPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 

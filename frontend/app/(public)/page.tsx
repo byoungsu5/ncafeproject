@@ -14,8 +14,8 @@ export default function Home() {
                             <span className={styles.titleEmphasis}>고라파덕이 서빙해주는 카페</span>
                         </h1>
                         <p className={styles.description}>
-                            세상에서 가장 귀여운 바리스타 고라파덕이 만들어주는 스페셜티 커피와
-                            수제 디저트를 만나보세요. 포근한 노란빛 감성으로 하루를 살짝 따뜻하게
+                            세상에서 가장 귀여운 바리스타 파이리가가 만들어주는 스페셜티 커피와
+                            수제 디저트를 만나보세요. 따뜻한 주황빛 감성으로 하루를 따뜻하게
                             덮어줄게요.
                         </p>
                         <div className={styles.actions}>

@@ -2,10 +2,10 @@
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(15px);
-    border-bottom: 2px solid #f3e8ff;
-    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.08);
+    background: linear-gradient(90deg, rgba(248, 113, 22, 0.96), rgba(251, 146, 60, 0.96));
+    backdrop-filter: blur(18px);
+    border-bottom: 2px solid rgba(124, 45, 18, 0.45);
+    box-shadow: 0 8px 24px rgba(124, 45, 18, 0.4);
 }
 
 .inner {
@@ -22,7 +22,7 @@
     font-size: 1.5rem;
     font-weight: 900;
     letter-spacing: -0.05em;
-    background: linear-gradient(120deg, #d1a7e9 0%, #f687b3 100%);
+    background: linear-gradient(120deg, #fed7aa 0%, #fbbf24 50%, #f97316 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -39,31 +39,31 @@
     border-radius: 50px;
     font-size: 1rem;
     font-weight: 600;
-    color: #6d28d9;
+    color: #fffbeb;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .navLink:hover {
-    color: #8b5cf6;
-    background: #f5f3ff;
+    color: #fffbeb;
+    background: rgba(0, 0, 0, 0.08);
 }
 
 .navLinkActive {
-    color: white;
-    background: #a78bfa;
+    color: #0b1120;
+    background: #fffbeb;
 }
 
 .signupBtn {
-    background: linear-gradient(135deg, #a78bfa 0%, #f687b3 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(167, 139, 250, 0.4);
+    background: linear-gradient(135deg, #fed7aa 0%, #f97316 100%);
+    color: #0b1120;
+    box-shadow: 0 4px 15px rgba(124, 45, 18, 0.55);
 }
 
 .signupBtn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(167, 139, 250, 0.6);
-    color: white;
-    background: linear-gradient(135deg, #a78bfa 0%, #f687b3 100%);
+    box-shadow: 0 8px 24px rgba(124, 45, 18, 0.65);
+    color: #0b1120;
+    background: linear-gradient(135deg, #fed7aa 0%, #fb923c 100%);
 }
 
 .cartBadge {
