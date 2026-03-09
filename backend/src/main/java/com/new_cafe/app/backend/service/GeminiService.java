@@ -15,7 +15,7 @@ public class GeminiService {
     private String apiKey;
 
     private final WebClient webClient;
-    private static final String GEMINI_MODEL = "gemini-1.5-flash"; // Using 1.5 Flash as 2.5 is not a thing yet
+    private static final String GEMINI_MODEL = "gemini-2.5-flash"; // Using 1.5 Flash as 2.5 is not a thing yet
 
     public GeminiService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl("https://generativelanguage.googleapis.com/v1beta/models/").build();

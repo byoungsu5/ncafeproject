@@ -54,7 +54,7 @@ __pycache__/
 - `ChatRequest`: `messages` (list[Message]), `stream` (bool, 기본값 True)
 ### app/services/gemini.py
 - `google.genai.Client`를 `GEMINI_API_KEY`로 초기화
-- 모델: `gemini-2.0-flash`
+- 모델: `gemini-2.5-flash`
 - `chat(messages) -> str`: 동기 응답. `client.models.generate_content()` 사용
 - `chat_stream(messages) -> Generator[str]`: 스트리밍 응답. `client.models.generate_content_stream()` 사용. 각 chunk의 `.text`를 yield
 - `messages` 파라미터 형식: `[{"role": "user"|"model", "parts": [{"text": "..."}]}]`
