@@ -5,7 +5,7 @@
     min-height: calc(100vh - var(--header-height) - 100px);
     padding: 2rem 1rem;
     background-color: #faf5ff;
-    /* 메타몽 배경색 */
+    /* 파이리 배경색 */
 }
 
 .loginCard {

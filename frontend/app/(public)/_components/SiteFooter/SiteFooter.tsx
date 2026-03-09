@@ -7,8 +7,8 @@ export default function SiteFooter() {
             <div className={styles.inner}>
                 <div className={styles.top}>
                     <div className={styles.brand}>
-                        <span className={styles.logo}>🟣 NCafe x 메타몽</span>
-                        <p className={styles.tagline}>당신이 원하는 대로, 무엇이든 될 수 있는 몽글몽글 공간</p>
+                        <span className={styles.logo}>🟣 파이리 Cafe</span>
+                        <p className={styles.tagline}>당신의 공간을 파이리가 채워줍니다.</p>
                     </div>
                     <nav className={styles.nav}>
                         <Link href="/" className={styles.navLink}>홈</Link>
@@ -20,15 +20,15 @@ export default function SiteFooter() {
 
                 <div className={styles.bottom}>
                     <div className={styles.info}>
-                        <span>대표자: 뉴렉</span>
+                        <span>대표자: 파이리</span>
                         <span className={styles.dot} />
                         <span>사업자번호: 132-18-11111</span>
                         <span className={styles.dot} />
                         <span>연락처: 02-9999-8888</span>
                         <span className={styles.dot} />
-                        <span>이메일: support@new-cafe.com</span>
+                        <span>이메일: support@파이리cafe.com</span>
                     </div>
-                    <p className={styles.copyright}>&copy; {new Date().getFullYear()} NCafe. All rights reserved.</p>
+                    <p className={styles.copyright}>&copy; {new Date().getFullYear()} 파이리Cafe. All rights reserved.</p>
                 </div>
             </div>
         </footer>
