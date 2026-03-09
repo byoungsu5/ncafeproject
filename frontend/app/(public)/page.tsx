@@ -32,8 +32,8 @@ export default function Home() {
                         <div className={styles.card}>
                             <div className={styles.illustration}>
                                 <Image
-                                    src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=900&q=80"
-                                    alt="귀여운 카페 일러스트"
+                                    src="/images/charmander-barista.png"
+                                    alt="파이리 바리스타 일러스트"
                                     fill
                                     sizes="(max-width: 1024px) 100vw, 480px"
                                 />

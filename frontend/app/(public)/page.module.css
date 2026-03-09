@@ -2,7 +2,7 @@
   width: 100%;
   min-height: calc(100vh - var(--header-height));
   overflow-x: hidden;
-  background: #fff7d6;
+  background: radial-gradient(circle at top, #fee2c5 0, #f97316 18%, #3f1b0b 90%);
 }
 
 .hero {
@@ -11,11 +11,11 @@
   padding: 2.5rem 2.75rem;
   border-radius: 32px;
   background:
-    radial-gradient(circle at top left, #fff1b8 0, #ffe08a 40%, #ffecc7 80%),
-    #ffe8a3;
+    radial-gradient(circle at top left, #fed7aa 0, #fdba74 40%, #ffedd5 85%),
+    #ffedd5;
   box-shadow:
-    0 32px 80px rgba(245, 158, 11, 0.28),
-    0 0 0 1px rgba(248, 250, 252, 0.9);
+    0 32px 80px rgba(248, 113, 22, 0.38),
+    0 0 0 1px rgba(255, 247, 237, 0.95);
 }
 
 .heroInner {
@@ -83,19 +83,19 @@
   padding: 0.95rem 1.8rem;
   border-radius: 999px;
   border: none;
-  background: #f97316;
+  background: linear-gradient(135deg, #fb923c, #f97316);
   color: #fefce8;
   font-weight: 700;
   font-size: 0.95rem;
-  box-shadow: 0 16px 40px rgba(194, 65, 12, 0.45);
+  box-shadow: 0 18px 42px rgba(194, 65, 12, 0.55);
 }
 
 .secondaryButton {
   padding: 0.9rem 1.6rem;
   border-radius: 999px;
-  border: 1px solid rgba(146, 64, 14, 0.25);
+  border: 1px solid rgba(127, 29, 13, 0.3);
   background: rgba(255, 251, 235, 0.9);
-  color: #92400e;
+  color: #7c2d12;
   font-weight: 600;
   font-size: 0.9rem;
 }
