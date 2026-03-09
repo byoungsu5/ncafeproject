@@ -4,21 +4,21 @@
     align-items: center;
     min-height: calc(100vh - var(--header-height) - 100px);
     padding: 2rem 1rem;
-    background-color: #dd8959;
-    /* 파이리 배경색 */
+    background:
+        radial-gradient(circle at top, #fee2c5 0, #f97316 22%, #3f1b0b 95%);
 }
 
 .loginCard {
-    background-color: white;
+    background: #fffbeb;
     padding: 3rem;
     border-radius: 2.5rem;
-    box-shadow: 0 15px 35px rgba(139, 92, 246, 0.1);
+    box-shadow: 0 20px 50px rgba(124, 45, 18, 0.55);
     width: 100%;
     max-width: 440px;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    border: 2px solid #ed8004;
+    border: 2px solid #f97316;
     animation: dittoPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -40,7 +40,7 @@
 }
 
 .title {
-    color: #5b21b6;
+    color: #7c2d12;
     font-size: 2.25rem;
     font-weight: 900;
     margin-bottom: 0.75rem;
@@ -49,7 +49,7 @@
 
 .subtitle {
     text-align: center;
-    color: #7c3aed;
+    color: #9a3412;
     font-size: 0.95rem;
     font-weight: 500;
     margin-bottom: 1rem;
@@ -63,34 +63,34 @@
 
 .label {
     font-size: 0.95rem;
-    color: #6d28d9;
+    color: #c2410c;
     font-weight: 700;
     margin-left: 0.5rem;
 }
 
 .input {
     padding: 1rem 1.25rem;
-    border: 2px solid #f3e8ff;
+    border: 2px solid #fed7aa;
     border-radius: 1.25rem;
     font-size: 1rem;
     transition: all 0.3s ease;
-    background-color: #faf5ff;
+    background-color: #fff7ed;
 }
 
 .input:focus {
     outline: none;
-    border-color: #d1a7e9;
+    border-color: #fb923c;
     background-color: white;
-    box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.15);
+    box-shadow: 0 0 0 4px rgba(248, 113, 22, 0.2);
 }
 
 .input::placeholder {
-    color: #a78bfa;
+    color: #fed7aa;
     opacity: 0.5;
 }
 
 .button {
-    background: linear-gradient(135deg, #d1a7e9 0%, #a78bfa 100%);
+    background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
     color: white;
     border: none;
     padding: 1.1rem;
@@ -100,13 +100,13 @@
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     margin-top: 1rem;
-    box-shadow: 0 8px 16px rgba(167, 139, 250, 0.3);
+    box-shadow: 0 10px 24px rgba(194, 65, 12, 0.5);
 }
 
 .button:hover {
     transform: translateY(-3px);
-    box-shadow: 0 12px 24px rgba(167, 139, 250, 0.4);
-    background: linear-gradient(135deg, #c084fc 0%, #a78bfa 100%);
+    box-shadow: 0 14px 30px rgba(194, 65, 12, 0.65);
+    background: linear-gradient(135deg, #fdba74 0%, #fb923c 40%, #f97316 100%);
 }
 
 .button:disabled {

@@ -22,8 +22,7 @@ const outfit = Outfit({
 import { AuthProvider } from "@/context/AuthContext";
 
 export const metadata: Metadata = {
-  title: "NCafe - 따뜻한 커피와 함께하는 특별한 공간",
-  description: "공부하고, 소통하고, 창작하는 특별한 공간. NCafe에서 당신의 이야기를 시작하세요.",
+  title: "🔥파이리 Cafe🔥",
 };
 
 export default function RootLayout({
