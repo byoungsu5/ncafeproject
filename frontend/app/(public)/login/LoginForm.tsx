@@ -2,6 +2,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 import styles from './login.module.css';
 
@@ -32,47 +33,73 @@ export default function LoginForm() {
 
     return (
         <div className={styles.container}>
-            <form onSubmit={handleSubmit} className={styles.loginCard}>
-                <div className={styles.header}>
-                    <h1 className={styles.title}>몽글몽글 로그인</h1>
-                    <p className={styles.subtitle}>NCafe x 메타몽의 세계로 오신 것을 환영합니다!</p>
-                </div>
+            <div className={styles.content}>
+                <section className={styles.leftPanel}>
+                    <div className={styles.leftCard}>
+                        <div className={styles.leftImageWrapper}>
+                            <Image
+                                src="/images/squirtle-coffee.png"
+                                alt="커피를 들고 있는 꼬부기"
+                                fill
+                                sizes="(max-width: 1024px) 100vw, 420px"
+                            />
+                        </div>
+                        <h2 className={styles.leftTitle}>잠시 쉬어가실래요?</h2>
+                        <p className={styles.leftSubtitle}>파이리리가 함께할게요!</p>
+                    </div>
+                </section>
 
-                <div className={styles.formGroup}>
-                    <label htmlFor="username" className={styles.label}>아이디</label>
-                    <input
-                        id="username"
-                        type="text"
-                        className={styles.input}
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        placeholder="아이디를 입력하세요"
-                        required
-                        disabled={isLoading}
-                    />
-                </div>
+                <section className={styles.rightPanel}>
+                    <form onSubmit={handleSubmit} className={styles.loginCard}>
+                        <div className={styles.header}>
+                            <h1 className={styles.title}>다시 만나서 반가워요!</h1>
+                            <p className={styles.subtitle}>
+                                파이리의 특별한 커피가 기다리고 있어요!
+                            </p>
+                        </div>
 
-                <div className={styles.formGroup}>
-                    <label htmlFor="password" className={styles.label}>비밀번호</label>
-                    <input
-                        id="password"
-                        type="password"
-                        className={styles.input}
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="비밀번호를 입력하세요"
-                        required
-                        disabled={isLoading}
-                    />
-                </div>
+                        <div className={styles.formGroup}>
+                            <label htmlFor="username" className={styles.label}>
+                                아이디
+                            </label>
+                            <input
+                                id="username"
+                                type="text"
+                                className={styles.input}
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                placeholder="아이디를 입력하세요"
+                                required
+                                disabled={isLoading}
+                            />
+                        </div>
 
-                {error && <p className={styles.errorMessage}>⚠️ {error}</p>}
+                        <div className={styles.formGroup}>
+                            <label htmlFor="password" className={styles.label}>
+                                비밀번호
+                            </label>
+                            <input
+                                id="password"
+                                type="password"
+                                className={styles.input}
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="비밀번호를 입력하세요"
+                                required
+                                disabled={isLoading}
+                            />
+                        </div>
 
-                <button type="submit" className={styles.button} disabled={isLoading}>
-                    {isLoading ? '변신 중...' : '로그인 실현!'}
-                </button>
-            </form>
+                        {error && <p className={styles.errorMessage}>⚠️ {error}</p>}
+
+                        <button type="submit" className={styles.button} disabled={isLoading}>
+                            {isLoading ? '로그인 중...' : '로그인'}
+                        </button>
+                    </form>
+                </section>
+            </div>
         </div>
     );
 }
+
 

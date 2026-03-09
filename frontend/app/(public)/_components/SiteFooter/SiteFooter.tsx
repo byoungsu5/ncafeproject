@@ -7,7 +7,7 @@ export default function SiteFooter() {
             <div className={styles.inner}>
                 <div className={styles.top}>
                     <div className={styles.brand}>
-                        <span className={styles.logo}>🟣 파이리 Cafe</span>
+                        <span className={styles.logo}>🔥 파이리 Cafe</span>
                         <p className={styles.tagline}>당신의 공간을 파이리가 채워줍니다.</p>
                     </div>
                     <nav className={styles.nav}>
