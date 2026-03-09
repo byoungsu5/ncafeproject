@@ -3,43 +3,21 @@
 import { useState, useEffect, useRef } from 'react';
 import styles from './page.module.css';
 
+type Role = 'user' | 'model';
+
 interface ChatMessage {
     id: string;
-    sender: string;
+    role: Role;
     content: string;
-    timestamp: string;
 }
 
 export default function ChatPage() {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [inputValue, setInputValue] = useState('');
-    const [nickname, setNickname] = useState('익명');
-    const [loading, setLoading] = useState(true);
+    const [nickname, setNickname] = useState('나');
+    const [isSending, setIsSending] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
 
-    // Fetch messages
-    const fetchMessages = async () => {
-        try {
-            const response = await fetch('/api/chat');
-            if (response.ok) {
-                const data = await response.json();
-                setMessages(data);
-            }
-        } catch (error) {
-            console.error('Failed to fetch messages:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchMessages();
-        // Poll for new messages every 3 seconds for basic "live" feel
-        const interval = setInterval(fetchMessages, 3000);
-        return () => clearInterval(interval);
-    }, []);
-
-    // Scroll to bottom when messages change
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -48,49 +26,82 @@ export default function ChatPage() {
 
     const handleSend = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!inputValue.trim()) return;
+        if (!inputValue.trim() || isSending) return;
 
-        const currentMsg = inputValue;
-        setInputValue(''); // Clear input immediately for better UX
+        const userMessage: ChatMessage = {
+            id: crypto.randomUUID(),
+            role: 'user',
+            content: inputValue.trim(),
+        };
+
+        setMessages((prev) => [...prev, userMessage]);
+        setInputValue('');
+        setIsSending(true);
 
         try {
-            const response = await fetch('/api/chat', {
+            const payload = {
+                messages: [
+                    { role: 'user', content: `내 닉네임은 "${nickname}"이야.` },
+                    ...messages.map((m) => ({
+                        role: m.role,
+                        content: m.content,
+                    })),
+                    { role: userMessage.role, content: userMessage.content },
+                ],
+                stream: false,
+            };
+
+            const response = await fetch('/api/ai-chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    sender: nickname,
-                    content: currentMsg,
-                }),
+                body: JSON.stringify(payload),
             });
 
-            if (response.ok) {
-                fetchMessages(); // Refresh list
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                console.error('AI chat error:', errorData.message || 'Unknown error');
+                return;
+            }
+
+            const data: { content?: string } = await response.json();
+            if (data.content) {
+                const aiMessage: ChatMessage = {
+                    id: crypto.randomUUID(),
+                    role: 'model',
+                    content: data.content,
+                };
+                setMessages((prev) => [...prev, aiMessage]);
             }
         } catch (error) {
-            console.error('Failed to send message:', error);
+            console.error('Failed to send AI chat message:', error);
+        } finally {
+            setIsSending(false);
         }
     };
 
     return (
         <div className={styles.chatContainer}>
-            <h1 className={styles.chatTitle}>NCafe 몽글 채팅 (메모리 버전)</h1>
+            <h1 className={styles.chatTitle}>NCafe AI 채팅 (Gemini)</h1>
 
             <div className={styles.messageList} ref={scrollRef}>
-                {loading ? (
-                    <div className={styles.loading}>채팅을 불러오는 중...</div>
+                {messages.length === 0 ? (
+                    <div className={styles.loading}>
+                        첫 메시지를 보내서 Gemini와 대화를 시작해보세요.
+                    </div>
                 ) : (
                     messages.map((msg) => (
                         <div
                             key={msg.id}
-                            className={`${styles.messageItem} ${msg.sender === nickname ? styles.own : ''}`}
+                            className={`${styles.messageItem} ${
+                                msg.role === 'user' ? styles.own : ''
+                            }`}
                         >
-                            <span className={styles.senderName}>{msg.sender}</span>
-                            <div className={styles.messageBubble}>{msg.content}</div>
-                            <span className={styles.timestamp}>
-                                {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            <span className={styles.senderName}>
+                                {msg.role === 'user' ? nickname : 'Gemini'}
                             </span>
+                            <div className={styles.messageBubble}>{msg.content}</div>
                         </div>
                     ))
                 )}
@@ -115,11 +126,12 @@ export default function ChatPage() {
                 <button
                     type="submit"
                     className={styles.sendButton}
-                    disabled={!inputValue.trim()}
+                    disabled={!inputValue.trim() || isSending}
                 >
-                    전송
+                    {isSending ? '응답 생성 중...' : '전송'}
                 </button>
             </form>
         </div>
     );
 }
+
