@@ -54,7 +54,7 @@ export default function SiteHeader() {
                                     href="/admin/menus"
                                     className={`${styles.navLink} ${pathname.startsWith('/admin') ? styles.navLinkActive : ''}`}
                                 >
-                                    관리자
+                                    {user.username}님
                                 </Link>
                                 <button onClick={logout} className={styles.navLink}>
                                     로그아웃
