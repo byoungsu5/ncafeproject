@@ -65,3 +65,18 @@
     color: white;
     background: linear-gradient(135deg, #a78bfa 0%, #f687b3 100%);
 }
+
+.cartBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.5rem;
+    height: 1.5rem;
+    margin-left: 0.4rem;
+    padding: 0 0.3rem;
+    border-radius: 999px;
+    background: #f97316;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
