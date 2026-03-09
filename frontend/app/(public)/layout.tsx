@@ -1,4 +1,5 @@
 import SiteHeader from './_components/SiteHeader';
+import ChatWidget from './_components/ChatWidget';
 import SiteFooter from './_components/SiteFooter';
 import styles from './layout.module.css';
 
@@ -10,6 +11,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                 {children}
             </div>
             <SiteFooter />
+            <ChatWidget />
         </div>
     );
 }
