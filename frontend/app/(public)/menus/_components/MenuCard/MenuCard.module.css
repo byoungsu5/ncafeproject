@@ -11,7 +11,7 @@
 
 .card:hover {
     transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.12), 0 8px 16px rgba(139, 92, 246, 0.08);
+    box-shadow: 0 20px 40px rgba(234, 88, 12, 0.12), 0 8px 16px rgba(234, 88, 12, 0.08);
 }
 
 .card:hover .image {
@@ -38,7 +38,7 @@
 .overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(109, 40, 217, 0.4) 0%, transparent 50%);
+    background: linear-gradient(to top, rgba(234, 88, 12, 0.4) 0%, transparent 50%);
     opacity: 0;
     transition: opacity 0.35s ease;
     pointer-events: none;
@@ -77,13 +77,13 @@
     display: inline-block;
     font-size: 0.75rem;
     font-weight: 700;
-    color: #7c3aed;
-    background: #f5f3ff;
+    color: #c2410c;
+    background: #ffedd5;
     padding: 0.3rem 0.8rem;
     border-radius: 50px;
     margin-bottom: 0.75rem;
     letter-spacing: 0.02em;
-    border: 1px solid #ddd6fe;
+    border: 1px solid #fed7aa;
 }
 
 .name {
@@ -104,7 +104,7 @@
 .price {
     font-size: 1.2rem;
     font-weight: 900;
-    background: linear-gradient(135deg, #8b5cf6 0%, #d1a7e9 100%);
+    background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

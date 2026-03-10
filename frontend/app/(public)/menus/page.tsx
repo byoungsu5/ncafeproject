@@ -15,12 +15,19 @@ export default function MenuPage() {
     }, []);
 
     return (
-        <main>
+        <main className={styles.page}>
+            {/* Background elements for premium feel (Unified with Main Page) */}
+            <div className={styles.bgGlow1} />
+            <div className={styles.bgGlow2} />
+            <div className={styles.bgGrid} />
+
             {/* Hero Banner */}
             <section className={styles.hero}>
-                <div className={styles.heroOverlay} />
                 <div className={styles.heroContent}>
-                    <span className={styles.heroLabel}>파이리의 뜨거운 메뉴</span>
+                    <span className={styles.heroLabel}>
+                        <span className={styles.heroDot}></span>
+                        파이리의 뜨거운 메뉴
+                    </span>
                     <h1 className={styles.heroTitle}>
                         당신을 위해 준비한
                         <br />

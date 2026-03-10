@@ -100,15 +100,15 @@ export default function Home() {
                             </span>
                         </div>
                         <h2 className={styles.locationTitle}>
-                            화산재가 아스라이 날리는<br/>
-                            <span className={styles.locationHighlight}>파이리 화산 카페</span>로 오세요!
+                            화산재가 아스라이 날리는<br />
+                            <span className={styles.locationHighlight}>파이리 카페</span>로 오세요!
                         </h2>
                         <p className={styles.locationDescription}>
-                            꼬부기와 이상해씨도 매일 찾아오는 환상의 휴식처!<br/>
-                            대자연의 숨결이 느껴지는 활화산 절경을 배경으로<br/>
+                            꼬부기와 이상해씨도 매일 찾아오는 환상의 휴식처!<br />
+                            대자연의 숨결이 느껴지는 활화산 절경을 배경으로<br />
                             파이리가 정성껏 내려주는 참숯 로스팅 커피를 즐겨보세요.
                         </p>
-                        
+
                         <div className={styles.locationInfo}>
                             <div className={styles.infoItem}>
                                 <span className={styles.infoIcon}>🌋</span>
@@ -130,7 +130,7 @@ export default function Home() {
                     <div className={styles.locationVisual}>
                         <div className={styles.locationImageWrapper}>
                             <Image
-                                src="/images/cafe-location.jpg"
+                                src="/images/cafe-location.png"
                                 alt="파이리 카페 전경"
                                 fill
                                 sizes="(max-width: 1024px) 100vw, 600px"
