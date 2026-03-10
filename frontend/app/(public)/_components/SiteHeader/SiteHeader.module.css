@@ -22,10 +22,10 @@
     font-size: 1.5rem;
     font-weight: 900;
     letter-spacing: -0.05em;
-    background: linear-gradient(120deg, #fed7aa 0%, #fbbf24 50%, #f97316 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #fff7ed; /* Plain solid color so it doesn't fade into the background */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
 }
 
 .nav {
@@ -40,6 +40,9 @@
     font-size: 1rem;
     font-weight: 600;
     color: #fffbeb;
+    background: transparent;
+    border: none;
+    cursor: pointer;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 

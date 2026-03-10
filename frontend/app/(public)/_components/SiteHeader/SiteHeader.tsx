@@ -17,7 +17,7 @@ export default function SiteHeader() {
         <header className={styles.header}>
             <div className={styles.inner}>
                 <Link href="/" className={styles.logo}>
-                    🟣 파이리 Cafe
+                    🔥 파이리 Cafe
                 </Link>
                 <nav className={styles.nav}>
                     <Link
