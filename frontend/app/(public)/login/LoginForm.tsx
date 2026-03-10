@@ -38,8 +38,8 @@ export default function LoginForm() {
                     <div className={styles.leftCard}>
                         <div className={styles.leftImageWrapper}>
                             <Image
-                                src="/images/charmander-barista.png"
-                                alt="커피를 들고 있는 파이리"
+                                src="/images/charmander-barista2.png"
+                                alt="따뜻한 커피를 들고 있는 파이리"
                                 fill
                                 sizes="(max-width: 1024px) 100vw, 420px"
                             />
