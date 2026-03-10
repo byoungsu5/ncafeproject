@@ -9,7 +9,7 @@
     left: 1.25rem;
     top: 50%;
     transform: translateY(-50%);
-    color: #f59e0b;
+    color: #ff6b35;
     pointer-events: none;
     transition: color 0.2s ease;
 }
@@ -17,28 +17,28 @@
 .input {
     width: 100%;
     padding: 0.9rem 1.5rem 0.9rem 3.2rem;
-    border: 2px solid #fde047;
+    border: 2px solid #ff6b35;
     border-radius: 50px;
     font-size: 0.95rem;
     font-weight: 500;
-    color: #78350f;
+    color: #7c2d12;
     background: white;
     transition: all 0.25s ease;
     outline: none;
-    box-shadow: 0 4px 15px rgba(253, 224, 71, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.2);
 }
 
 .input::placeholder {
-    color: #d97706;
+    color: #ff8c61;
     opacity: 0.6;
 }
 
 .input:focus {
-    border-color: #fbbf24;
-    box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.15), 0 4px 20px rgba(253, 224, 71, 0.3);
+    border-color: #e65c2b;
+    box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.15), 0 4px 20px rgba(255, 107, 53, 0.3);
 }
 
 .input:focus~.icon,
 .wrapper:focus-within .icon {
-    color: #d97706;
+    color: #e65c2b;
 }

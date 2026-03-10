@@ -4,7 +4,7 @@
     flex-direction: column;
     align-items: center;
     background: white;
-    border: 2px solid #fde047;
+    border: 2px solid #ff6b35;
     border-radius: 20px;
     overflow: hidden;
     padding-bottom: 2.5rem;
@@ -14,7 +14,7 @@
 
 .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(251, 191, 36, 0.15);
+    box-shadow: 0 15px 35px rgba(255, 107, 53, 0.15);
 }
 
 .cardLink {
@@ -33,7 +33,7 @@
     left: -10%;
     width: 120%;
     height: 140px;
-    background: #fef3c7;
+    background: #ffe4d6;
     border-radius: 0 0 50% 50%;
     z-index: 0;
 }
@@ -71,8 +71,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #fde047;
-    color: #b45309;
+    background: #ff6b35;
+    color: white;
     font-weight: bold;
 }
 
@@ -127,24 +127,24 @@
 .priceButton {
     position: relative;
     z-index: 2;
-    background: #fde047;
-    color: #b45309;
+    background: #ff6b35;
+    color: white;
     font-size: 1.15rem;
     font-weight: 900;
     padding: 0.6rem 2rem;
     border-radius: 50px;
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(253, 224, 71, 0.4);
+    box-shadow: 0 4px 10px rgba(255, 107, 53, 0.4);
     transition: all 0.2s ease;
     margin-top: 0.5rem;
 }
 
 .priceButton:hover:not(:disabled) {
-    background: #fcd34d;
+    background: #e65c2b;
     transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(252, 211, 77, 0.5);
-    color: #92400e;
+    box-shadow: 0 6px 15px rgba(255, 107, 53, 0.5);
+    color: white;
 }
 
 .priceButton:disabled {

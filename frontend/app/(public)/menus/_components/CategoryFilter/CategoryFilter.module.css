@@ -10,10 +10,10 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.7rem 1.4rem;
-    border: 2px solid #fde047;
+    border: 2px solid #ff6b35;
     border-radius: 50px;
     background: white;
-    color: #78350f;
+    color: #7c2d12;
     font-size: 0.95rem;
     font-weight: 700;
     transition: all 0.25s ease;
@@ -21,25 +21,25 @@
 }
 
 .tab:hover {
-    border-color: #fbbf24;
-    background: #fffbeb;
+    border-color: #e65c2b;
+    background: #fff0eb;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.2);
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.2);
 }
 
 .tabActive {
-    background: #fde047;
-    border-color: #fde047;
-    color: #451a03;
-    box-shadow: 0 6px 15px rgba(253, 224, 71, 0.4);
+    background: #ff6b35;
+    border-color: #ff6b35;
+    color: white;
+    box-shadow: 0 6px 15px rgba(255, 107, 53, 0.4);
 }
 
 .tabActive:hover {
-    background: #fde047;
-    border-color: #fde047;
-    color: #451a03;
+    background: #ff6b35;
+    border-color: #ff6b35;
+    color: white;
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(253, 224, 71, 0.5);
+    box-shadow: 0 8px 20px rgba(255, 107, 53, 0.5);
 }
 
 .tabIcon {
@@ -50,7 +50,7 @@
     width: 100px;
     height: 40px;
     border-radius: 50px;
-    background: linear-gradient(90deg, #fef3c7 25%, #fde047 50%, #fef3c7 75%);
+    background: linear-gradient(90deg, #ffe4d6 25%, #ffb89e 50%, #ffe4d6 75%);
     background-size: 200% 100%;
     animation: shimmer 1.5s ease-in-out infinite;
 }
