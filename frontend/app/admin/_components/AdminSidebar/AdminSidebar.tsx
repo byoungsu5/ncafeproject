@@ -10,7 +10,8 @@ import {
     Users,
     BarChart3,
     Package,
-    LogOut
+    LogOut,
+    FileText
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import styles from './AdminSidebar.module.css';
@@ -32,6 +33,12 @@ const navItems = [
         section: '주문 관리',
         items: [
             { href: '/admin/orders', label: '주문 내역', icon: ShoppingBag },
+        ],
+    },
+    {
+        section: 'RAG 관리',
+        items: [
+            { href: '/admin/rag', label: '문서 관리', icon: FileText },
         ],
     },
     {

@@ -6,7 +6,7 @@ RUN chmod +x ./gradlew
 RUN ./gradlew bootJar --no-daemon -x test --max-workers=1 -Dorg.gradle.jvmargs="-Xmx1g"
 
 # Runtime stage
-FROM eclipse-temurin:21-jre-alpine
+FROM amazoncorretto:21-alpine
 WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar app.jar
 COPY --from=builder /app/upload /app/initial-upload
