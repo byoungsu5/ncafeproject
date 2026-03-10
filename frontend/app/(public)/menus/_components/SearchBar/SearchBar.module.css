@@ -1,41 +1,44 @@
 .wrapper {
     position: relative;
-    max-width: 420px;
+    width: 100%;
+    max-width: 500px;
 }
 
 .icon {
     position: absolute;
-    left: 1.1rem;
+    left: 1.25rem;
     top: 50%;
     transform: translateY(-50%);
-    color: var(--color-gray-400);
+    color: #f59e0b;
     pointer-events: none;
     transition: color 0.2s ease;
 }
 
 .input {
     width: 100%;
-    padding: 0.75rem 1rem 0.75rem 2.8rem;
-    border: 1.5px solid var(--color-gray-200);
+    padding: 0.9rem 1.5rem 0.9rem 3.2rem;
+    border: 2px solid #fde047;
     border-radius: 50px;
-    font-size: 0.9rem;
-    color: var(--color-gray-900);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #78350f;
     background: white;
     transition: all 0.25s ease;
     outline: none;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 15px rgba(253, 224, 71, 0.2);
 }
 
 .input::placeholder {
-    color: var(--color-gray-400);
+    color: #d97706;
+    opacity: 0.6;
 }
 
 .input:focus {
-    border-color: #a78bfa;
-    box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.1), 0 2px 12px rgba(139, 92, 246, 0.08);
+    border-color: #fbbf24;
+    box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.15), 0 4px 20px rgba(253, 224, 71, 0.3);
 }
 
 .input:focus~.icon,
 .wrapper:focus-within .icon {
-    color: #8b5cf6;
+    color: #d97706;
 }

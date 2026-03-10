@@ -44,11 +44,11 @@ export default function MenuPage() {
             {/* Content */}
             <section className={styles.content}>
                 <div className={styles.toolbar}>
+                    <SearchBar onSearch={handleSearch} />
                     <CategoryFilter
                         selectedCategory={selectedCategory}
                         onSelect={setSelectedCategory}
                     />
-                    <SearchBar onSearch={handleSearch} />
                 </div>
 
                 <MenuGrid

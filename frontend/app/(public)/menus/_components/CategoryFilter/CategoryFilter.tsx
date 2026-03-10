@@ -27,8 +27,7 @@ export default function CategoryFilter({ selectedCategory, onSelect }: CategoryF
                 className={`${styles.tab} ${selectedCategory === undefined ? styles.tabActive : ''}`}
                 onClick={() => onSelect(undefined)}
             >
-                <span className={styles.tabIcon}>📋</span>
-                전체
+                전체 보기
             </button>
 
             {categories.map((category: CategoryResponse) => (

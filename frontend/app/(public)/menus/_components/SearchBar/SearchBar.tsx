@@ -34,7 +34,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
             <input
                 type="text"
                 className={styles.input}
-                placeholder="메뉴 검색..."
+                placeholder="찾고 싶은 메뉴가 있나요? (예: 아메리카노)"
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
             />
