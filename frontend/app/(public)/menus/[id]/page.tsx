@@ -80,11 +80,15 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
                     </div>
                     <div className={styles.infoColumn}>
                         <MenuDetailContent
+                            id={menu.id}
                             korName={menu.korName}
                             engName={menu.engName}
                             price={menu.price}
                             categoryName={menu.categoryName}
                             description={menu.description}
+                            imageSrc={menu.imageSrc}
+                            isAvailable={menu.isAvailable}
+                            isSoldOut={menu.isSoldOut}
                         />
                     </div>
                 </div>
