@@ -377,6 +377,126 @@
   animation: rotate 60s linear infinite reverse;
 }
 
+/* Location Section */
+.locationSection {
+  position: relative;
+  z-index: 10;
+  max-width: 1200px;
+  margin: 2rem auto 6rem;
+  padding: 0 2rem;
+  animation: slideUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+  opacity: 0;
+}
+
+.locationInner {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 4rem;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border-radius: 40px;
+  padding: 3.5rem;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+.locationText {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.locationTitle {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 800;
+  line-height: 1.35;
+  color: #431407;
+}
+
+.locationHighlight {
+  color: #ea580c;
+}
+
+.locationDescription {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #525252;
+}
+
+.locationInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 1rem;
+  background: rgba(254, 243, 199, 0.3);
+  padding: 1.5rem;
+  border-radius: 20px;
+  border: 1px solid rgba(252, 211, 77, 0.3);
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.infoIcon {
+  font-size: 1.5rem;
+  background: white;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 5px 15px rgba(234, 88, 12, 0.1);
+}
+
+.infoLabel {
+  display: block;
+  font-size: 0.85rem;
+  color: #ea580c;
+  margin-bottom: 0.2rem;
+}
+
+.infoValue {
+  font-weight: 600;
+  color: #431407;
+  font-size: 1.05rem;
+}
+
+.locationVisual {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/10;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(234, 88, 12, 0.2);
+}
+
+.locationImageWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.locationImage {
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.locationVisual:hover .locationImage {
+  transform: scale(1.05);
+}
+
+.imageOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(67, 20, 7, 0.4), transparent 40%);
+  pointer-events: none;
+}
+
 /* Responsiveness */
 @media (max-width: 1024px) {
   .heroInner {
@@ -391,6 +511,11 @@
     flex-wrap: wrap;
     gap: 1.5rem;
     padding: 1.5rem;
+  }
+  
+  .locationInner {
+    gap: 2rem;
+    padding: 2.5rem;
   }
 }
 
@@ -437,6 +562,23 @@
   .badgeBottomLeft {
     left: 0;
   }
+  
+  .locationInner {
+    grid-template-columns: 1fr;
+    padding: 2rem;
+    gap: 3rem;
+  }
+  
+  .locationText {
+    text-align: center;
+    align-items: center;
+  }
+  
+  .locationInfo {
+    width: 100%;
+    align-items: flex-start;
+    text-align: left;
+  }
 }
 
 @media (max-width: 480px) {
@@ -464,5 +606,13 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+  }
+  
+  .locationInner {
+    padding: 1.5rem;
+  }
+  
+  .locationTitle {
+    font-size: 1.6rem;
   }
 }

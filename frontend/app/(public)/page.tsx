@@ -89,6 +89,58 @@ export default function Home() {
                     </div>
                 </div>
             </section>
+
+            {/* Location Section */}
+            <section className={styles.locationSection}>
+                <div className={styles.locationInner}>
+                    <div className={styles.locationText}>
+                        <div className={styles.badgeWrapper}>
+                            <span className={styles.badge}>
+                                📍 찾아오시는 길
+                            </span>
+                        </div>
+                        <h2 className={styles.locationTitle}>
+                            화산재가 아스라이 날리는<br/>
+                            <span className={styles.locationHighlight}>파이리 화산 카페</span>로 오세요!
+                        </h2>
+                        <p className={styles.locationDescription}>
+                            꼬부기와 이상해씨도 매일 찾아오는 환상의 휴식처!<br/>
+                            대자연의 숨결이 느껴지는 활화산 절경을 배경으로<br/>
+                            파이리가 정성껏 내려주는 참숯 로스팅 커피를 즐겨보세요.
+                        </p>
+                        
+                        <div className={styles.locationInfo}>
+                            <div className={styles.infoItem}>
+                                <span className={styles.infoIcon}>🌋</span>
+                                <div>
+                                    <strong className={styles.infoLabel}>주소</strong>
+                                    <p className={styles.infoValue}>관동지방 홍련섬 화산 동굴 앞 절경 1번지</p>
+                                </div>
+                            </div>
+                            <div className={styles.infoItem}>
+                                <span className={styles.infoIcon}>⏰</span>
+                                <div>
+                                    <strong className={styles.infoLabel}>영업 시간</strong>
+                                    <p className={styles.infoValue}>매일 09:00 - 22:00 (용암 분출 시 휴무)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={styles.locationVisual}>
+                        <div className={styles.locationImageWrapper}>
+                            <Image
+                                src="/images/cafe-location.jpg"
+                                alt="파이리 카페 전경"
+                                fill
+                                sizes="(max-width: 1024px) 100vw, 600px"
+                                className={styles.locationImage}
+                            />
+                            <div className={styles.imageOverlay}></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
     );
 }
