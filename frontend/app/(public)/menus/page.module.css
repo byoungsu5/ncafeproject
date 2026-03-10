@@ -19,6 +19,22 @@
   background-color: #fafafa;
 }
 
+.page::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/images/cafe-location.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  opacity: 0.15;
+  z-index: 0;
+  pointer-events: none;
+}
+
 .bgGlow1 {
   position: absolute;
   top: -10%;
