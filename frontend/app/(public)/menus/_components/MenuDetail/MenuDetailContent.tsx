@@ -1,3 +1,4 @@
+import { ShoppingCart, CreditCard } from 'lucide-react';
 import styles from './MenuDetailContent.module.css';
 
 interface MenuDetailContentProps {
@@ -28,6 +29,17 @@ export default function MenuDetailContent({
                     <p className={styles.description}>{description}</p>
                 </div>
             )}
+
+            <div className={styles.actionButtons}>
+                <button className={styles.cartBtn}>
+                    <ShoppingCart size={20} />
+                    장바구니 담기
+                </button>
+                <button className={styles.orderBtn}>
+                    <CreditCard size={20} />
+                    바로 주문하기
+                </button>
+            </div>
         </div>
     );
 }
