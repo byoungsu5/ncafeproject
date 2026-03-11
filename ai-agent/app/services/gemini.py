@@ -3,7 +3,7 @@ from typing import Generator
 from app import config
 
 client = genai.Client(api_key=config.GEMINI_API_KEY)
-MODEL_NAME = "gemini-2.5-flash"
+MODEL_NAME = getattr(config, "MODEL_NAME", "gemini-2.5-flash")
 
 def chat(messages: list[dict]) -> str:
     response = client.models.generate_content(
