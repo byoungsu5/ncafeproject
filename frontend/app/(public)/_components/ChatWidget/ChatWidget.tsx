@@ -102,11 +102,12 @@ export default function ChatWidget() {
                 setMessages((prev) => [...prev, botMsg]);
             }
         } catch (error) {
+            const message = error instanceof Error ? error.message : 'Unknown error';
             const errorMsg: WidgetMessage = {
                 id: createId(),
                 role: 'system',
                 content:
-                    '꼬부꼬북… 🌊 지금은 바닷속 통신이 불안정해북! 잠시 후에 다시 불러줘꼬북!',
+                    `꼬부꼬북… 🌊 지금은 바닷속 통신이 불안정해북! (${message}) 잠시 후에 다시 불러줘꼬북!`,
             };
             setMessages((prev) => [...prev, errorMsg]);
         } finally {
