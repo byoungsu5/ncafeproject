@@ -73,7 +73,16 @@ export default function AdminOrdersPage() {
             if (response.ok) {
                 fetchOrders(true);
             } else {
-                alert('상태 업데이트에 실패했습니다.');
+                let errorMessage = '알 수 없는 오류';
+                const text = await response.text();
+                try {
+                    const errorData = JSON.parse(text);
+                    errorMessage = errorData.message || response.statusText;
+                } catch (e) {
+                    // JSON이 아닌 경우 (예: HTML 에러 페이지)
+                    errorMessage = text.substring(0, 100) || response.statusText;
+                }
+                alert(`상태 업데이트에 실패했습니다: ${errorMessage}`);
             }
         } catch (error) {
             console.error('Update failed:', error);
@@ -111,14 +120,14 @@ export default function AdminOrdersPage() {
                 return (
                     <span className={`${styles.statusBadge} ${styles.statusCompleted}`}>
                         <CheckCircle size={14} style={{ marginRight: '4px' }} />
-                        완료됨
+                        완료
                     </span>
                 );
             case 'CANCELLED':
                 return (
                     <span className={`${styles.statusBadge} ${styles.statusCancelled}`}>
                         <XCircle size={14} style={{ marginRight: '4px' }} />
-                        취소됨
+                        주문취소
                     </span>
                 );
             default:
@@ -200,15 +209,32 @@ export default function AdminOrdersPage() {
                                                     <>
                                                         <button 
                                                             className={`${styles.actionButton} ${styles.completeButton}`}
-                                                            onClick={() => updateOrderStatus(order.id, 'COMPLETED')}
+                                                            onClick={() => updateOrderStatus(order.id, 'ACCEPTED')}
+                                                            style={{ backgroundColor: '#0ea5e9' }}
                                                         >
-                                                            주문 완료
+                                                            주문 확인
                                                         </button>
                                                         <button 
                                                             className={styles.actionButton}
                                                             onClick={() => updateOrderStatus(order.id, 'CANCELLED')}
                                                         >
-                                                            취소
+                                                            주문 취소
+                                                        </button>
+                                                    </>
+                                                )}
+                                                {order.status === 'ACCEPTED' && (
+                                                    <>
+                                                        <button 
+                                                            className={`${styles.actionButton} ${styles.completeButton}`}
+                                                            onClick={() => updateOrderStatus(order.id, 'COMPLETED')}
+                                                        >
+                                                            조리 완료
+                                                        </button>
+                                                        <button 
+                                                            className={styles.actionButton}
+                                                            onClick={() => updateOrderStatus(order.id, 'CANCELLED')}
+                                                        >
+                                                            주문 취소
                                                         </button>
                                                     </>
                                                 )}

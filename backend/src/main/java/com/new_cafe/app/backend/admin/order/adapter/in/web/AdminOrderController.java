@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin/orders")
@@ -25,19 +24,27 @@ public class AdminOrderController {
     @PatchMapping("/{orderId}/status")
     public ResponseEntity<Order> updateOrderStatus(
             @PathVariable Long orderId,
-            @RequestBody Map<String, String> body) {
+            @RequestBody StatusUpdateRequest request) {
         
-        String statusStr = body.get("status");
+        String statusStr = request.status();
         if (statusStr == null) {
             return ResponseEntity.badRequest().build();
         }
 
         try {
+            System.out.println("[AdminOrderController] Updating order " + orderId + " to status " + statusStr);
             OrderStatus status = OrderStatus.valueOf(statusStr);
             Order updatedOrder = orderUseCase.updateOrderStatus(orderId, status);
             return ResponseEntity.ok(updatedOrder);
         } catch (IllegalArgumentException e) {
+            System.err.println("[AdminOrderController] Invalid status: " + statusStr);
             return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            System.err.println("[AdminOrderController] Failed to update order: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
         }
     }
+
+    public record StatusUpdateRequest(String status) {}
 }

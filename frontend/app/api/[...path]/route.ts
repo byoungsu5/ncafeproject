@@ -23,6 +23,9 @@ async function proxyRequest(req: NextRequest) {
 
         if (token) {
             headers.set('Authorization', `Bearer ${token}`);
+            console.log(`[API Proxy] ${req.method} ${pathname} - Token found`);
+        } else {
+            console.warn(`[API Proxy] ${req.method} ${pathname} - No token found in session`);
         }
 
         let body: BodyInit | null = null;
@@ -40,6 +43,8 @@ async function proxyRequest(req: NextRequest) {
             headers,
             body,
         });
+
+        console.log(`[API Proxy] ${req.method} ${pathname} -> Backend returned ${proxyRes.status}`);
 
         if (proxyRes.status === 401 && token) {
             session.destroy();
