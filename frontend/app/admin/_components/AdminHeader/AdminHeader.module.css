@@ -1,14 +1,16 @@
 .header {
     height: var(--header-height);
-    background-color: var(--bg-primary);
-    border-bottom: 1px solid var(--color-gray-200);
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(249, 115, 22, 0.2);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 var(--space-6);
+    padding: 0 var(--space-8);
     position: sticky;
     top: 0;
     z-index: 50;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 
 .left {
@@ -18,26 +20,15 @@
 }
 
 .pageTitle {
-    font-size: var(--text-xl);
-    font-weight: var(--font-semibold);
-    color: var(--color-gray-900);
+    font-size: var(--text-lg);
+    font-weight: 800;
+    color: #4a3222;
+    letter-spacing: -0.02em;
 }
 
-.breadcrumb {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-size: var(--text-sm);
-    color: var(--color-gray-500);
-}
-
-.breadcrumbSeparator {
-    color: var(--color-gray-300);
-}
-
-.breadcrumbCurrent {
-    color: var(--color-gray-900);
-    font-weight: var(--font-medium);
+.pageTitle::before {
+    content: "🔥";
+    margin-right: 0.5rem;
 }
 
 .right {
@@ -51,51 +42,55 @@
 }
 
 .searchInput {
-    width: 240px;
-    height: 40px;
+    width: 260px;
+    height: 42px;
     padding: 0 var(--space-4);
     padding-left: var(--space-10);
-    border: 1px solid var(--color-gray-200);
-    border-radius: var(--radius-md);
+    border: 1px solid rgba(249, 115, 22, 0.2);
+    border-radius: var(--radius-full);
     font-size: var(--text-sm);
-    background-color: var(--color-gray-50);
-    transition: all var(--transition-fast);
+    background-color: rgba(249, 115, 22, 0.03);
+    transition: all var(--transition-base);
+    color: #4a3222;
 }
 
 .searchInput:focus {
     outline: none;
-    border-color: var(--color-primary-500);
-    background-color: var(--bg-primary);
-    box-shadow: 0 0 0 3px var(--color-primary-100);
+    border-color: #f97316;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1);
+    width: 300px;
 }
 
 .searchIcon {
     position: absolute;
-    left: var(--space-3);
+    left: var(--space-4);
     top: 50%;
     transform: translateY(-50%);
-    color: var(--color-gray-400);
-    width: 18px;
-    height: 18px;
+    color: #f97316;
+    width: 16px;
+    height: 16px;
+    opacity: 0.7;
 }
 
 .iconButton {
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
     border: none;
     background-color: transparent;
-    border-radius: var(--radius-md);
-    color: var(--color-gray-500);
+    border-radius: var(--radius-full);
+    color: #8b5a3c;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all var(--transition-base);
 }
 
 .iconButton:hover {
-    background-color: var(--color-gray-100);
-    color: var(--color-gray-700);
+    background-color: rgba(249, 115, 22, 0.08);
+    color: #f97316;
+    transform: translateY(-1px);
 }
 
 .notificationBadge {
@@ -104,11 +99,24 @@
 
 .badge {
     position: absolute;
-    top: 6px;
-    right: 6px;
+    top: 10px;
+    right: 10px;
     width: 8px;
     height: 8px;
-    background-color: var(--color-error);
+    background-color: #ef4444;
     border-radius: var(--radius-full);
-    border: 2px solid var(--bg-primary);
+    border: 2px solid white;
+}
+
+@media (max-width: 768px) {
+    .searchInput {
+        width: 42px;
+        padding: 0;
+        cursor: pointer;
+    }
+    
+    .searchInput:focus {
+        width: 200px;
+        padding-left: var(--space-10);
+    }
 }

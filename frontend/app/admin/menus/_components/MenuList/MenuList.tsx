@@ -9,11 +9,12 @@ const ITEMS_PER_PAGE = 12;
 interface MenuListProps {
     selectedCategory: number | undefined;
     searchQuery: string | undefined;
+    onDataFetch?: (total: number, soldOut: number) => void;
 }
 
-export default function MenuList({ selectedCategory, searchQuery }: MenuListProps) {
+export default function MenuList({ selectedCategory, searchQuery, onDataFetch }: MenuListProps) {
 
-    const { menus } = useMenus(selectedCategory, searchQuery);
+    const { menus, total } = useMenus(selectedCategory, searchQuery);
 
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -21,6 +22,13 @@ export default function MenuList({ selectedCategory, searchQuery }: MenuListProp
     useEffect(() => {
         setCurrentPage(1);
     }, [selectedCategory, searchQuery]);
+
+    useEffect(() => {
+        if (onDataFetch) {
+            const soldOut = menus.filter(m => m.isSoldOut).length;
+            onDataFetch(total, soldOut);
+        }
+    }, [menus, total, onDataFetch]);
 
     return (
         <div>

@@ -65,7 +65,7 @@ export default function SignupForm() {
                             <p className={styles.leftSubtitle}>파이리가 기다리고 있었어요!</p>
                         </div>
                     </section>
-                    
+
                     <section className={styles.rightPanel}>
                         <div className={styles.loginCard}>
                             <div className={styles.header}>

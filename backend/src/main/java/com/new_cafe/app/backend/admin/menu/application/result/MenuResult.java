@@ -12,6 +12,8 @@ public record MenuResult(
         Integer price,
         Long categoryId,
         Boolean isAvailable,
+        String imageSrc,
+        String categoryName,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
@@ -24,6 +26,8 @@ public record MenuResult(
                 menu.getPrice(),
                 menu.getCategoryId(),
                 menu.getIsAvailable(),
+                menu.getImageSrc(),
+                menu.getCategoryName(),
                 menu.getCreatedAt(),
                 menu.getUpdatedAt()
         );

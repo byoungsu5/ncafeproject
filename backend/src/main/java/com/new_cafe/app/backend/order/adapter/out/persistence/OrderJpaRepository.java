@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface OrderJpaRepository extends JpaRepository<OrderEntity, Long> {
     List<OrderEntity> findByNicknameOrderByOrderTimeDesc(String nickname);
+    List<OrderEntity> findAllByOrderByOrderTimeDesc();
 }

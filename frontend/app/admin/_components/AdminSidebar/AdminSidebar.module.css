@@ -4,81 +4,83 @@
     top: 0;
     bottom: 0;
     width: var(--sidebar-width);
-    background-color: var(--bg-primary);
-    border-right: 1px solid var(--color-gray-200);
+    background-color: #ffffff;
+    border-right: 1px solid rgba(249, 115, 22, 0.1);
     display: flex;
     flex-direction: column;
     z-index: 100;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.02);
 }
 
 .logo {
-    padding: var(--space-6);
-    border-bottom: 1px solid var(--color-gray-100);
+    padding: var(--space-8) var(--space-6);
+    border-bottom: 1px solid rgba(249, 115, 22, 0.05);
 }
 
 .logoText {
-    font-size: var(--text-xl);
-    font-weight: var(--font-bold);
-    color: var(--color-primary-600);
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #4a3222;
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--space-3);
+    letter-spacing: -0.05em;
 }
 
 .logoIcon {
-    font-size: var(--text-2xl);
+    font-size: 1.5rem;
+    filter: drop-shadow(0 0 8px rgba(249, 115, 22, 0.4));
 }
 
 .nav {
     flex: 1;
-    padding: var(--space-4);
+    padding: var(--space-6) var(--space-4);
     overflow-y: auto;
 }
 
 .navSection {
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-8);
 }
 
 .navSectionTitle {
-    font-size: var(--text-xs);
-    font-weight: var(--font-semibold);
-    color: var(--color-gray-400);
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #a47551;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 0 var(--space-3);
-    margin-bottom: var(--space-2);
+    letter-spacing: 0.1em;
+    padding: 0 var(--space-4);
+    margin-bottom: var(--space-4);
+    opacity: 0.6;
 }
 
 .navList {
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
+    gap: var(--space-2);
 }
 
 .navItem {
     display: flex;
     align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-3);
-    border-radius: var(--radius-md);
-    color: var(--color-gray-600);
-    font-size: var(--text-sm);
-    font-weight: var(--font-medium);
-    transition: all var(--transition-fast);
+    gap: var(--space-4);
+    padding: 0.8rem 1rem;
+    border-radius: var(--radius-lg);
+    color: #5a3d29;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all var(--transition-base);
 }
 
 .navItem:hover {
-    background-color: var(--color-gray-50);
-    color: var(--color-gray-900);
+    background-color: rgba(249, 115, 22, 0.05);
+    color: #f97316;
+    transform: translateX(4px);
 }
 
 .navItemActive {
-    background-color: var(--color-primary-50);
-    color: var(--color-primary-700);
-}
-
-.navItemActive:hover {
-    background-color: var(--color-primary-100);
+    background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.25);
 }
 
 .navIcon {
@@ -88,63 +90,77 @@
 }
 
 .footer {
-    padding: var(--space-4);
-    border-top: 1px solid var(--color-gray-100);
+    padding: var(--space-6) var(--space-4);
+    border-top: 1px solid rgba(249, 115, 22, 0.05);
 }
 
 .cafeInfo {
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    padding: var(--space-3);
-    background-color: var(--color-gray-50);
-    border-radius: var(--radius-md);
+    padding: 1rem;
+    background-color: rgba(249, 115, 22, 0.03);
+    border-radius: var(--radius-xl);
+    border: 1px solid rgba(249, 115, 22, 0.05);
+    margin-bottom: 1rem;
 }
 
 .cafeAvatar {
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-full);
-    background-color: var(--color-primary-100);
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #fef3c7 0%, #ffedd5 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: var(--text-lg);
+    font-size: 1.25rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .cafeName {
-    font-size: var(--text-sm);
-    font-weight: var(--font-semibold);
-    color: var(--color-gray-900);
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: #4a3222;
 }
 
 .cafeRole {
-    font-size: var(--text-xs);
-    color: var(--color-gray-500);
+    font-size: 0.75rem;
+    color: #a47551;
+    font-weight: 500;
 }
 
 .logoutButton {
     width: 100%;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: var(--space-2);
-    padding: var(--space-3);
-    margin-top: var(--space-2);
-    border: none;
+    padding: 0.8rem;
+    border: 1px solid rgba(239, 68, 68, 0.1);
     background: transparent;
-    color: var(--color-gray-500);
-    font-size: var(--text-sm);
-    font-weight: var(--font-medium);
+    color: #ef4444;
+    font-size: 0.9rem;
+    font-weight: 700;
     cursor: pointer;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     transition: all 0.2s ease;
 }
 
 .logoutButton:hover {
-    background-color: #fee2e2;
-    color: #ef4444;
+    background-color: #fef2f2;
+    border-color: #ef4444;
+    transform: translateY(-1px);
 }
 
 .hiddenTitle {
     display: none;
+}
+
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(249, 115, 22, 0.1);
+    border-radius: 10px;
 }

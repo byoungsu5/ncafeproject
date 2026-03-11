@@ -12,6 +12,8 @@ public record MenuResponse(
         Integer price,
         Long categoryId,
         Boolean isAvailable,
+        String imageSrc,
+        String categoryName,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
@@ -24,6 +26,8 @@ public record MenuResponse(
                 result.price(),
                 result.categoryId(),
                 result.isAvailable(),
+                result.imageSrc(),
+                result.categoryName(),
                 result.createdAt(),
                 result.updatedAt()
         );

@@ -47,4 +47,18 @@ public class OrderService implements OrderUseCase {
     public List<Order> getOrdersByNickname(String nickname) {
         return orderPort.findByNickname(nickname);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Order> getAllOrders() {
+        return orderPort.findAll();
+    }
+
+    @Override
+    public Order updateOrderStatus(Long orderId, OrderStatus status) {
+        Order order = orderPort.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
+        order.setStatus(status);
+        return orderPort.save(order);
+    }
 }

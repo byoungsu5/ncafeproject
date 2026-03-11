@@ -20,6 +20,8 @@ public class Menu {
     private Long categoryId;
     private Boolean isAvailable;
     private Integer sortOrder;
+    private String imageSrc;
+    private String categoryName;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

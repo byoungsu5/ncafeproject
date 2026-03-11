@@ -1,4 +1,4 @@
-package com.new_cafe.app.backend.admin.menu.adapter.out.persistence;
+package com.new_cafe.app.backend.admin.menu.adapter.out.persistence.jpa;
 
 import java.time.LocalDateTime;
 
@@ -13,10 +13,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import com.new_cafe.app.backend.menu.adapter.out.persistence.CategoryEntity;
+import com.new_cafe.app.backend.admin.menu.domain.Menu;
 
 @Entity(name = "AdminMenu")
 @Table(name = "menus")
@@ -57,7 +62,12 @@ public class MenuEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public Menu toDomain() {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", insertable = false, updatable = false)
+    private CategoryEntity category;
+
+    public Menu toDomain(String imageSrc) {
+        String categoryName = (category != null) ? category.getName() : "미지정";
         return Menu.builder()
                 .id(id)
                 .korName(korName)
@@ -67,6 +77,8 @@ public class MenuEntity {
                 .categoryId(categoryId)
                 .isAvailable(isAvailable)
                 .sortOrder(sortOrder)
+                .imageSrc(imageSrc != null ? imageSrc : "blank.png")
+                .categoryName(categoryName)
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
                 .build();

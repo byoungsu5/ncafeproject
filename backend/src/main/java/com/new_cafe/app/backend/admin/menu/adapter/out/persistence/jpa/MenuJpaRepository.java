@@ -1,4 +1,4 @@
-package com.new_cafe.app.backend.admin.menu.adapter.out.persistence;
+package com.new_cafe.app.backend.admin.menu.adapter.out.persistence.jpa;
 
 import java.util.List;
 

@@ -3,20 +3,26 @@ import styles from './CategoryTabs.module.css';
 import { CategoryResponseDto, useCategories } from './useCategories';
 import { useState } from 'react';
 
-export default function CategoryTabs({ selectedCategory, setSelectedCategory }: { selectedCategory: number | undefined; setSelectedCategory: (id: number) => void }) {
+const categoryIconMap: { [key: string]: string } = {
+    '커피': '☕',
+    '음료': '🥤',
+    '베이커리': '🥐',
+    '샌드위치': '🥪',
+    '디저트': '🍰'
+};
+
+export default function CategoryTabs({ selectedCategory, setSelectedCategory }: { selectedCategory: number | undefined; setSelectedCategory: (id: number | undefined) => void }) {
     const { categories } = useCategories();
-    // const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
 
     return (
         <div className={styles.tabs}>
             {/* 전체 탭 */}
             <button
                 className={`${styles.tab} ${selectedCategory === undefined ? styles.tabActive : ''}`}
-                onClick={() => setSelectedCategory(undefined as any)}
+                onClick={() => setSelectedCategory(undefined)}
             >
                 <span className={styles.tabIcon}>📋</span>
                 전체
-                <span className={styles.tabCount}>{100}</span>
             </button>
 
             {/* 카테고리별 탭 */}
@@ -28,9 +34,8 @@ export default function CategoryTabs({ selectedCategory, setSelectedCategory }: 
                         setSelectedCategory(category.id);
                     }}
                 >
-                    <span className={styles.tabIcon}>{category.icon}</span>
+                    <span className={styles.tabIcon}>{categoryIconMap[category.name] || '🏷️'}</span>
                     {category.name}
-                    <span className={styles.tabCount}>{0}</span>
                 </button>
             ))}
         </div>

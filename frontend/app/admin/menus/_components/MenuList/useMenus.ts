@@ -26,6 +26,7 @@ export interface MenuListResponse {
 
 export function useMenus(selectedCategory: number | undefined, searchQuery: string | undefined) {
     const [menus, setMenus] = useState<MenuResponse[]>([]);
+    const [total, setTotal] = useState(0);
 
     useEffect(() => {
         const fetchMenus = async () => {
@@ -37,7 +38,7 @@ export function useMenus(selectedCategory: number | undefined, searchQuery: stri
                 params.set('categoryId', selectedCategory.toString());
             }
             if (searchQuery) {
-                params.set('searchQuery', searchQuery);
+                params.set('query', searchQuery);
             }
 
             try {
@@ -45,34 +46,10 @@ export function useMenus(selectedCategory: number | undefined, searchQuery: stri
                 if (!response.ok) {
                     throw new Error('Failed to fetch menus');
                 }
-                const data = await response.json();
+                const data: MenuListResponse = await response.json();
 
                 setMenus(data.menus);
-
-                // 백엔드 데이터를 프론트엔드 Menu 타입으로 변환
-                // const mappedMenus: MenuResponse[] = data.map((item: any) => ({
-                //     id: String(item.id),
-                //     korName: item.korName,
-                //     engName: item.engName,
-                //     description: item.description,
-                //     price: parseInt(item.price) || 0,
-                //     // 카테고리 정보가 없으므로 임시로 첫 번째 카테고리 할당
-                //     category: mockCategories[0],
-                //     images: item.image ? [{
-                //         id: `img-${item.id}`,
-                //         url: item.image,
-                //         isPrimary: true,
-                //         sortOrder: 0
-                //     }] : [],
-                //     isAvailable: true,
-                //     isSoldOut: false,
-                //     sortOrder: item.id, // 임시 정렬 순서
-                //     options: [],
-                //     createdAt: new Date(),
-                //     updatedAt: new Date(),
-                // }));
-
-                // setMenus(data);
+                setTotal(data.total);
             } catch (error) {
                 console.error('Error fetching menus:', error);
             }
@@ -81,5 +58,5 @@ export function useMenus(selectedCategory: number | undefined, searchQuery: stri
         fetchMenus();
     }, [selectedCategory, searchQuery]);
 
-    return { menus, setMenus };
+    return { menus, total, setMenus };
 }

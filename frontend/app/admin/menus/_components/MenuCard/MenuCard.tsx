@@ -15,23 +15,27 @@ export default function MenuCard({ menu }: MenuCardProps) {
 
     return (
         <div className={styles.card}>
-            <div className={styles.imageWrapper}>
-                <Link href={`/admin/menus/${menu.id}`}>
-                    {menu.imageSrc && menu.imageSrc !== 'blank.png' ? (
-                        <Image
-                            src={`${baseUrl}/${menu.imageSrc}`}
-                            alt={menu.korName}
-                            fill
-                            className={styles.image}
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        />
-                    ) : (
-                        <div className={styles.noImage}>No Image</div>
-                    )}
-                </Link>
-                <div className={styles.badges}>
-                    {menu.isSoldOut && <span className={styles.badgeSoldOut}>품절</span>}
-                    {!menu.isAvailable && <span className={styles.badgeHidden}>숨김</span>}
+            <div className={styles.topCurve}></div>
+            
+            <div className={styles.imageContainer}>
+                <div className={styles.imageWrapper}>
+                    <Link href={`/admin/menus/${menu.id}`}>
+                        {menu.imageSrc && menu.imageSrc !== 'blank.png' ? (
+                            <Image
+                                src={`${baseUrl}/${menu.imageSrc}`}
+                                alt={menu.korName}
+                                fill
+                                className={styles.image}
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            />
+                        ) : (
+                            <div className={styles.noImage}>No Image</div>
+                        )}
+                    </Link>
+                    <div className={styles.badges}>
+                        {menu.isSoldOut && <span className={styles.badgeSoldOut}>품절</span>}
+                        {!menu.isAvailable && <span className={styles.badgeHidden}>숨김</span>}
+                    </div>
                 </div>
             </div>
 

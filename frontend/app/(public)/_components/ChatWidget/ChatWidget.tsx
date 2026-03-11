@@ -157,6 +157,16 @@ export default function ChatWidget() {
                                 </div>
                             );
                         })}
+                        {isSending && (
+                            <div className={styles.bubbleRow}>
+                                <div className={`${styles.bubble} ${styles.bubbleBot} ${styles.loadingBubble}`}>
+                                    <div className={styles.dot}></div>
+                                    <div className={styles.dot}></div>
+                                    <div className={styles.dot}></div>
+                                    <span className={styles.loadingText}>답변 대기 중...</span>
+                                </div>
+                            </div>
+                        )}
                     </div>
                     <form className={styles.footer} onSubmit={handleSubmit}>
                         <input

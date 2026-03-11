@@ -66,8 +66,8 @@ export default function AdminSidebar() {
             {/* Logo */}
             <div className={styles.logo}>
                 <div className={styles.logoText}>
-                    <span className={styles.logoIcon}>🟣</span>
-                    NCafe Admin
+                    <span className={styles.logoIcon}>🔥</span>
+                    파이리 Admin
                 </div>
             </div>
 
@@ -100,10 +100,10 @@ export default function AdminSidebar() {
             {/* Footer - Cafe Info & Logout */}
             <div className={styles.footer}>
                 <div className={styles.cafeInfo}>
-                    <div className={styles.cafeAvatar}>💜</div>
+                    <div className={styles.cafeAvatar}>👑</div>
                     <div>
                         <div className={styles.cafeName}>{user?.username || '관리자'}</div>
-                        <div className={styles.cafeRole}>{user?.roles.some(r => typeof r === 'string' ? r === 'ROLE_ADMIN' : r.authority === 'ROLE_ADMIN') ? '수퍼바이저' : '스태프'}</div>
+                        <div className={styles.cafeRole}>{user?.roles.some(r => typeof r === 'string' ? r === 'ROLE_ADMIN' : r.authority === 'ROLE_ADMIN') ? '최고 관리자' : '매니저'}</div>
                     </div>
                 </div>
                 <button onClick={logout} className={styles.logoutButton}>

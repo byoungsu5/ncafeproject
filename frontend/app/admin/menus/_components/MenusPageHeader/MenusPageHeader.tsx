@@ -1,15 +1,22 @@
 'use client';
 
 import Link from 'next/link';
-import { Plus, Search } from 'lucide-react';
+import { Plus, Search, ShoppingBag } from 'lucide-react';
 import Button from '@/components/common/Button';
 import styles from './MenusPageHeader.module.css';
 import { useState } from 'react';
 
-export default function MenusPageHeader({ searchQuery, setSearchQuery }: { searchQuery: string; setSearchQuery: (query: string) => void; }) {
-
-    const [totalCount, setTotalCount] = useState(0);
-    const [soldOutCount, setSoldOutCount] = useState(0);
+export default function MenusPageHeader({
+    searchQuery,
+    setSearchQuery,
+    totalCount,
+    soldOutCount
+}: {
+    searchQuery: string;
+    setSearchQuery: (query: string) => void;
+    totalCount: number;
+    soldOutCount: number;
+}) {
     // const [searchQuery, setSearchQuery] = useState('');
 
     return (
@@ -20,6 +27,12 @@ export default function MenusPageHeader({ searchQuery, setSearchQuery }: { searc
                     <p className={styles.subtitle}>카페의 모든 메뉴를 등록하고 관리합니다.</p>
                 </div>
                 <div className={styles.actions}>
+                    <Link href="/admin/orders">
+                        <Button variant="outline" size="sm">
+                            <ShoppingBag size={16} />
+                            주문 관리
+                        </Button>
+                    </Link>
                     <Button variant="outline" size="sm">
                         엑셀 다운로드
                     </Button>
