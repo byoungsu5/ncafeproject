@@ -33,12 +33,6 @@ export default function SiteHeader() {
                         메뉴
                     </Link>
                     <Link
-                        href="/chat"
-                        className={`${styles.navLink} ${pathname.startsWith('/chat') ? styles.navLinkActive : ''}`}
-                    >
-                        채팅
-                    </Link>
-                    <Link
                         href="/cart"
                         className={`${styles.navLink} ${pathname.startsWith('/cart') ? styles.navLinkActive : ''}`}
                     >

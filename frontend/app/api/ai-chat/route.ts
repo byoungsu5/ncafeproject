@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
         const url = new URL(`${AI_AGENT_BASE}/chat`);
-        
+
         const responseData = await new Promise((resolve, reject) => {
             const requestData = JSON.stringify(body);
             const options = {
