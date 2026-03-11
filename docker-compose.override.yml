@@ -6,3 +6,7 @@ services:
   db:
     ports:
       - "5432:5432"
+
+  ai-agent:
+    ports:
+      - "8000:8000"
