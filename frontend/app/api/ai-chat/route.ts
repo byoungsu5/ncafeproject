@@ -7,6 +7,7 @@ export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
         const url = `${AI_AGENT_BASE}/chat`;
+        console.log(`[AI Chat] Runtime AI_AGENT_BASE: ${AI_AGENT_BASE}`);
         console.log(`[AI Chat] Proxying to: ${url}`);
 
         const res = await fetch(url, {
