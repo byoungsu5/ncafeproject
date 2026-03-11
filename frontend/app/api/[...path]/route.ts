@@ -27,6 +27,7 @@ async function proxyRequest(req: NextRequest) {
         } else {
             console.warn(`[API Proxy] ${req.method} ${pathname} - No token found in session`);
         }
+        console.log(`[API Proxy] ${req.method} ${pathname} - Incoming Origin: ${req.headers.get('origin')}`);
 
         let body: BodyInit | null = null;
         if (req.method !== 'GET' && req.method !== 'HEAD') {
