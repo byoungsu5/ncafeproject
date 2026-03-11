@@ -9,4 +9,4 @@ services:
 
   ai-agent:
     ports:
-      - "8000:8000"
+      - "8136:8000"
