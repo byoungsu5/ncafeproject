@@ -53,8 +53,8 @@ services:
       - DB_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
     depends_on:
       - db
-    expose:
-      - "8000"
+    ports:
+      - "8000:8000"
     restart: unless-stopped
 
   db:

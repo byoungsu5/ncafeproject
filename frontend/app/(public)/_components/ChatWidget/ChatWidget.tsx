@@ -11,7 +11,7 @@ interface WidgetMessage {
     content: string;
 }
 
-const BOT_NAME = '꼬부기 대리점원';
+const BOT_NAME = '파이리 대리점원';
 
 function createId() {
     if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
@@ -27,7 +27,7 @@ export default function ChatWidget() {
             id: createId(),
             role: 'bot',
             content:
-                '꼬부꼬북! 🌊 시원한 물의 기운이 가득한 NCafe에 오신 걸 환영해북!\n어떤 음료를 추천해줄꼬북?',
+                '파이리! 🔥 뜨거운 불의 기운이 가득한 파이리 카페에 오신 걸 환영해🔥!\n어떤 음료를 추천해줄까🔥?',
         },
     ]);
     const [input, setInput] = useState('');
@@ -73,8 +73,8 @@ export default function ChatWidget() {
                     {
                         role: 'user',
                         content:
-                            '너는 물 타입 포켓몬 꼬부기가 운영하는 카페 NCafe의 점원 컨셉으로 대답해야 해. ' +
-                            '문장 끝에는 꼭 "꼬북" 또는 "꼬부꼬북" 같은 말투를 써줘.',
+                            '너는 불 타입 포켓몬 파이리가 운영하는 카페 NCafe의 점원 컨셉으로 대답해야 해. ' +
+                            '문장 끝에는 꼭 "🔥" 또는 "파이리리" 같은 말투를 써줘.',
                     },
                     ...historyForModel,
                     { role: 'user', content: userContent },
@@ -89,7 +89,9 @@ export default function ChatWidget() {
             });
 
             if (!res.ok) {
-                throw new Error('AI agent error');
+                const errorData = (await res.json()) as { message?: string; error?: { message?: string } };
+                const backendMsg = errorData.message || errorData.error?.message || 'AI agent error';
+                throw new Error(backendMsg);
             }
 
             const data = (await res.json()) as { content?: string };
@@ -107,7 +109,7 @@ export default function ChatWidget() {
                 id: createId(),
                 role: 'system',
                 content:
-                    `꼬부꼬북… 🌊 지금은 바닷속 통신이 불안정해북! (${message}) 잠시 후에 다시 불러줘꼬북!`,
+                    `파이리리… 🔥 지금은 불의 기운이 불안정해🔥! (${message}) 잠시 후에 다시 불러줘🔥!`,
             };
             setMessages((prev) => [...prev, errorMsg]);
         } finally {
@@ -120,7 +122,7 @@ export default function ChatWidget() {
             {isOpen && (
                 <div className={styles.panel}>
                     <header className={styles.header}>
-                        <div className={styles.avatar}>🐢</div>
+                        <div className={styles.avatar}>🔥</div>
                         <div className={styles.titleBlock}>
                             <div className={styles.title}>{BOT_NAME}</div>
                             <div className={styles.status}>
@@ -139,18 +141,16 @@ export default function ChatWidget() {
                             return (
                                 <div
                                     key={msg.id}
-                                    className={`${styles.bubbleRow} ${
-                                        isUser ? styles.bubbleRowUser : ''
-                                    }`}
+                                    className={`${styles.bubbleRow} ${isUser ? styles.bubbleRowUser : ''
+                                        }`}
                                 >
                                     <div
-                                        className={`${styles.bubble} ${
-                                            isSystem
+                                        className={`${styles.bubble} ${isSystem
                                                 ? styles.bubbleSystem
                                                 : isUser
-                                                ? styles.bubbleUser
-                                                : styles.bubbleBot
-                                        }`}
+                                                    ? styles.bubbleUser
+                                                    : styles.bubbleBot
+                                            }`}
                                     >
                                         {msg.content}
                                     </div>
@@ -182,7 +182,7 @@ export default function ChatWidget() {
                 onClick={handleToggle}
                 aria-label={isOpen ? '채팅창 닫기' : '채팅창 열기'}
             >
-                {isOpen ? '×' : '🐢'}
+                {isOpen ? '×' : '🔥'}
             </button>
         </div>
     );
