@@ -33,8 +33,28 @@ services:
     environment:
       - API_BASE_URL=http://backend:8080
       - SESSION_SECRET=${SESSION_SECRET:-JQvH/BoClMe32u3gbIXxmf+VBxRisvakVC/HbrihT+s=}
+      - AI_AGENT_URL=http://ai-agent:8000
     depends_on:
       - backend
+      - ai-agent
+    restart: unless-stopped
+
+  ai-agent:
+    build:
+      context: ./ai-agent
+      dockerfile: Dockerfile
+    container_name: ${USER_ID:-kang}-ai-agent
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=${SPRING_DATASOURCE_DB:-mydb}
+      - DB_USER=${SPRING_DATASOURCE_USERNAME}
+      - DB_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+    depends_on:
+      - db
+    expose:
+      - "8000"
     restart: unless-stopped
 
   db:
