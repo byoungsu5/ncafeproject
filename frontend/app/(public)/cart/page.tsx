@@ -1,6 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
 import { useCartStore } from '@/src/entities/cart/model/store';
 
@@ -9,9 +11,50 @@ export default function CartPage() {
     const increaseQuantity = useCartStore((state) => state.increaseQuantity);
     const decreaseQuantity = useCartStore((state) => state.decreaseQuantity);
     const removeItem = useCartStore((state) => state.removeItem);
+    const clearCart = useCartStore((state) => state.clear);
+    const [isOrdering, setIsOrdering] = useState(false);
+    const router = useRouter();
 
     const totalCount = items.reduce((sum, item) => sum + item.quantity, 0);
     const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+    const handleOrder = async () => {
+        if (items.length === 0 || isOrdering) return;
+
+        if (!confirm('정말로 주문하시겠어요?')) return;
+
+        setIsOrdering(true);
+        try {
+            const orderRequest = {
+                items: items.map((item) => ({
+                    menuId: item.id,
+                    menuName: item.korName,
+                    price: item.price,
+                    quantity: item.quantity,
+                })),
+            };
+
+            const response = await fetch('/api/orders', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderRequest),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || '주문 중 오류가 발생했습니다.');
+            }
+
+            const order = await response.json();
+            alert(`주문이 완료되었습니다! (주문번호: ${order.id})`);
+            clearCart();
+            router.push('/');
+        } catch (error: any) {
+            alert(error.message);
+        } finally {
+            setIsOrdering(false);
+        }
+    };
 
     return (
         <main className={styles.page}>
@@ -87,9 +130,10 @@ export default function CartPage() {
                             <button
                                 type="button"
                                 className={styles.orderButton}
-                                disabled={items.length === 0}
+                                disabled={items.length === 0 || isOrdering}
+                                onClick={handleOrder}
                             >
-                                주문하기
+                                {isOrdering ? '처리 중...' : '주문하기'}
                             </button>
                         </div>
                     </>

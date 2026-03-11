@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { ShoppingCart, CreditCard } from 'lucide-react';
 import { useCartStore } from '@/src/entities/cart/model/store';
 import styles from './MenuDetailContent.module.css';
@@ -26,6 +28,8 @@ export default function MenuDetailContent({
     isSoldOut,
 }: MenuDetailContentProps) {
     const addItem = useCartStore((state) => state.addItem);
+    const [isOrdering, setIsOrdering] = useState(false);
+    const router = useRouter();
 
     const handleAddToCart = () => {
         if (!isAvailable || isSoldOut) return;
@@ -38,6 +42,45 @@ export default function MenuDetailContent({
             imageSrc,
         });
         alert(`${korName}이(가) 장바구니에 담겼습니다.`);
+    };
+
+    const handleOrderNow = async () => {
+        if (!isAvailable || isSoldOut || isOrdering) return;
+
+        if (!confirm(`${korName}을(를) 바로 주문하시겠어요?`)) return;
+
+        setIsOrdering(true);
+        try {
+            const orderRequest = {
+                items: [
+                    {
+                        menuId: id,
+                        menuName: korName,
+                        price: price,
+                        quantity: 1,
+                    },
+                ],
+            };
+
+            const response = await fetch('/api/orders', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderRequest),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || '주문 중 오류가 발생했습니다.');
+            }
+
+            const order = await response.json();
+            alert(`주문이 완료되었습니다! (주문번호: ${order.id})`);
+            router.push('/');
+        } catch (error: any) {
+            alert(error.message);
+        } finally {
+            setIsOrdering(false);
+        }
     };
 
     const disabled = !isAvailable || isSoldOut;
@@ -59,21 +102,18 @@ export default function MenuDetailContent({
                 <button 
                     className={styles.cartBtn} 
                     onClick={handleAddToCart}
-                    disabled={disabled}
+                    disabled={disabled || isOrdering}
                 >
                     <ShoppingCart size={20} />
                     {disabled ? '품절' : '장바구니 담기'}
                 </button>
                 <button 
                     className={styles.orderBtn}
-                    onClick={() => {
-                        handleAddToCart();
-                        // You can add logic to navigate to cart/checkout page here in the future
-                    }}
-                    disabled={disabled}
+                    onClick={handleOrderNow}
+                    disabled={disabled || isOrdering}
                 >
                     <CreditCard size={20} />
-                    {disabled ? '품절' : '바로 주문하기'}
+                    {disabled ? '품절' : isOrdering ? '처리 중...' : '바로 주문하기'}
                 </button>
             </div>
         </div>
