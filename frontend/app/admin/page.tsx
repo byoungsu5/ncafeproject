@@ -48,14 +48,20 @@ export default function AdminDashboard() {
     })) || [];
 
     return (
-        <main className={styles.container}>
-            <header className={styles.header}>
-                <h1 className={styles.title}>
-                    <LayoutDashboard size={28} style={{ marginRight: '10px', verticalAlign: 'middle' }} />
-                    대시보드
-                </h1>
-                <p className={styles.subtitle}>매장 운영 현황과 매출 트렌드를 분석합니다.</p>
-            </header>
+        <main className={styles.page}>
+            {/* Background elements for premium feel */}
+            <div className={styles.bgGlow1} />
+            <div className={styles.bgGlow2} />
+            <div className={styles.bgGrid} />
+
+            <div className={styles.container}>
+                <header className={styles.header}>
+                    <h1 className={styles.title}>
+                        <LayoutDashboard size={28} style={{ marginRight: '10px', verticalAlign: 'middle' }} />
+                        대시보드
+                    </h1>
+                    <p className={styles.subtitle}>매장 운영 현황과 매출 트렌드를 분석합니다.</p>
+                </header>
 
             {/* Summary Statistics Cards */}
             <div className={styles.grid}>
@@ -174,6 +180,7 @@ export default function AdminDashboard() {
                     </div>
                 </div>
             )}
+            </div>
         </main>
     );
 }
