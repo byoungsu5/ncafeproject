@@ -8,6 +8,9 @@ import com.new_cafe.app.backend.menu.application.dto.MenuResponse;
 import com.new_cafe.app.backend.menu.application.port.in.GetMenuUseCase;
 import com.new_cafe.app.backend.menu.application.port.out.LoadMenuPort;
 import com.new_cafe.app.backend.menu.domain.Menu;
+import com.new_cafe.app.backend.menu.domain.MenuImage;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -30,5 +33,10 @@ public class MenuQueryService implements GetMenuUseCase {
     public MenuListResponse getMenus(Long categoryId, String query) {
         var menus = loadMenuPort.findAll(categoryId, query);
         return MenuListResponse.from(menus);
+    }
+
+    @Override
+    public List<MenuImage> getMenuImages(Long menuId) {
+        return loadMenuPort.findImagesByMenuId(menuId);
     }
 }

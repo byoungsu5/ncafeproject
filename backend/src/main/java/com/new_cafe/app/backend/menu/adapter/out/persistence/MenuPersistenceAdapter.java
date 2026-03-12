@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.new_cafe.app.backend.menu.application.port.out.LoadMenuPort;
 import com.new_cafe.app.backend.menu.domain.Menu;
+import com.new_cafe.app.backend.menu.domain.MenuImage;
 
 @Component
 public class MenuPersistenceAdapter implements LoadMenuPort {
@@ -48,6 +49,13 @@ public class MenuPersistenceAdapter implements LoadMenuPort {
                     String imageSrc = menuImageRepository.findFirstImageSrcByMenuId(entity.getId());
                     return entity.toDomain(imageSrc);
                 })
+                .toList();
+    }
+
+    @Override
+    public List<MenuImage> findImagesByMenuId(Long menuId) {
+        return menuImageRepository.findByMenuIdOrderBySortOrder(menuId).stream()
+                .map(MenuImageEntity::toDomain)
                 .toList();
     }
 }

@@ -35,4 +35,14 @@ public class MenuImageEntity {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    public com.new_cafe.app.backend.menu.domain.MenuImage toDomain() {
+        return com.new_cafe.app.backend.menu.domain.MenuImage.builder()
+                .id(this.id)
+                .menuId(this.menuId)
+                .url(this.srcUrl)
+                .sortOrder(this.sortOrder)
+                .createdAt(this.createdAt)
+                .build();
+    }
 }

@@ -29,16 +29,17 @@ export function useMenuImages(menuId: string | number) {
                 if (!response.ok) {
                     throw new Error('Failed to fetch menu images');
                 }
-                const data: MenuImageListResponse = await response.json();
+                const data = await response.json();
+                const imageArray = Array.isArray(data) ? data : (data.images || []);
 
                 // 데이터 처리: 정렬 등
-                const processedImages = data.images.map(img => ({
+                const processedImages = imageArray.map((img: MenuImage) => ({
                     ...img,
                     // 필요한 경우 url 경로 보정 등을 여기서 수행할 수 있음
                 }));
 
                 // 정렬 (sortOrder 기준 오름차순)
-                processedImages.sort((a, b) => a.sortOrder - b.sortOrder);
+                processedImages.sort((a: MenuImage, b: MenuImage) => a.sortOrder - b.sortOrder);
 
                 setImages(processedImages);
             } catch (err) {

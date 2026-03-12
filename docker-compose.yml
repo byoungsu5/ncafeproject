@@ -34,6 +34,7 @@ services:
       - API_BASE_URL=http://backend:8080
       - SESSION_SECRET=${SESSION_SECRET:-JQvH/BoClMe32u3gbIXxmf+VBxRisvakVC/HbrihT+s=}
       - AI_AGENT_URL=http://ai-agent:8000
+      - NEXT_PUBLIC_AI_API_URL=http://localhost:8136/api/ai
     depends_on:
       - backend
       - ai-agent

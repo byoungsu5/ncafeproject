@@ -11,8 +11,8 @@ interface RagDocument {
     created_at: string;
 }
 
-// Assumes the AI server runs on localhost:8000 locally
-const AI_API_URL = process.env.NEXT_PUBLIC_AI_API_URL || 'http://localhost:8000/api/ai';
+// Assumes the AI server runs on localhost:8136 locally (mapped from 8000 in Docker)
+const AI_API_URL = process.env.NEXT_PUBLIC_AI_API_URL || 'http://localhost:8136/api/ai';
 
 export default function RagAdminPage() {
     const [documents, setDocuments] = useState<RagDocument[]>([]);

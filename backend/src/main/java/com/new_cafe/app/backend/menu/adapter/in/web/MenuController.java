@@ -13,6 +13,7 @@ import com.new_cafe.app.backend.entity.Category;
 import com.new_cafe.app.backend.menu.application.dto.MenuListResponse;
 import com.new_cafe.app.backend.menu.application.dto.MenuResponse;
 import com.new_cafe.app.backend.menu.application.port.in.GetMenuUseCase;
+import com.new_cafe.app.backend.menu.domain.MenuImage;
 import com.new_cafe.app.backend.service.CategoryService;
 
 @RestController
@@ -44,5 +45,10 @@ public class MenuController {
     public ResponseEntity<MenuResponse> getMenu(@PathVariable Long id) {
         MenuResponse response = getMenuUseCase.getMenu(id);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/admin/menus/{id}/menu-images")
+    public ResponseEntity<List<MenuImage>> getMenuImages(@PathVariable Long id) {
+        return ResponseEntity.ok(getMenuUseCase.getMenuImages(id));
     }
 }

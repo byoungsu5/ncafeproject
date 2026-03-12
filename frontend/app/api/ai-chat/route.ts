@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const AI_AGENT_BASE = process.env.AI_AGENT_URL || 'http://localhost:8000';
+const AI_AGENT_BASE = process.env.AI_AGENT_URL || 'http://localhost:8136';
 
 export async function POST(req: NextRequest) {
     console.log('[AI Chat] Request received');
