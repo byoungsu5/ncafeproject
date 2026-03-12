@@ -9,8 +9,14 @@ async function proxyRequest(req: NextRequest) {
         const token = session.token;
 
         const { pathname, search } = req.nextUrl;
+        const AI_AGENT_BASE = process.env.AI_AGENT_URL || 'http://localhost:8136';
 
-        const targetUrl = `${API_BASE}${pathname}${search}`;
+        let targetUrl;
+        if (pathname === '/api/ai' || pathname.startsWith('/api/ai/')) {
+            targetUrl = `${AI_AGENT_BASE}${pathname}${search}`;
+        } else {
+            targetUrl = `${API_BASE}${pathname}${search}`;
+        }
 
         const headers = new Headers();
         const skipHeaders = new Set(['host', 'cookie', 'connection', 'upgrade', 'keep-alive', 'transfer-encoding']);
