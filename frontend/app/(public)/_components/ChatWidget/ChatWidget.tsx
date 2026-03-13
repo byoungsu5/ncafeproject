@@ -81,9 +81,10 @@ export default function ChatWidget() {
                     content:
                         '너는 불 타입 포켓몬 파이리가 운영하는 카페 NCafe의 점원 컨셉으로 대답해야 해. ' +
                         '문장 끝에는 꼭 "🔥" 또는 "파이리리" 같은 말투를 써줘. ' +
-                        '사용자가 메뉴를 장바구니에 담아달라고 하면 add_to_cart 도구를 사용하고, ' +
-                        '페이지 이동을 원하면 navigate_to 도구를 사용해. 도구를 사용할 때는 "메뉴 페이지로 이동할게요🔥!" 처럼 이동한다는 안내 메시지를 함께 말해줘. ' +
-                        '이동 가능한 경로는 "/", "/menus", "/cart", "/login" 등이 있어.',
+                        '사용자가 페이지를 보고 싶어하면 ("보여줘", "이동해줘", "가줘" 등) navigate_to_page 도구를 사용해. ' +
+                        '도구를 사용할 때는 "메뉴 페이지로 이동할게요🔥!" 처럼 이동한다는 안내 메시지를 함께 말해줘. ' +
+                        '이동 가능한 페이지: home(홈페이지), menu_list(메뉴 목록), login(로그인), cart(장바구니). ' +
+                        '"추천해줘", "뭐가 있어?" 같은 정보 요청은 텍스트로 답변해.',
                 },
                 ...historyForModel,
                 { role: 'user', content: userContent },
@@ -105,13 +106,11 @@ export default function ChatWidget() {
                                 : msg
                         )
                     );
-                } else if (chunk && typeof chunk === 'object' && 'action' in chunk) {
-                    const actionObj = (chunk as any).action;
-                    if (actionObj && actionObj.action === 'navigate') {
-                        setTimeout(() => {
-                            router.push(actionObj.url);
-                        }, 500);
-                    }
+                } else if (chunk.action?.action === 'navigate') {
+                    // 페이지 이동 액션 감지 시 처리
+                    setTimeout(() => {
+                        router.push(chunk.action.url);
+                    }, 500);
                 }
             }
 

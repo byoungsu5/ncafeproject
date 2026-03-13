@@ -18,10 +18,19 @@ async def chat_endpoint(request: ChatRequest):
         return response_data
 
     async def event_generator():
-        # 비동기 제너레이터를 순회하며 SSE 형식으로 yield
-        async for data in gemini.chat_stream(gemini_messages):
-            if data:
-                yield {"data": json.dumps(data, ensure_ascii=False)}
+        action = None
+        # chat_stream yields str (텍스트) or dict (액션)
+        async for chunk in gemini.chat_stream(gemini_messages):
+            if isinstance(chunk, dict):
+                # dict → 프론트엔드 액션 (나중에 전송)
+                action = chunk
+            elif chunk:
+                # str → 텍스트 청크 (즉시 SSE 전송)
+                yield {"data": json.dumps({"content": chunk}, ensure_ascii=False)}
+
+        # 텍스트 이후에 액션 전송
+        if action:
+            yield {"data": json.dumps(action, ensure_ascii=False)}
         yield {"data": "[DONE]"}
 
     return EventSourceResponse(event_generator())

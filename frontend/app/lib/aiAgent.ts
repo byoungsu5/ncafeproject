@@ -43,7 +43,12 @@ export async function* sendMessageStream(
             try {
                 const parsed = JSON.parse(data);
                 
-                if (parsed.calls && parsed.calls.length > 0) {
+                // 1) 액션 직접 전송 (새 형식: {"action":"navigate","url":"/menus"})
+                if (parsed.action) {
+                    yield { action: parsed };
+                }
+                // 2) 레거시 function call 형식 ({"calls":[...]})
+                else if (parsed.calls && parsed.calls.length > 0) {
                     for (const call of parsed.calls) {
                         if (call.name === 'navigate_to' && call.args && call.args.path) {
                             yield { action: { action: 'navigate', url: call.args.path } } as any;
@@ -51,12 +56,9 @@ export async function* sendMessageStream(
                     }
                 }
                 
+                // 3) 텍스트 청크 ({"content":"..."})
                 if (parsed.content) {
                     yield parsed.content;
-                }
-                
-                if (parsed.action) {
-                    yield { action: parsed.action } as any;
                 }
             } catch (e) {
                 // Ignore incomplete JSON
