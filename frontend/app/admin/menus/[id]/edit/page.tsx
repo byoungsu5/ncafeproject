@@ -34,7 +34,7 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
                         isAvailable: data.isAvailable,
                         isSoldOut: false,
                         images: [],
-                        options: [],
+                        options: data.options || [],
                     });
                 }
             } catch {
@@ -58,6 +58,7 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
                     price: data.price,
                     categoryId: Number(data.categoryId),
                     isAvailable: data.isAvailable,
+                    options: data.options,
                 }),
             });
             router.push(`/admin/menus/${id}`);

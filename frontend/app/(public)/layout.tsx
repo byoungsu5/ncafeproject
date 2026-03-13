@@ -1,6 +1,8 @@
 import SiteHeader from './_components/SiteHeader';
 import ChatWidget from './_components/ChatWidget';
 import SiteFooter from './_components/SiteFooter';
+import CartConfirmModal from '@/src/shared/ui/CartConfirmModal/CartConfirmModal';
+import OrderModal from '@/src/shared/ui/OrderModal/OrderModal';
 import styles from './layout.module.css';
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
@@ -12,6 +14,8 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             </div>
             <SiteFooter />
             <ChatWidget />
+            <CartConfirmModal />
+            <OrderModal />
         </div>
     );
 }

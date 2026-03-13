@@ -32,10 +32,41 @@ public class MenuService implements CreateMenuUseCase, UpdateMenuUseCase,
         Menu menu = Menu.create(
                 command.korName(),
                 command.engName(),
+                command.slug(),
                 command.description(),
                 command.price(),
-                command.categoryId()
+                command.categoryId(),
+                command.isAvailable()
         );
+        
+        if (command.options() != null) {
+            menu = Menu.builder()
+                .id(menu.getId())
+                .korName(menu.getKorName())
+                .engName(menu.getEngName())
+                .slug(menu.getSlug())
+                .description(menu.getDescription())
+                .price(menu.getPrice())
+                .categoryId(menu.getCategoryId())
+                .isAvailable(menu.getIsAvailable())
+                .options(command.options().stream()
+                    .map(o -> com.new_cafe.app.backend.admin.menu.domain.MenuOption.builder()
+                        .name(o.name())
+                        .type(o.type())
+                        .isRequired(o.required())
+                        .sortOrder(o.sortOrder())
+                        .items(o.items() != null ? o.items().stream()
+                            .map(i -> com.new_cafe.app.backend.admin.menu.domain.OptionItem.builder()
+                                .name(i.name())
+                                .priceDelta(i.priceDelta())
+                                .sortOrder(i.sortOrder())
+                                .build())
+                            .collect(java.util.stream.Collectors.toList()) : new java.util.ArrayList<>())
+                        .build())
+                    .collect(java.util.stream.Collectors.toList()))
+                .build();
+        }
+        
         Menu saved = menuPort.save(menu);
         return MenuResult.from(saved);
     }
@@ -48,11 +79,47 @@ public class MenuService implements CreateMenuUseCase, UpdateMenuUseCase,
         menu.update(
                 command.korName(),
                 command.engName(),
+                command.slug(),
                 command.description(),
                 command.price(),
                 command.categoryId(),
                 command.isAvailable()
         );
+
+        if (command.options() != null) {
+            java.util.List<com.new_cafe.app.backend.admin.menu.domain.MenuOption> options = command.options().stream()
+                .map(o -> com.new_cafe.app.backend.admin.menu.domain.MenuOption.builder()
+                    .name(o.name())
+                    .type(o.type())
+                    .isRequired(o.required())
+                    .sortOrder(o.sortOrder())
+                    .items(o.items() != null ? o.items().stream()
+                        .map(i -> com.new_cafe.app.backend.admin.menu.domain.OptionItem.builder()
+                            .name(i.name())
+                            .priceDelta(i.priceDelta())
+                            .sortOrder(i.sortOrder())
+                            .build())
+                        .collect(java.util.stream.Collectors.toList()) : new java.util.ArrayList<>())
+                    .build())
+                .collect(java.util.stream.Collectors.toList());
+            
+            // Note: This is an immutable domain object pattern, ideally we'd have a method on Menu to set options
+            menu = Menu.builder()
+                .id(menu.getId())
+                .korName(menu.getKorName())
+                .engName(menu.getEngName())
+                .slug(menu.getSlug())
+                .description(menu.getDescription())
+                .price(menu.getPrice())
+                .categoryId(menu.getCategoryId())
+                .isAvailable(menu.getIsAvailable())
+                .categoryName(menu.getCategoryName())
+                .imageSrc(menu.getImageSrc())
+                .createdAt(menu.getCreatedAt())
+                .updatedAt(menu.getUpdatedAt())
+                .options(options)
+                .build();
+        }
 
         Menu saved = menuPort.save(menu);
         return MenuResult.from(saved);

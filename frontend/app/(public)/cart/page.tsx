@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
 import { useCartStore } from '@/src/entities/cart/model/store';
+import { useOrderModal } from '@/src/shared/ui/OrderModal/useOrderModal';
 
 export default function CartPage() {
     const items = useCartStore((state) => state.items);
@@ -14,6 +15,8 @@ export default function CartPage() {
     const clearCart = useCartStore((state) => state.clear);
     const [isOrdering, setIsOrdering] = useState(false);
     const router = useRouter();
+    const openOrderModal = useOrderModal((state) => state.open);
+    const closeOrderModal = useOrderModal((state) => state.close);
 
     const totalCount = items.reduce((sum, item) => sum + item.quantity, 0);
     const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -21,9 +24,18 @@ export default function CartPage() {
     const handleOrder = async () => {
         if (items.length === 0 || isOrdering) return;
 
-        if (!confirm('정말로 주문하시겠어요?')) return;
+        openOrderModal({
+            type: 'confirm',
+            title: '주문 확인 🔥',
+            message: '장바구니의 모든 메뉴를 주문하시겠어요?',
+            onConfirm: performOrder,
+        });
+    };
 
+    const performOrder = async () => {
         setIsOrdering(true);
+        closeOrderModal();
+
         try {
             const orderRequest = {
                 items: items.map((item) => ({
@@ -46,11 +58,23 @@ export default function CartPage() {
             }
 
             const order = await response.json();
-            alert(`주문이 완료되었습니다! (주문번호: ${order.id})`);
-            clearCart();
-            router.push('/');
+            
+            openOrderModal({
+                type: 'success',
+                title: '주문 완료! 🔥',
+                message: '파이리가 맛있게 준비해드릴게요!',
+                orderId: order.id,
+                onClose: () => {
+                    clearCart();
+                    router.push('/');
+                },
+            });
         } catch (error: any) {
-            alert(error.message);
+            openOrderModal({
+                type: 'error',
+                title: '주문 실패… 🔥',
+                message: error.message,
+            });
         } finally {
             setIsOrdering(false);
         }

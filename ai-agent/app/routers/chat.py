@@ -14,13 +14,14 @@ async def chat_endpoint(request: ChatRequest):
     gemini_messages = to_gemini_messages(request.messages)
 
     if not request.stream:
-        response_text = gemini.chat(gemini_messages)
-        return {"content": response_text}
+        response_data = gemini.chat(gemini_messages)
+        return response_data
 
     async def event_generator():
-        # Iterate over the sync generator from gemini service
-        for token in gemini.chat_stream(gemini_messages):
-            yield {"data": json.dumps({"content": token}, ensure_ascii=False)}
+        # 비동기 제너레이터를 순회하며 SSE 형식으로 yield
+        async for data in gemini.chat_stream(gemini_messages):
+            if data:
+                yield {"data": json.dumps(data, ensure_ascii=False)}
         yield {"data": "[DONE]"}
 
     return EventSourceResponse(event_generator())

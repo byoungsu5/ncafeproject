@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface GetMenuUseCase {
     MenuResponse getMenu(Long id);
+    MenuResponse getMenuBySlug(String slug);
     MenuListResponse getMenus(Long categoryId, String query);
     List<MenuImage> getMenuImages(Long menuId);
 }

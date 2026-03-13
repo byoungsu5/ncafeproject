@@ -37,6 +37,7 @@ export interface Menu {
   id: number;
   korName: string;
   engName: string;
+  slug: string;
   description: string;
   price: number;
   category: MenuCategory;
@@ -53,6 +54,7 @@ export interface Menu {
 export interface MenuFormData {
   korName: string;
   engName: string;
+  slug: string;
   description: string;
   price: number;
   categoryId: string;

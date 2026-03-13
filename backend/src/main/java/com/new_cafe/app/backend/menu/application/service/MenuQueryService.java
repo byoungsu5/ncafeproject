@@ -30,6 +30,13 @@ public class MenuQueryService implements GetMenuUseCase {
     }
 
     @Override
+    public MenuResponse getMenuBySlug(String slug) {
+        Menu menu = loadMenuPort.findBySlug(slug)
+                .orElseThrow(() -> new IllegalArgumentException("Menu not found: " + slug));
+        return MenuResponse.from(menu);
+    }
+
+    @Override
     public MenuListResponse getMenus(Long categoryId, String query) {
         var menus = loadMenuPort.findAll(categoryId, query);
         return MenuListResponse.from(menus);

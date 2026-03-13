@@ -31,6 +31,15 @@ public class MenuPersistenceAdapter implements LoadMenuPort {
     }
 
     @Override
+    public Optional<Menu> findBySlug(String slug) {
+        return menuRepository.findBySlugAndIsAvailableTrue(slug)
+                .map(entity -> {
+                    String imageSrc = menuImageRepository.findFirstImageSrcByMenuId(entity.getId());
+                    return entity.toDomain(imageSrc);
+                });
+    }
+
+    @Override
     public List<Menu> findAll(Long categoryId, String query) {
         List<MenuEntity> entities;
 

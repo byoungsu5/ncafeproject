@@ -1,8 +1,26 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ShoppingCart, CreditCard } from 'lucide-react';
+import { ShoppingCart, CreditCard, ListChecks } from 'lucide-react';
 import { useCartStore } from '@/src/entities/cart/model/store';
 import styles from './MenuDetailContent.module.css';
+import { useCartConfirmModal } from '@/src/shared/ui/CartConfirmModal/useCartConfirmModal';
+import { useOrderModal } from '@/src/shared/ui/OrderModal/useOrderModal';
+
+interface OptionItem {
+    id: number;
+    name: string;
+    priceDelta: number;
+    sortOrder: number;
+}
+
+interface MenuOption {
+    id: number;
+    name: string;
+    type: string;
+    required: boolean;
+    sortOrder: number;
+    items: OptionItem[];
+}
 
 interface MenuDetailContentProps {
     id: number;
@@ -14,6 +32,7 @@ interface MenuDetailContentProps {
     imageSrc: string;
     isAvailable: boolean;
     isSoldOut: boolean;
+    options?: MenuOption[];
 }
 
 export default function MenuDetailContent({
@@ -26,10 +45,41 @@ export default function MenuDetailContent({
     imageSrc,
     isAvailable,
     isSoldOut,
+    options = [],
 }: MenuDetailContentProps) {
     const addItem = useCartStore((state) => state.addItem);
     const [isOrdering, setIsOrdering] = useState(false);
     const router = useRouter();
+    const openCartModal = useCartConfirmModal((state) => state.open);
+    const openOrderModal = useOrderModal((state) => state.open);
+    const closeOrderModal = useOrderModal((state) => state.close);
+
+    // 옵션 선택 상태 관리
+    const [selectedOptions, setSelectedOptions] = useState<Record<number, number[]>>({});
+
+    const handleSingleSelect = (optionId: number, itemId: number) => {
+        setSelectedOptions(prev => ({ ...prev, [optionId]: [itemId] }));
+    };
+
+    const handleMultipleSelect = (optionId: number, itemId: number) => {
+        setSelectedOptions(prev => {
+            const current = prev[optionId] || [];
+            if (current.includes(itemId)) {
+                return { ...prev, [optionId]: current.filter(id => id !== itemId) };
+            }
+            return { ...prev, [optionId]: [...current, itemId] };
+        });
+    };
+
+    // 추가금 합산
+    const extraPrice = options.reduce((total, opt) => {
+        const selected = selectedOptions[opt.id] || [];
+        return total + opt.items
+            .filter(item => selected.includes(item.id))
+            .reduce((sum, item) => sum + (item.priceDelta || 0), 0);
+    }, 0);
+
+    const totalPrice = price + extraPrice;
 
     const handleAddToCart = () => {
         if (!isAvailable || isSoldOut) return;
@@ -38,25 +88,34 @@ export default function MenuDetailContent({
             id,
             korName,
             engName,
-            price,
+            price: totalPrice,
             imageSrc,
         });
-        alert(`${korName}이(가) 장바구니에 담겼습니다.`);
+        openCartModal(korName);
     };
 
     const handleOrderNow = async () => {
         if (!isAvailable || isSoldOut || isOrdering) return;
 
-        if (!confirm(`${korName}을(를) 바로 주문하시겠어요?`)) return;
+        openOrderModal({
+            type: 'confirm',
+            title: '주문 확인 🔥',
+            message: `${korName}을(를) 바로 주문하시겠어요?`,
+            onConfirm: performOrder,
+        });
+    };
 
+    const performOrder = async () => {
         setIsOrdering(true);
+        closeOrderModal();
+        
         try {
             const orderRequest = {
                 items: [
                     {
                         menuId: id,
                         menuName: korName,
-                        price: price,
+                        price: totalPrice,
                         quantity: 1,
                     },
                 ],
@@ -74,10 +133,20 @@ export default function MenuDetailContent({
             }
 
             const order = await response.json();
-            alert(`주문이 완료되었습니다! (주문번호: ${order.id})`);
-            router.push('/');
+            
+            openOrderModal({
+                type: 'success',
+                title: '주문 완료! 🔥',
+                message: '파이리가 맛있게 준비해드릴게요!',
+                orderId: order.id,
+                onClose: () => router.push('/'),
+            });
         } catch (error: any) {
-            alert(error.message);
+            openOrderModal({
+                type: 'error',
+                title: '주문 실패… 🔥',
+                message: error.message,
+            });
         } finally {
             setIsOrdering(false);
         }
@@ -89,12 +158,71 @@ export default function MenuDetailContent({
             <span className={styles.category}>{categoryName}</span>
             <h1 className={styles.korName}>{korName}</h1>
             <p className={styles.engName}>{engName}</p>
-            <p className={styles.price}>{price.toLocaleString()}원</p>
+            <p className={styles.price}>
+                {totalPrice.toLocaleString()}원
+                {extraPrice > 0 && (
+                    <span className={styles.extraPrice}> (+{extraPrice.toLocaleString()}원)</span>
+                )}
+            </p>
 
             {description && (
                 <div className={styles.descriptionSection}>
                     <h2 className={styles.sectionTitle}>설명</h2>
                     <p className={styles.description}>{description}</p>
+                </div>
+            )}
+
+            {/* 옵션 선택 UI */}
+            {options.length > 0 && (
+                <div className={styles.optionsSection}>
+                    <h2 className={styles.sectionTitle}>
+                        <ListChecks size={14} />
+                        옵션 선택
+                    </h2>
+                    {options.map(opt => (
+                        <div key={opt.id} className={styles.optionGroup}>
+                            <div className={styles.optionGroupLabel}>
+                                <span className={styles.optionName}>{opt.name}</span>
+                                <div className={styles.optionMeta}>
+                                    <span className={styles.optionTypeBadge}>
+                                        {opt.type === 'single' ? '1개 선택' : '복수 선택'}
+                                    </span>
+                                    {opt.required && <span className={styles.requiredBadge}>필수</span>}
+                                </div>
+                            </div>
+                            <div className={styles.optionItems}>
+                                {opt.items.map(item => {
+                                    const isSelected = (selectedOptions[opt.id] || []).includes(item.id);
+                                    return (
+                                        <label
+                                            key={item.id}
+                                            className={`${styles.optionItem} ${isSelected ? styles.optionItemSelected : ''}`}
+                                        >
+                                            <input
+                                                type={opt.type === 'single' ? 'radio' : 'checkbox'}
+                                                name={`option-${opt.id}`}
+                                                checked={isSelected}
+                                                onChange={() => {
+                                                    if (opt.type === 'single') {
+                                                        handleSingleSelect(opt.id, item.id);
+                                                    } else {
+                                                        handleMultipleSelect(opt.id, item.id);
+                                                    }
+                                                }}
+                                                className={styles.optionInput}
+                                            />
+                                            <span className={styles.optionItemName}>{item.name}</span>
+                                            {item.priceDelta > 0 && (
+                                                <span className={styles.optionItemPrice}>
+                                                    +{item.priceDelta.toLocaleString()}원
+                                                </span>
+                                            )}
+                                        </label>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    ))}
                 </div>
             )}
 
@@ -119,3 +247,4 @@ export default function MenuDetailContent({
         </div>
     );
 }
+

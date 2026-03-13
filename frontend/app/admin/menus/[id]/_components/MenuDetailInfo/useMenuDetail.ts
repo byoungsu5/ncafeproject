@@ -9,6 +9,7 @@ export interface MenuDetail {
     isAvailable: boolean;
     createdAt: string;
     description: string;
+    options: import('@/types').MenuOption[];
 }
 
 export function useMenuDetail(id: number | string) {

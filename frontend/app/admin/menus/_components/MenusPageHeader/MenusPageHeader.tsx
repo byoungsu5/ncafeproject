@@ -33,9 +33,6 @@ export default function MenusPageHeader({
                             주문 관리
                         </Button>
                     </Link>
-                    <Button variant="outline" size="sm">
-                        엑셀 다운로드
-                    </Button>
                     <Link href="/admin/menus/new">
                         <Button>
                             <Plus size={16} />

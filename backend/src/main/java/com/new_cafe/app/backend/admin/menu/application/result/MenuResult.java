@@ -8,6 +8,7 @@ public record MenuResult(
         Long id,
         String korName,
         String engName,
+        String slug,
         String description,
         Integer price,
         Long categoryId,
@@ -15,13 +16,15 @@ public record MenuResult(
         String imageSrc,
         String categoryName,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        java.util.List<com.new_cafe.app.backend.admin.menu.domain.MenuOption> options
 ) {
     public static MenuResult from(Menu menu) {
         return new MenuResult(
                 menu.getId(),
                 menu.getKorName(),
                 menu.getEngName(),
+                menu.getSlug(),
                 menu.getDescription(),
                 menu.getPrice(),
                 menu.getCategoryId(),
@@ -29,7 +32,8 @@ public record MenuResult(
                 menu.getImageSrc(),
                 menu.getCategoryName(),
                 menu.getCreatedAt(),
-                menu.getUpdatedAt()
+                menu.getUpdatedAt(),
+                menu.getOptions()
         );
     }
 }

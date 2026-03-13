@@ -1,6 +1,7 @@
+import { useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { MenuFormData } from '@/types';
-import { mockCategories } from '@/mocks/menuData';
+import { useCategories } from '../CategoryTabs/useCategories';
 import OptionSection from './OptionSection';
 import ImageUploadSection from './ImageUploadSection';
 import styles from './MenuForm.module.css';
@@ -18,6 +19,7 @@ export default function MenuForm({
     isSubmitting = false,
     submitLabel = '저장하기'
 }: MenuFormProps) {
+    const { categories } = useCategories();
     const methods = useForm<MenuFormData>({
         defaultValues: {
             isAvailable: true,
@@ -29,7 +31,20 @@ export default function MenuForm({
         }
     });
 
-    const { register, handleSubmit, formState: { errors } } = methods;
+    const { register, handleSubmit, formState: { errors }, watch, setValue } = methods;
+
+    const engName = watch('engName');
+
+    useEffect(() => {
+        if (engName) {
+            const suggestedSlug = engName.toLowerCase()
+                .replace(/[^a-z0-9\s]/g, '')
+                .replace(/\s+/g, '-');
+            
+            // Note: In a real app, you might want to only update if slug field is pristine
+            setValue('slug', suggestedSlug);
+        }
+    }, [engName, setValue]);
 
     return (
         <FormProvider {...methods}>
@@ -68,6 +83,24 @@ export default function MenuForm({
 
                         <div className={styles.fieldGroup}>
                             <label className={styles.label}>
+                                슬러그 (URL 주소) <span className={styles.required}>*</span>
+                            </label>
+                            <input
+                                {...register('slug', {
+                                    required: '슬러그를 입력해주세요',
+                                    pattern: {
+                                        value: /^[a-z0-9-]+$/,
+                                        message: '영문 소문자, 숫자, 하이픈(-)만 사용 가능합니다'
+                                    }
+                                })}
+                                className={styles.input}
+                                placeholder="예: iced-americano"
+                            />
+                            {errors.slug && <span className={styles.error}>{errors.slug.message}</span>}
+                        </div>
+
+                        <div className={styles.fieldGroup}>
+                            <label className={styles.label}>
                                 카테고리 <span className={styles.required}>*</span>
                             </label>
                             <select
@@ -75,9 +108,9 @@ export default function MenuForm({
                                 className={styles.select}
                             >
                                 <option value="">카테고리 선택</option>
-                                {mockCategories.map(cat => (
+                                {categories.map(cat => (
                                     <option key={cat.id} value={cat.id}>
-                                        {cat.icon} {cat.korName}
+                                        {cat.name}
                                     </option>
                                 ))}
                             </select>

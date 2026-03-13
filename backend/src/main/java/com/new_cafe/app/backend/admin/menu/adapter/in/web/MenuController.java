@@ -76,10 +76,12 @@ public class MenuController {
                 id,
                 command.korName(),
                 command.engName(),
+                command.slug(),
                 command.description(),
                 command.price(),
                 command.categoryId(),
-                command.isAvailable()
+                command.isAvailable(),
+                command.options()
         );
         MenuResult result = updateMenuUseCase.updateMenu(commandWithId);
         return ResponseEntity.ok(MenuResponse.from(result));

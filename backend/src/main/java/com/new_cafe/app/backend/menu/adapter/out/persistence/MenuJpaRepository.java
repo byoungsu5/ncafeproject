@@ -14,6 +14,9 @@ public interface MenuJpaRepository extends JpaRepository<MenuEntity, Long> {
     Optional<MenuEntity> findByIdAndIsAvailableTrue(Long id);
 
     @EntityGraph(attributePaths = {"category"})
+    Optional<MenuEntity> findBySlugAndIsAvailableTrue(String slug);
+
+    @EntityGraph(attributePaths = {"category"})
     List<MenuEntity> findByIsAvailableTrue();
 
     @EntityGraph(attributePaths = {"category"})

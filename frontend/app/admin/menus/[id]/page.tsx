@@ -22,7 +22,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
                     <MenuDetailInfo id={id} />
                 </div>
                 <div className={styles.column}>
-                    <MenuOptions />
+                    <MenuOptions menuId={id} />
                 </div>
             </div>
         </main>

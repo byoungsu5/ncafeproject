@@ -32,6 +32,14 @@ export default function SiteHeader() {
                     >
                         메뉴
                     </Link>
+                    {user && (
+                        <Link
+                            href="/orders"
+                            className={`${styles.navLink} ${pathname === '/orders' ? styles.navLinkActive : ''}`}
+                        >
+                            주문현황
+                        </Link>
+                    )}
                     <Link
                         href="/cart"
                         className={`${styles.navLink} ${pathname.startsWith('/cart') ? styles.navLinkActive : ''}`}

@@ -6,9 +6,9 @@ import { ArrowLeft } from 'lucide-react';
 import styles from './page.module.css';
 import { MenuDetailHero, MenuDetailContent, useMenu } from '../_components/MenuDetail';
 
-export default function MenuDetailPage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = use(params);
-    const { menu, loading } = useMenu(id);
+export default function MenuDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = use(params);
+    const { menu, loading } = useMenu(slug);
 
     if (loading) {
         return (
@@ -89,6 +89,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
                             imageSrc={menu.imageSrc}
                             isAvailable={menu.isAvailable}
                             isSoldOut={menu.isSoldOut}
+                            options={menu.options}
                         />
                     </div>
                 </div>

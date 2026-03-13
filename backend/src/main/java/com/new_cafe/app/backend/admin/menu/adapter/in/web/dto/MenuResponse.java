@@ -8,6 +8,7 @@ public record MenuResponse(
         Long id,
         String korName,
         String engName,
+        String slug,
         String description,
         Integer price,
         Long categoryId,
@@ -15,13 +16,15 @@ public record MenuResponse(
         String imageSrc,
         String categoryName,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        java.util.List<com.new_cafe.app.backend.admin.menu.domain.MenuOption> options
 ) {
     public static MenuResponse from(MenuResult result) {
         return new MenuResponse(
                 result.id(),
                 result.korName(),
                 result.engName(),
+                result.slug(),
                 result.description(),
                 result.price(),
                 result.categoryId(),
@@ -29,7 +32,8 @@ public record MenuResponse(
                 result.imageSrc(),
                 result.categoryName(),
                 result.createdAt(),
-                result.updatedAt()
+                result.updatedAt(),
+                result.options()
         );
     }
 }

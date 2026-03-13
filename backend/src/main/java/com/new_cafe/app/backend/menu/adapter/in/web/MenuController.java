@@ -47,6 +47,12 @@ public class MenuController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/menus/slug/{slug}")
+    public ResponseEntity<MenuResponse> getMenuBySlug(@PathVariable String slug) {
+        MenuResponse response = getMenuUseCase.getMenuBySlug(slug);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/admin/menus/{id}/menu-images")
     public ResponseEntity<List<MenuImage>> getMenuImages(@PathVariable Long id) {
         return ResponseEntity.ok(getMenuUseCase.getMenuImages(id));

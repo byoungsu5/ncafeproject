@@ -11,7 +11,8 @@ import {
     BarChart3,
     Package,
     LogOut,
-    FileText
+    FileText,
+    ListChecks
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import styles from './AdminSidebar.module.css';
@@ -27,6 +28,7 @@ const navItems = [
         section: '메뉴 관리',
         items: [
             { href: '/admin/menus', label: '메뉴 관리', icon: Coffee },
+            { href: '/admin/options', label: '옵션 관리', icon: ListChecks },
         ],
     },
     {

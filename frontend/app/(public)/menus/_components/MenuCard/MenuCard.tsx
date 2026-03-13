@@ -4,6 +4,8 @@ import styles from './MenuCard.module.css';
 import { MenuResponse } from '../MenuGrid/useMenus';
 import { useCartStore } from '@/src/entities/cart/model/store';
 
+import { useCartConfirmModal } from '@/src/shared/ui/CartConfirmModal/useCartConfirmModal';
+
 interface MenuCardProps {
     menu: MenuResponse;
 }
@@ -11,6 +13,7 @@ interface MenuCardProps {
 export default function MenuCard({ menu }: MenuCardProps) {
     const baseUrl = '/images';
     const addItem = useCartStore((state) => state.addItem);
+    const openModal = useCartConfirmModal((state) => state.open);
 
     const handleAddToCart = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -23,13 +26,15 @@ export default function MenuCard({ menu }: MenuCardProps) {
             price: menu.price,
             imageSrc: menu.imageSrc,
         });
+
+        openModal(menu.korName);
     };
 
     const disabled = !menu.isAvailable || menu.isSoldOut;
 
     return (
         <div className={styles.card}>
-            <Link href={`/menus/${menu.id}`} className={styles.cardLink}>
+            <Link href={`/menus/${menu.slug}`} className={styles.cardLink}>
                 <div className={styles.topCurve}></div>
                 
                 <div className={styles.imageContainer}>

@@ -2,38 +2,16 @@ import { ListChecks } from 'lucide-react';
 import styles from './MenuOptions.module.css';
 import { MenuOption } from '@/types';
 
-export default function MenuOptions() {
-    // 부모로부터 받던 props를 끊고 컴포넌트 내부에서 자체적으로 데이터를 관리하거나 
-    // 정적인 스타일 구조를 유지합니다.
-    const options: MenuOption[] = [{
-        id: 1,
-        name: '크기',
-        type: 'single',
-        required: true,
-        items: [
-            { id: 1, name: 'small', priceDelta: 0 },
-            { id: 2, name: 'large', priceDelta: 0 },
-        ]
-    }, {
-        id: 2,
-        name: '샷 추가',
-        type: 'multiple',
-        required: false,
-        items: [
-            { id: 1, name: '샷 추가', priceDelta: 0 },
-            { id: 2, name: '휘핑 추가', priceDelta: 0 },
-        ]
-    },
-    {
-        id: 3,
-        name: '온도',
-        type: 'single',
-        required: false,
-        items: [
-            { id: 1, name: 'hot', priceDelta: 0 },
-            { id: 2, name: 'ice', priceDelta: 0 },
-        ]
-    }];
+import { useMenuDetail } from '../MenuDetailInfo/useMenuDetail';
+
+export default function MenuOptions({ menuId }: { menuId: string }) {
+    const { menuDetail, loading, error } = useMenuDetail(menuId);
+
+    if (loading) return <div className={styles.loading}>옵션을 불러오는 중...</div>;
+    if (error) return <div className={styles.error}>옵션을 불러오지 못했습니다.</div>;
+    if (!menuDetail) return null;
+
+    const options = menuDetail.options || [];
 
     if (!options || options.length === 0) {
         return (
@@ -56,7 +34,7 @@ export default function MenuOptions() {
                 옵션 ({options.length})
             </h2>
 
-            {options.map((option) => (
+            {options.map((option: any) => (
                 <div key={option.id} className={styles.optionGroup}>
                     <div className={styles.optionGroupHeader}>
                         <span>{option.name}</span>
@@ -71,7 +49,7 @@ export default function MenuOptions() {
                     </div>
 
                     <div className={styles.optionItems}>
-                        {option.items.map((item) => (
+                        {option.items.map((item: any) => (
                             <div key={item.id} className={styles.optionItem}>
                                 <span>{item.name}</span>
                                 <span className={styles.optionPrice}>

@@ -21,9 +21,12 @@ export default function NewMenuPage() {
                 body: JSON.stringify({
                     korName: data.korName,
                     engName: data.engName,
+                    slug: data.slug,
                     description: data.description,
                     price: data.price,
                     categoryId: Number(data.categoryId),
+                    isAvailable: data.isAvailable,
+                    options: data.options,
                 }),
             });
             router.push('/admin/menus');
