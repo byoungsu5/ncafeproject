@@ -89,6 +89,10 @@ public class MenuService implements CreateMenuUseCase, UpdateMenuUseCase,
         );
 
         if (command.options() != null) {
+            System.out.println("[MenuService] Received " + command.options().size() + " options for menu " + command.id());
+            for (int i = 0; i < command.options().size(); i++) {
+                System.out.println("  Option " + i + ": name=" + command.options().get(i).name() + ", items=" + (command.options().get(i).items() != null ? command.options().get(i).items().size() : 0));
+            }
             java.util.List<com.new_cafe.app.backend.admin.menu.domain.MenuOption> options = command.options().stream()
                 .map(o -> com.new_cafe.app.backend.admin.menu.domain.MenuOption.builder()
                     .id(o.id())

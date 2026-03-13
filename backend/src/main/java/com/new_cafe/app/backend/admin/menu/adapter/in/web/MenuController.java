@@ -3,15 +3,7 @@ package com.new_cafe.app.backend.admin.menu.adapter.in.web;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.new_cafe.app.backend.admin.menu.adapter.in.web.dto.MenuListResponse;
 import com.new_cafe.app.backend.admin.menu.adapter.in.web.dto.MenuResponse;
@@ -63,14 +55,16 @@ public class MenuController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MenuResponse> getMenu(@PathVariable Long id) {
+    public ResponseEntity<MenuResponse> getMenu(@PathVariable java.lang.Long id) {
+        System.out.println("[AdminMenuController] GET /api/admin/menus/" + id);
         MenuResult result = getMenuUseCase.getMenu(id);
+        System.out.println("[AdminMenuController] Found result: " + (result != null ? result.korName() : "null"));
         return ResponseEntity.ok(MenuResponse.from(result));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<MenuResponse> updateMenu(
-            @PathVariable Long id,
+            @PathVariable java.lang.Long id,
             @Valid @RequestBody UpdateMenuCommand command) {
         UpdateMenuCommand commandWithId = new UpdateMenuCommand(
                 id,
@@ -88,7 +82,7 @@ public class MenuController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMenu(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteMenu(@PathVariable java.lang.Long id) {
         deleteMenuUseCase.deleteMenu(id);
         return ResponseEntity.noContent().build();
     }

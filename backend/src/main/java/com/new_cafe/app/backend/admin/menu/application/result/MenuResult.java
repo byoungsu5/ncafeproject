@@ -1,8 +1,9 @@
 package com.new_cafe.app.backend.admin.menu.application.result;
 
 import java.time.LocalDateTime;
-
+import java.util.List;
 import com.new_cafe.app.backend.admin.menu.domain.Menu;
+import com.new_cafe.app.backend.admin.menu.domain.MenuOption;
 
 public record MenuResult(
         Long id,
@@ -17,7 +18,7 @@ public record MenuResult(
         String categoryName,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
-        java.util.List<com.new_cafe.app.backend.admin.menu.domain.MenuOption> options
+        List<MenuOption> options
 ) {
     public static MenuResult from(Menu menu) {
         return new MenuResult(

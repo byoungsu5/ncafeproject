@@ -1,32 +1,24 @@
 package com.new_cafe.app.backend.admin.menu.adapter.out.persistence.jpa;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.new_cafe.app.backend.admin.menu.domain.Menu;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderBy;
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import com.new_cafe.app.backend.menu.adapter.out.persistence.CategoryEntity;
+
 import com.new_cafe.app.backend.admin.menu.domain.Menu;
 import com.new_cafe.app.backend.admin.menu.domain.MenuOption;
 import com.new_cafe.app.backend.admin.menu.domain.OptionItem;
+import com.new_cafe.app.backend.menu.adapter.out.persistence.CategoryEntity;
 
 @Entity(name = "AdminMenu")
 @Table(name = "menus")
@@ -38,28 +30,28 @@ public class MenuEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private java.lang.Long id;
 
     @Column(name = "kor_name")
-    private String korName;
+    private java.lang.String korName;
 
     @Column(name = "eng_name")
-    private String engName;
+    private java.lang.String engName;
 
-    private String slug;
+    private java.lang.String slug;
 
-    private String description;
+    private java.lang.String description;
 
-    private Integer price;
+    private java.lang.Integer price;
 
     @Column(name = "category_id")
-    private Long categoryId;
+    private java.lang.Long categoryId;
 
     @Column(name = "is_available")
-    private Boolean isAvailable;
+    private java.lang.Boolean isAvailable;
 
     @Column(name = "sort_order")
-    private Integer sortOrder;
+    private java.lang.Integer sortOrder;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -77,7 +69,7 @@ public class MenuEntity {
     @JoinColumn(name = "menu_id")
     @OrderBy("sortOrder ASC")
     @Builder.Default
-    private java.util.List<MenuOptionEntity> options = new java.util.ArrayList<>();
+    private List<MenuOptionEntity> options = new ArrayList<>();
 
     public Menu toDomain(String imageSrc) {
         String categoryName = (category != null) ? category.getName() : "미지정";
@@ -109,9 +101,9 @@ public class MenuEntity {
                                                 .priceDelta(i.getPriceDelta())
                                                 .sortOrder(i.getSortOrder())
                                                 .build())
-                                        .collect(java.util.stream.Collectors.toList()) : new java.util.ArrayList<>())
+                                        .collect(Collectors.toList()) : new ArrayList<>())
                                 .build())
-                        .collect(java.util.stream.Collectors.toList()) : new java.util.ArrayList<>())
+                        .collect(Collectors.toList()) : new ArrayList<>())
                 .build();
     }
 
@@ -127,80 +119,77 @@ public class MenuEntity {
         
         syncOptions(menu.getOptions());
     }
- 
-    private void syncOptions(java.util.List<com.new_cafe.app.backend.admin.menu.domain.MenuOption> domainOptions) {
-        if (domainOptions == null) {
+
+    private void syncOptions(List<MenuOption> domainOptions) {
+        if (domainOptions == null || domainOptions.isEmpty()) {
             this.options.clear();
             return;
         }
- 
-        // 제거될 옵션들 처리
-        this.options.removeIf(existingOpt -> {
-            boolean stays = domainOptions.stream()
-                .anyMatch(domainOpt -> domainOpt.getId() != null && domainOpt.getId().equals(existingOpt.getId()));
-            return !stays;
-        });
 
-        for (com.new_cafe.app.backend.admin.menu.domain.MenuOption domainOpt : domainOptions) {
-            if (domainOpt.getId() != null) {
-                // 기존 옵션 업데이트
-                this.options.stream()
-                    .filter(o -> o.getId().equals(domainOpt.getId()))
-                    .findFirst()
-                    .ifPresent(existingOpt -> {
-                        existingOpt.update(domainOpt.getName(), domainOpt.getType(), domainOpt.getIsRequired(), domainOpt.getSortOrder());
-                        syncItems(existingOpt, domainOpt.getItems());
-                    });
+        Map<Long, MenuOptionEntity> existingMap = this.options.stream()
+                .filter(o -> o.getId() != null)
+                .collect(Collectors.toMap(MenuOptionEntity::getId, o -> o));
+
+        List<MenuOptionEntity> newOptions = new ArrayList<>();
+
+        for (var domainOpt : domainOptions) {
+            MenuOptionEntity existingOpt = (domainOpt.getId() != null) ? existingMap.get(domainOpt.getId()) : null;
+
+            if (existingOpt != null) {
+                existingOpt.update(domainOpt.getName(), domainOpt.getType(), domainOpt.getIsRequired(), domainOpt.getSortOrder());
+                syncItems(existingOpt, domainOpt.getItems());
+                newOptions.add(existingOpt);
+                existingMap.remove(domainOpt.getId());
             } else {
-                // 새 옵션 추가
-                MenuOptionEntity newOption = MenuOptionEntity.builder()
+                MenuOptionEntity newOpt = MenuOptionEntity.builder()
                         .menuId(this.id)
                         .name(domainOpt.getName())
                         .type(domainOpt.getType())
                         .isRequired(domainOpt.getIsRequired())
                         .sortOrder(domainOpt.getSortOrder())
                         .build();
-                syncItems(newOption, domainOpt.getItems());
-                this.options.add(newOption);
+                syncItems(newOpt, domainOpt.getItems());
+                newOptions.add(newOpt);
             }
         }
+
+        this.options.clear();
+        this.options.addAll(newOptions);
     }
- 
-    private void syncItems(MenuOptionEntity optionEntity, java.util.List<com.new_cafe.app.backend.admin.menu.domain.OptionItem> domainItems) {
-        if (domainItems == null) {
+
+    private void syncItems(MenuOptionEntity optionEntity, List<com.new_cafe.app.backend.admin.menu.domain.OptionItem> domainItems) {
+        if (domainItems == null || domainItems.isEmpty()) {
             optionEntity.getItems().clear();
             return;
         }
 
-        // 제거될 아이템들 처리
-        optionEntity.getItems().removeIf(existingItem -> {
-            boolean stays = domainItems.stream()
-                .anyMatch(domainItem -> domainItem.getId() != null && domainItem.getId().equals(existingItem.getId()));
-            return !stays;
-        });
+        Map<Long, OptionItemEntity> existingMap = optionEntity.getItems().stream()
+                .filter(i -> i.getId() != null)
+                .collect(Collectors.toMap(OptionItemEntity::getId, i -> i));
 
-        for (com.new_cafe.app.backend.admin.menu.domain.OptionItem domainItem : domainItems) {
-            if (domainItem.getId() != null) {
-                // 기존 아이템 업데이트
-                optionEntity.getItems().stream()
-                    .filter(i -> i.getId().equals(domainItem.getId()))
-                    .findFirst()
-                    .ifPresent(existingItem -> {
-                        existingItem.update(domainItem.getName(), domainItem.getPriceDelta(), domainItem.getSortOrder());
-                    });
+        List<OptionItemEntity> newItems = new ArrayList<>();
+
+        for (var domainItem : domainItems) {
+            OptionItemEntity existingItem = (domainItem.getId() != null) ? existingMap.get(domainItem.getId()) : null;
+
+            if (existingItem != null) {
+                existingItem.update(domainItem.getName(), domainItem.getPriceDelta(), domainItem.getSortOrder());
+                newItems.add(existingItem);
+                existingMap.remove(domainItem.getId());
             } else {
-                // 새 아이템 추가
                 OptionItemEntity newItem = OptionItemEntity.builder()
-                        .optionId(optionEntity.getId())
                         .name(domainItem.getName())
                         .priceDelta(domainItem.getPriceDelta())
                         .sortOrder(domainItem.getSortOrder())
                         .build();
-                optionEntity.getItems().add(newItem);
+                newItems.add(newItem);
             }
         }
+
+        optionEntity.getItems().clear();
+        optionEntity.getItems().addAll(newItems);
     }
- 
+
     public static MenuEntity fromDomain(Menu menu) {
         MenuEntity entity = MenuEntity.builder()
                 .id(menu.getId())
@@ -217,7 +206,7 @@ public class MenuEntity {
                 .build();
         
         if (menu.getOptions() != null) {
-            java.util.List<MenuOptionEntity> optionEntities = menu.getOptions().stream()
+            List<MenuOptionEntity> optionEntities = menu.getOptions().stream()
                 .map(o -> {
                     MenuOptionEntity optionEntity = MenuOptionEntity.builder()
                         .id(o.getId())
@@ -229,20 +218,19 @@ public class MenuEntity {
                         .build();
                     
                     if (o.getItems() != null) {
-                        java.util.List<OptionItemEntity> itemEntities = o.getItems().stream()
+                        List<OptionItemEntity> itemEntities = o.getItems().stream()
                             .map(i -> OptionItemEntity.builder()
                                 .id(i.getId())
-                                .optionId(o.getId())
                                 .name(i.getName())
                                 .priceDelta(i.getPriceDelta())
                                 .sortOrder(i.getSortOrder())
                                 .build())
-                            .collect(java.util.stream.Collectors.toList());
+                            .collect(Collectors.toList());
                         optionEntity.getItems().addAll(itemEntities);
                     }
                     return optionEntity;
                 })
-                .collect(java.util.stream.Collectors.toList());
+                .collect(Collectors.toList());
             entity.options.addAll(optionEntities);
         }
         return entity;

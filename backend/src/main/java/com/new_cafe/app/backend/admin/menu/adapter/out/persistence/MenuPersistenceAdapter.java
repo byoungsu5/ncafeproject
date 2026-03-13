@@ -2,14 +2,11 @@ package com.new_cafe.app.backend.admin.menu.adapter.out.persistence;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.stereotype.Component;
-
 import com.new_cafe.app.backend.admin.menu.application.port.out.MenuPort;
 import com.new_cafe.app.backend.admin.menu.domain.Menu;
 import com.new_cafe.app.backend.admin.menu.adapter.out.persistence.jpa.MenuEntity;
 import com.new_cafe.app.backend.admin.menu.adapter.out.persistence.jpa.MenuJpaRepository;
-
 import com.new_cafe.app.backend.menu.adapter.out.persistence.MenuImageJpaRepository;
 
 @Component("adminMenuPersistenceAdapter")
@@ -19,7 +16,7 @@ public class MenuPersistenceAdapter implements MenuPort {
     private final MenuImageJpaRepository menuImageRepository;
 
     public MenuPersistenceAdapter(MenuJpaRepository repository,
-                                  MenuImageJpaRepository menuImageRepository) {
+                                   MenuImageJpaRepository menuImageRepository) {
         this.repository = repository;
         this.menuImageRepository = menuImageRepository;
     }
@@ -30,14 +27,16 @@ public class MenuPersistenceAdapter implements MenuPort {
         if (menu.getId() != null) {
             entity = repository.findById(menu.getId())
                     .orElseGet(() -> MenuEntity.fromDomain(menu));
-            System.out.println("[MenuPersistenceAdapter] Updating menu " + menu.getId() + " with " + (menu.getOptions() != null ? menu.getOptions().size() : 0) + " options");
+            System.out.println("[MenuPersistenceAdapter] Updating menu " + menu.getId() + " - Input options: " + (menu.getOptions() != null ? menu.getOptions().size() : 0));
             entity.update(menu);
+            System.out.println("[MenuPersistenceAdapter] Entity options after update: " + entity.getOptions().size());
         } else {
             System.out.println("[MenuPersistenceAdapter] Creating new menu with " + (menu.getOptions() != null ? menu.getOptions().size() : 0) + " options");
             entity = MenuEntity.fromDomain(menu);
         }
         
         MenuEntity saved = repository.saveAndFlush(entity);
+        System.out.println("[MenuPersistenceAdapter] Saved entity options: " + (saved.getOptions() != null ? saved.getOptions().size() : 0));
         return findById(saved.getId()).orElseThrow();
     }
 

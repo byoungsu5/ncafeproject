@@ -59,7 +59,7 @@ export default function MenuCard({ menu }: MenuCardProps) {
                             {menu.isSoldOut ? <EyeOff size={18} /> : <Eye size={18} />}
                         </Button>
                     </Link>
-                    <Link href={`/admin/menus/${menu.id}`}>
+                    <Link href={`/admin/menus/${menu.id}/edit`}>
                         <Button variant="ghost" size="sm">
                             <Edit size={18} />
                         </Button>
