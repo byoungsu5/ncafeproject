@@ -51,12 +51,14 @@ public class MenuService implements CreateMenuUseCase, UpdateMenuUseCase,
                 .isAvailable(menu.getIsAvailable())
                 .options(command.options().stream()
                     .map(o -> com.new_cafe.app.backend.admin.menu.domain.MenuOption.builder()
+                        .id(o.id())
                         .name(o.name())
                         .type(o.type())
                         .isRequired(o.required())
                         .sortOrder(o.sortOrder())
                         .items(o.items() != null ? o.items().stream()
                             .map(i -> com.new_cafe.app.backend.admin.menu.domain.OptionItem.builder()
+                                .id(i.id())
                                 .name(i.name())
                                 .priceDelta(i.priceDelta())
                                 .sortOrder(i.sortOrder())
@@ -89,12 +91,14 @@ public class MenuService implements CreateMenuUseCase, UpdateMenuUseCase,
         if (command.options() != null) {
             java.util.List<com.new_cafe.app.backend.admin.menu.domain.MenuOption> options = command.options().stream()
                 .map(o -> com.new_cafe.app.backend.admin.menu.domain.MenuOption.builder()
+                    .id(o.id())
                     .name(o.name())
                     .type(o.type())
                     .isRequired(o.required())
                     .sortOrder(o.sortOrder())
                     .items(o.items() != null ? o.items().stream()
                         .map(i -> com.new_cafe.app.backend.admin.menu.domain.OptionItem.builder()
+                            .id(i.id())
                             .name(i.name())
                             .priceDelta(i.priceDelta())
                             .sortOrder(i.sortOrder())
@@ -103,6 +107,7 @@ public class MenuService implements CreateMenuUseCase, UpdateMenuUseCase,
                     .build())
                 .collect(java.util.stream.Collectors.toList());
             
+            System.out.println("[MenuService] Rebuilding menu with " + options.size() + " options");
             // Note: This is an immutable domain object pattern, ideally we'd have a method on Menu to set options
             menu = Menu.builder()
                 .id(menu.getId())

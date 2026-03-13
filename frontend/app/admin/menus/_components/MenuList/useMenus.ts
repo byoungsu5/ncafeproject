@@ -16,6 +16,7 @@ export interface MenuResponse {
     sortOrder: number,
     createdAt: string,
     updatedAt: string,
+    options?: any[],
 }
 
 export interface MenuListResponse {

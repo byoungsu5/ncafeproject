@@ -26,10 +26,19 @@ public class MenuPersistenceAdapter implements MenuPort {
 
     @Override
     public Menu save(Menu menu) {
-        MenuEntity entity = MenuEntity.fromDomain(menu);
-        MenuEntity saved = repository.save(entity);
-        String imageSrc = menuImageRepository.findFirstImageSrcByMenuId(saved.getId());
-        return saved.toDomain(imageSrc);
+        MenuEntity entity;
+        if (menu.getId() != null) {
+            entity = repository.findById(menu.getId())
+                    .orElseGet(() -> MenuEntity.fromDomain(menu));
+            System.out.println("[MenuPersistenceAdapter] Updating menu " + menu.getId() + " with " + (menu.getOptions() != null ? menu.getOptions().size() : 0) + " options");
+            entity.update(menu);
+        } else {
+            System.out.println("[MenuPersistenceAdapter] Creating new menu with " + (menu.getOptions() != null ? menu.getOptions().size() : 0) + " options");
+            entity = MenuEntity.fromDomain(menu);
+        }
+        
+        MenuEntity saved = repository.saveAndFlush(entity);
+        return findById(saved.getId()).orElseThrow();
     }
 
     @Override

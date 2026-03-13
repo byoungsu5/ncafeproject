@@ -227,11 +227,13 @@ export default function OptionsPage() {
         setSaveProgress({ current: 0, total: targetMenus.length });
 
         const optionsPayload = options.map((opt, i) => ({
+            id: opt.id,
             name: opt.name,
             type: opt.type,
             required: opt.required,
             sortOrder: i,
             items: opt.items.map((item, j) => ({
+                id: item.id,
                 name: item.name,
                 priceDelta: Number(item.priceDelta) || 0,
                 sortOrder: j,

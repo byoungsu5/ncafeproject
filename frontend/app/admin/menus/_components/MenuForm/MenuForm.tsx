@@ -45,6 +45,13 @@ export default function MenuForm({
             setValue('slug', suggestedSlug);
         }
     }, [engName, setValue]);
+ 
+    // 카테고리 로드 시 초기값 동기화
+    useEffect(() => {
+        if (categories.length > 0 && defaultValues?.categoryId) {
+            setValue('categoryId', String(defaultValues.categoryId));
+        }
+    }, [categories, defaultValues, setValue]);
 
     return (
         <FormProvider {...methods}>

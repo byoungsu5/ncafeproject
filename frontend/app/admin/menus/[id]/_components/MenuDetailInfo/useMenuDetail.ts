@@ -4,11 +4,15 @@ export interface MenuDetail {
     id: number;
     korName: string;
     engName: string;
+    slug: string;
     categoryName: string;
-    price: number | string; // Allow string if formatted
+    categoryId: number;
+    price: number | string;
     isAvailable: boolean;
     createdAt: string;
+    updatedAt: string;
     description: string;
+    images: any[];
     options: import('@/types').MenuOption[];
 }
 
@@ -23,7 +27,7 @@ export function useMenuDetail(id: number | string) {
         const fetchMenu = async () => {
             setLoading(true);
             try {
-                const response = await fetch(`/api/admin/menus/${id}`);
+                const response = await fetch(`/api/admin/menus/${id}`, { cache: 'no-store' });
                 if (!response.ok) {
                     throw new Error('Failed to fetch menu detail');
                 }

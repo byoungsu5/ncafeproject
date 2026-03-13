@@ -101,6 +101,17 @@
     backdrop-filter: blur(4px);
 }
 
+.badgeOptions {
+    padding: 0.4rem 1rem;
+    background: rgba(255, 107, 53, 0.9);
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 2rem;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 4px 10px rgba(255, 107, 53, 0.3);
+}
+
 .content {
     position: relative;
     z-index: 1;

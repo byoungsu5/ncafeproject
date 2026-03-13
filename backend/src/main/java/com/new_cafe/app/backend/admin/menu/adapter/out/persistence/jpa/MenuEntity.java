@@ -115,6 +115,92 @@ public class MenuEntity {
                 .build();
     }
 
+    public void update(Menu menu) {
+        this.korName = menu.getKorName();
+        this.engName = menu.getEngName();
+        this.slug = menu.getSlug();
+        this.description = menu.getDescription();
+        this.price = menu.getPrice();
+        this.categoryId = menu.getCategoryId();
+        this.isAvailable = menu.getIsAvailable();
+        this.sortOrder = menu.getSortOrder();
+        
+        syncOptions(menu.getOptions());
+    }
+ 
+    private void syncOptions(java.util.List<com.new_cafe.app.backend.admin.menu.domain.MenuOption> domainOptions) {
+        if (domainOptions == null) {
+            this.options.clear();
+            return;
+        }
+ 
+        // 제거될 옵션들 처리
+        this.options.removeIf(existingOpt -> {
+            boolean stays = domainOptions.stream()
+                .anyMatch(domainOpt -> domainOpt.getId() != null && domainOpt.getId().equals(existingOpt.getId()));
+            return !stays;
+        });
+
+        for (com.new_cafe.app.backend.admin.menu.domain.MenuOption domainOpt : domainOptions) {
+            if (domainOpt.getId() != null) {
+                // 기존 옵션 업데이트
+                this.options.stream()
+                    .filter(o -> o.getId().equals(domainOpt.getId()))
+                    .findFirst()
+                    .ifPresent(existingOpt -> {
+                        existingOpt.update(domainOpt.getName(), domainOpt.getType(), domainOpt.getIsRequired(), domainOpt.getSortOrder());
+                        syncItems(existingOpt, domainOpt.getItems());
+                    });
+            } else {
+                // 새 옵션 추가
+                MenuOptionEntity newOption = MenuOptionEntity.builder()
+                        .menuId(this.id)
+                        .name(domainOpt.getName())
+                        .type(domainOpt.getType())
+                        .isRequired(domainOpt.getIsRequired())
+                        .sortOrder(domainOpt.getSortOrder())
+                        .build();
+                syncItems(newOption, domainOpt.getItems());
+                this.options.add(newOption);
+            }
+        }
+    }
+ 
+    private void syncItems(MenuOptionEntity optionEntity, java.util.List<com.new_cafe.app.backend.admin.menu.domain.OptionItem> domainItems) {
+        if (domainItems == null) {
+            optionEntity.getItems().clear();
+            return;
+        }
+
+        // 제거될 아이템들 처리
+        optionEntity.getItems().removeIf(existingItem -> {
+            boolean stays = domainItems.stream()
+                .anyMatch(domainItem -> domainItem.getId() != null && domainItem.getId().equals(existingItem.getId()));
+            return !stays;
+        });
+
+        for (com.new_cafe.app.backend.admin.menu.domain.OptionItem domainItem : domainItems) {
+            if (domainItem.getId() != null) {
+                // 기존 아이템 업데이트
+                optionEntity.getItems().stream()
+                    .filter(i -> i.getId().equals(domainItem.getId()))
+                    .findFirst()
+                    .ifPresent(existingItem -> {
+                        existingItem.update(domainItem.getName(), domainItem.getPriceDelta(), domainItem.getSortOrder());
+                    });
+            } else {
+                // 새 아이템 추가
+                OptionItemEntity newItem = OptionItemEntity.builder()
+                        .optionId(optionEntity.getId())
+                        .name(domainItem.getName())
+                        .priceDelta(domainItem.getPriceDelta())
+                        .sortOrder(domainItem.getSortOrder())
+                        .build();
+                optionEntity.getItems().add(newItem);
+            }
+        }
+    }
+ 
     public static MenuEntity fromDomain(Menu menu) {
         MenuEntity entity = MenuEntity.builder()
                 .id(menu.getId())
@@ -131,25 +217,33 @@ public class MenuEntity {
                 .build();
         
         if (menu.getOptions() != null) {
-            entity.options = menu.getOptions().stream()
-                .map(o -> MenuOptionEntity.builder()
-                    .id(o.getId())
-                    .menuId(menu.getId())
-                    .name(o.getName())
-                    .type(o.getType())
-                    .isRequired(o.getIsRequired())
-                    .sortOrder(o.getSortOrder())
-                    .items(o.getItems() != null ? o.getItems().stream()
-                        .map(i -> OptionItemEntity.builder()
-                            .id(i.getId())
-                            .optionId(o.getId())
-                            .name(i.getName())
-                            .priceDelta(i.getPriceDelta())
-                            .sortOrder(i.getSortOrder())
-                            .build())
-                        .collect(java.util.stream.Collectors.toList()) : new java.util.ArrayList<>())
-                    .build())
+            java.util.List<MenuOptionEntity> optionEntities = menu.getOptions().stream()
+                .map(o -> {
+                    MenuOptionEntity optionEntity = MenuOptionEntity.builder()
+                        .id(o.getId())
+                        .menuId(menu.getId())
+                        .name(o.getName())
+                        .type(o.getType())
+                        .isRequired(o.getIsRequired())
+                        .sortOrder(o.getSortOrder())
+                        .build();
+                    
+                    if (o.getItems() != null) {
+                        java.util.List<OptionItemEntity> itemEntities = o.getItems().stream()
+                            .map(i -> OptionItemEntity.builder()
+                                .id(i.getId())
+                                .optionId(o.getId())
+                                .name(i.getName())
+                                .priceDelta(i.getPriceDelta())
+                                .sortOrder(i.getSortOrder())
+                                .build())
+                            .collect(java.util.stream.Collectors.toList());
+                        optionEntity.getItems().addAll(itemEntities);
+                    }
+                    return optionEntity;
+                })
                 .collect(java.util.stream.Collectors.toList());
+            entity.options.addAll(optionEntities);
         }
         return entity;
     }

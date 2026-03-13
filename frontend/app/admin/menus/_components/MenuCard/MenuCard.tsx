@@ -35,6 +35,7 @@ export default function MenuCard({ menu }: MenuCardProps) {
                     <div className={styles.badges}>
                         {menu.isSoldOut && <span className={styles.badgeSoldOut}>품절</span>}
                         {!menu.isAvailable && <span className={styles.badgeHidden}>숨김</span>}
+
                     </div>
                 </div>
             </div>
@@ -49,13 +50,15 @@ export default function MenuCard({ menu }: MenuCardProps) {
                 <p className={styles.engName}>{menu.engName}</p>
 
                 <div className={styles.actions}>
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        className={menu.isSoldOut ? styles.actionActive : ''}
-                    >
-                        {menu.isSoldOut ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </Button>
+                    <Link href={`/admin/menus/${menu.id}`}>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className={menu.isSoldOut ? styles.actionActive : ''}
+                        >
+                            {menu.isSoldOut ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </Button>
+                    </Link>
                     <Link href={`/admin/menus/${menu.id}`}>
                         <Button variant="ghost" size="sm">
                             <Edit size={18} />

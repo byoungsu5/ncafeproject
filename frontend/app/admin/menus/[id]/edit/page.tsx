@@ -23,7 +23,7 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
     useEffect(() => {
         const fetchMenu = async () => {
             try {
-                const data = await fetchAPI(`/admin/menus/${id}`);
+                const data = await fetchAPI(`/admin/menus/${id}`, { cache: 'no-store' });
                 if (data) {
                     setInitialData({
                         korName: data.korName,
@@ -58,9 +58,11 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
                     price: data.price,
                     categoryId: Number(data.categoryId),
                     isAvailable: data.isAvailable,
+                    slug: data.slug,
                     options: data.options,
                 }),
             });
+            router.refresh(); // 캐시 무효화
             router.push(`/admin/menus/${id}`);
         } catch (error) {
             alert(error instanceof Error ? error.message : '메뉴 수정에 실패했습니다.');
