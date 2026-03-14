@@ -48,3 +48,19 @@ export const authAPI = {
 
     getSession: () => fetchAPI('/auth/session'),
 };
+
+export async function uploadFile(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const res = await fetch('/api/admin/images/upload', {
+        method: 'POST',
+        body: formData,
+    });
+
+    if (!res.ok) {
+        throw new Error('Image upload failed');
+    }
+
+    return res.json();
+}

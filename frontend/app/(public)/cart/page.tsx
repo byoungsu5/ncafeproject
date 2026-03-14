@@ -59,15 +59,25 @@ export default function CartPage() {
 
             const order = await response.json();
             
+            // 주문 생성 성공 후 결제 모달 오픈
             openOrderModal({
-                type: 'success',
-                title: '주문 완료! 🔥',
-                message: '파이리가 맛있게 준비해드릴게요!',
+                type: 'payment',
+                title: '결제하기 💳',
+                message: '결제 수단을 선택하고 주문을 완료하세요.',
                 orderId: order.id,
-                onClose: () => {
-                    clearCart();
-                    router.push('/');
-                },
+                amount: totalPrice,
+                onPaymentSuccess: (payment) => {
+                    openOrderModal({
+                        type: 'success',
+                        title: '주문 및 결제 완료! 🔥',
+                        message: '결제가 성공적으로 완료되었습니다. 파이리가 맛있게 준비해드릴게요!',
+                        orderId: order.id,
+                        onClose: () => {
+                            clearCart();
+                            router.push('/');
+                        },
+                    });
+                }
             });
         } catch (error: any) {
             openOrderModal({

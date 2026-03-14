@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import MenuForm from '../_components/MenuForm';
 import { MenuFormData } from '@/types';
-import { fetchAPI } from '@/app/lib/api';
+import { fetchAPI, uploadFile } from '@/app/lib/api';
 import styles from './page.module.css';
 
 export default function NewMenuPage() {
@@ -16,6 +16,25 @@ export default function NewMenuPage() {
     const handleSubmit = async (data: MenuFormData) => {
         setIsSubmitting(true);
         try {
+            // 이미지 업로드 처리
+            const imagePromises = data.images.map(async (img) => {
+                if (img.file) {
+                    const uploadRes = await uploadFile(img.file);
+                    return {
+                        url: uploadRes.url,
+                        isPrimary: img.isPrimary,
+                        sortOrder: img.sortOrder
+                    };
+                }
+                return {
+                    url: img.url,
+                    isPrimary: img.isPrimary,
+                    sortOrder: img.sortOrder
+                };
+            });
+
+            const uploadedImages = await Promise.all(imagePromises);
+
             await fetchAPI('/admin/menus', {
                 method: 'POST',
                 body: JSON.stringify({
@@ -27,11 +46,7 @@ export default function NewMenuPage() {
                     categoryId: Number(data.categoryId),
                     isAvailable: data.isAvailable,
                     isSoldOut: data.isSoldOut,
-                    images: data.images.map(img => ({
-                        url: img.url,
-                        isPrimary: img.isPrimary,
-                        sortOrder: img.sortOrder
-                    })),
+                    images: uploadedImages,
                     options: data.options,
                 }),
             });

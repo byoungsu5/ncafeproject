@@ -1,0 +1,16 @@
+# docker-compose.override.yml - 로컬 개발 환경 전용
+# 이 파일은 로컬에서 docker compose up 시 자동으로 적용됩니다.
+# ⚠️ 서버에서는 이 파일이 존재하지 않아야 합니다.
+
+services:
+  backend:
+    ports:
+      - "${LOCAL_BACKEND_PORT:-8080}:8080"
+
+  ai-agent:
+    ports:
+      - "${LOCAL_AGENT_PORT:-8000}:8000"
+
+  db:
+    ports:
+      - "${LOCAL_DB_PORT:-5432}:5432"

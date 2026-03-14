@@ -19,7 +19,7 @@ async function proxyRequest(req: NextRequest) {
         }
 
         const headers = new Headers();
-        const skipHeaders = new Set(['host', 'cookie', 'connection', 'upgrade', 'keep-alive', 'transfer-encoding']);
+        const skipHeaders = new Set(['host', 'connection', 'upgrade', 'keep-alive', 'transfer-encoding']);
 
         req.headers.forEach((value, key) => {
             if (!skipHeaders.has(key.toLowerCase())) {
@@ -29,29 +29,19 @@ async function proxyRequest(req: NextRequest) {
 
         if (token) {
             headers.set('Authorization', `Bearer ${token}`);
-            console.log(`[API Proxy] ${req.method} ${pathname} - Token found`);
-        } else {
-            console.warn(`[API Proxy] ${req.method} ${pathname} - No token found in session`);
-        }
-        console.log(`[API Proxy] ${req.method} ${pathname} - Incoming Origin: ${req.headers.get('origin')}`);
-
-        let body: BodyInit | null = null;
-        if (req.method !== 'GET' && req.method !== 'HEAD') {
-            const contentType = req.headers.get('content-type');
-            if (contentType?.includes('multipart/form-data')) {
-                body = await req.blob();
-            } else {
-                body = await req.text();
-            }
         }
 
         const proxyRes = await fetch(targetUrl, {
             method: req.method,
             headers,
-            body,
+            body: req.method !== 'GET' && req.method !== 'HEAD' ? req.body : null,
+            // @ts-ignore - duplex is required for streaming request bodies in Node.js fetch
+            duplex: 'half',
         });
 
-        console.log(`[API Proxy] ${req.method} ${pathname} -> Backend returned ${proxyRes.status}`);
+        if (proxyRes.status >= 400) {
+            console.error(`[API Proxy] ${req.method} ${pathname} -> Backend returned ${proxyRes.status} ${proxyRes.statusText}`);
+        }
 
         if (proxyRes.status === 401 && token) {
             session.destroy();

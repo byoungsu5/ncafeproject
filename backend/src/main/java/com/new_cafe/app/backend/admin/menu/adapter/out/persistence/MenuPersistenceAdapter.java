@@ -9,17 +9,18 @@ import com.new_cafe.app.backend.admin.menu.adapter.out.persistence.jpa.MenuEntit
 import com.new_cafe.app.backend.admin.menu.adapter.out.persistence.jpa.MenuJpaRepository;
 import com.new_cafe.app.backend.menu.adapter.out.persistence.MenuImageJpaRepository;
 import com.new_cafe.app.backend.admin.menu.adapter.out.persistence.jpa.MenuImageEntity;
+import com.new_cafe.app.backend.admin.menu.adapter.out.persistence.jpa.AdminMenuImageJpaRepository;
 
 @Component("adminMenuPersistenceAdapter")
 public class MenuPersistenceAdapter implements MenuPort {
 
     private final MenuJpaRepository repository;
     private final MenuImageJpaRepository userMenuImageRepository;
-    private final com.new_cafe.app.backend.admin.menu.adapter.out.persistence.jpa.MenuImageJpaRepository adminMenuImageRepository;
+    private final AdminMenuImageJpaRepository adminMenuImageRepository;
 
     public MenuPersistenceAdapter(MenuJpaRepository repository,
                                    MenuImageJpaRepository userMenuImageRepository,
-                                   com.new_cafe.app.backend.admin.menu.adapter.out.persistence.jpa.MenuImageJpaRepository adminMenuImageRepository) {
+                                   AdminMenuImageJpaRepository adminMenuImageRepository) {
         this.repository = repository;
         this.userMenuImageRepository = userMenuImageRepository;
         this.adminMenuImageRepository = adminMenuImageRepository;

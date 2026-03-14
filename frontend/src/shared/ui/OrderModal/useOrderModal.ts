@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type OrderModalType = 'confirm' | 'success' | 'error';
+export type OrderModalType = 'confirm' | 'success' | 'error' | 'payment';
 
 interface OrderModalState {
     isOpen: boolean;
@@ -8,7 +8,9 @@ interface OrderModalState {
     title: string;
     message: string;
     orderId?: number;
+    amount?: number;
     onConfirm?: () => void;
+    onPaymentSuccess?: (payment: any) => void;
     onClose?: () => void;
     
     open: (params: {
@@ -16,7 +18,9 @@ interface OrderModalState {
         title: string;
         message: string;
         orderId?: number;
+        amount?: number;
         onConfirm?: () => void;
+        onPaymentSuccess?: (payment: any) => void;
         onClose?: () => void;
     }) => void;
     close: () => void;

@@ -96,6 +96,13 @@ export default function ImageUploadSection() {
         }
     };
 
+    const getImageUrl = (url: string) => {
+        if (!url) return '';
+        if (url.startsWith('http') || url.startsWith('blob:')) return url;
+        // 파일명만 있는 경우 프록시 경로 추가
+        return `/images/${url}`;
+    };
+
     return (
         <div className={styles.container}>
             {/* 드래그 앤 드롭 영역 */}
@@ -133,7 +140,7 @@ export default function ImageUploadSection() {
                     {fields.map((field, index) => (
                         <div key={field.id} className={styles.imageCard}>
                             <Image
-                                src={field.url}
+                                src={getImageUrl(field.url)}
                                 alt={`Menu Image ${index + 1}`}
                                 fill
                                 className={styles.imagePreview}

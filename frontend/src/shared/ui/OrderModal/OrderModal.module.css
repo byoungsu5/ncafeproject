@@ -179,6 +179,90 @@
     box-shadow: 0 10px 20px -5px rgba(239, 68, 68, 0.4);
 }
 
+.iconWrapper.payment {
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    color: #3b82f6;
+}
+
+.paymentSelection {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    text-align: left;
+}
+
+.paymentMethod {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 2px solid #f3f4f6;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.paymentMethod:hover {
+    border-color: #3b82f6;
+    background: #f8faff;
+}
+
+.paymentMethodSelected {
+    border-color: #3b82f6;
+    background: #f0f7ff;
+}
+
+.methodIcon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.methodInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.methodName {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #1f2937;
+}
+
+.methodDesc {
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.amountBox {
+    width: 100%;
+    padding: 1.25rem;
+    background: #f9fafb;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.amountLabel {
+    font-weight: 600;
+    color: #6b7280;
+}
+
+.amountValue {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #111827;
+}
+
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
