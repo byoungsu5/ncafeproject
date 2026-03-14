@@ -102,3 +102,14 @@
     background-color: var(--color-gray-50);
     border-color: var(--color-gray-400);
 }
+/* 추가된 스타일 */
+.loading, .error {
+    padding: var(--space-10);
+    text-align: center;
+    color: var(--color-gray-500);
+    font-size: var(--text-base);
+}
+
+.error {
+    color: #dc2626;
+}

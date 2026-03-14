@@ -5,8 +5,8 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: ${USER_ID:-kang}-backend
-    expose:
-      - "8080"
+    # expose:
+    #   - "8080"
     volumes:
       - upload-data:/app/upload
     environment:
@@ -54,8 +54,8 @@ services:
       - DB_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
     depends_on:
       - db
-    expose:
-      - "8000"
+    #expose:
+    #  - "8000"
     restart: unless-stopped
 
   db:
@@ -65,8 +65,8 @@ services:
       POSTGRES_DB: ${SPRING_DATASOURCE_DB:-mydb}
       POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME}
       POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
-    expose:
-      - "5432"
+    #expose:
+    #  - "5432"
     volumes:
       - db-data:/var/lib/postgresql/data
     restart: unless-stopped
