@@ -24,9 +24,11 @@ export interface MenuDetail {
     id: number;
     korName: string;
     engName: string;
+    categoryId: number;
     categoryName: string;
     price: number;
     isAvailable: boolean;
+    isSoldOut: boolean;
     createdAt: string;
     description: string;
     options: MenuOptionDetail[];
@@ -61,9 +63,11 @@ export function useMenuDetail(id: string) {
                     id: data.id,
                     korName: data.korName,
                     engName: data.engName,
+                    categoryId: data.categoryId,
                     categoryName: data.categoryName,
                     price: typeof data.price === 'string' ? parseInt(data.price, 10) : data.price,
                     isAvailable: data.isAvailable,
+                    isSoldOut: data.isSoldOut,
                     createdAt: data.createdAt,
                     description: data.description,
                     options: data.options || [],
@@ -81,5 +85,50 @@ export function useMenuDetail(id: string) {
         fetchMenuDetail();
     }, [id]);
 
-    return { menuDetail, loading, error };
+    const toggleSoldOut = async () => {
+        if (!menuDetail) return;
+        
+        const newSoldOutStatus = !menuDetail.isSoldOut;
+        try {
+            const response = await fetch(`/api/admin/menus/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    korName: menuDetail.korName,
+                    engName: menuDetail.engName,
+                    description: menuDetail.description,
+                    price: menuDetail.price,
+                    categoryId: menuDetail.categoryId,
+                    isAvailable: menuDetail.isAvailable,
+                    isSoldOut: newSoldOutStatus,
+                    options: menuDetail.options,
+                }),
+            });
+
+            if (response.ok) {
+                setMenuDetail({ ...menuDetail, isSoldOut: newSoldOutStatus });
+            }
+        } catch (err) {
+            console.error('Failed to toggle sold out status', err);
+        }
+    };
+
+    // Helper map for category names to IDs if needed, but the current backend PUT /api/admin/menus/{id}
+    // requires the full MenuFormData. This might be tricky if we don't have all data.
+    // However, the backend UpdateMenuCommand seems to need korName, engName, price, categoryId, etc.
+    // Let's refine the toggle as it might need full data.
+    
+    return { menuDetail, loading, error, toggleSoldOut };
 }
+
+// Remove temporary mapping as we now have categoryId in data
+/*
+const dataIdMap: Record<string, string> = {
+    '커피': '1',
+    '에이드': '2',
+    '티': '3',
+    '디저트': '4',
+};
+*/

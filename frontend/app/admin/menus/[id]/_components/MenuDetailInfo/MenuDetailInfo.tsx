@@ -6,7 +6,7 @@ import { format } from 'date-fns';
 import { useMenuDetail } from './useMenuDetail';
 
 export default function MenuDetailInfo({ id }: { id: string }) {
-    const { menuDetail: menu, loading, error } = useMenuDetail(id);
+    const { menuDetail: menu, loading, error, toggleSoldOut } = useMenuDetail(id);
 
     if (loading) return <div className={styles.loading}>정보를 불러오는 중...</div>;
     if (error) return <div className={styles.error}>정보를 불러오지 못했습니다.</div>;
@@ -42,10 +42,25 @@ export default function MenuDetailInfo({ id }: { id: string }) {
             </div>
 
             <div className={styles.row}>
-                <span className={styles.label}>판매 상태</span>
+                <span className={styles.label}>노출 상태</span>
                 <span className={`${styles.badge} ${menu.isAvailable ? styles.badgeAvailable : styles.badgeSoldOut}`}>
-                    {menu.isAvailable ? '판매 중' : '숨김'}
+                    {menu.isAvailable ? '고객 노출 중' : '숨김 상태'}
                 </span>
+            </div>
+
+            <div className={styles.row}>
+                <span className={styles.label}>재고 상태</span>
+                <div className={styles.soldOutContainer}>
+                    <span className={`${styles.badge} ${!menu.isSoldOut ? styles.badgeAvailable : styles.badgeSoldOut}`}>
+                        {menu.isSoldOut ? '품절' : '판매 가능'}
+                    </span>
+                    <button 
+                        onClick={toggleSoldOut}
+                        className={styles.toggleButton}
+                    >
+                        {menu.isSoldOut ? '판매 재개하기' : '품절 처리하기'}
+                    </button>
+                </div>
             </div>
 
             <div className={styles.row}>
