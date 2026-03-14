@@ -3,6 +3,23 @@ import { useState, useEffect } from 'react';
 /**
  * 메뉴 상세 정보 데이터 구조 정의
  */
+export interface OptionItemDetail {
+    id?: number;
+    name: string;
+    priceDelta: number;
+    sortOrder: number;
+}
+
+export interface MenuOptionDetail {
+    id?: number;
+    name: string;
+    type: string;
+    isRequired?: boolean;
+    required?: boolean;
+    sortOrder: number;
+    items: OptionItemDetail[];
+}
+
 export interface MenuDetail {
     id: number;
     korName: string;
@@ -12,6 +29,7 @@ export interface MenuDetail {
     isAvailable: boolean;
     createdAt: string;
     description: string;
+    options: MenuOptionDetail[];
 }
 
 /**
@@ -29,7 +47,7 @@ export function useMenuDetail(id: string) {
         const fetchMenuDetail = async () => {
             try {
                 setLoading(true);
-                // 백엔드 API 호출 (실제 API 엔드포인트에 맞게 조정 필요)
+                // 백엔드 API 호출
                 const response = await fetch(`/api/admin/menus/${id}`);
 
                 if (!response.ok) {
@@ -38,7 +56,7 @@ export function useMenuDetail(id: string) {
 
                 const data = await response.json();
 
-                // 요청하신 데이터 구조에 맞게 매핑 (필요한 경우)
+                // 데이터 구조에 맞게 매핑 (options 포함)
                 const mappedData: MenuDetail = {
                     id: data.id,
                     korName: data.korName,
@@ -48,6 +66,7 @@ export function useMenuDetail(id: string) {
                     isAvailable: data.isAvailable,
                     createdAt: data.createdAt,
                     description: data.description,
+                    options: data.options || [],
                 };
 
                 setMenuDetail(mappedData);
