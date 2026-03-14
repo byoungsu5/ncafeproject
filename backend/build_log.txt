@@ -1,0 +1,35 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Task :compileJava
+/home/kang/workspace/ncafeproject/backend/src/main/java/com/new_cafe/app/backend/admin/menu/adapter/in/web/MenuController.java:69: error: constructor UpdateMenuCommand in record UpdateMenuCommand cannot be applied to given types;
+        UpdateMenuCommand commandWithId = new UpdateMenuCommand(
+                                          ^
+  required: Long,@jakarta.validation.constraints.NotBlank(message="\ud55c\uae00 \uba54\ub274\uba85\uc744 \uc785\ub825\ud574\uc8fc\uc138\uc694") String,@jakarta.validation.constraints.NotBlank(message="\uc601\ubb38 \uba54\ub274\uba85\uc744 \uc785\ub825\ud574\uc8fc\uc138\uc694") String,String,String,@jakarta.validation.constraints.NotNull(message="\uac00\uaca9\uc744 \uc785\ub825\ud574\uc8fc\uc138\uc694"),@jakarta.validation.constraints.Min(value=0L, message="\uac00\uaca9\uc740 0\uc6d0 \uc774\uc0c1\uc774\uc5b4\uc57c \ud569\ub2c8\ub2e4") Integer,@jakarta.validation.constraints.NotNull(message="\uce74\ud14c\uace0\ub9ac\ub97c \uc120\ud0dd\ud574\uc8fc\uc138\uc694") Long,Boolean,Boolean,List<OptionCommand>
+  found:    Long,@jakarta.validation.constraints.NotBlank(message="\ud55c\uae00 \uba54\ub274\uba85\uc744 \uc785\ub825\ud574\uc8fc\uc138\uc694") String,@jakarta.validation.constraints.NotBlank(message="\uc601\ubb38 \uba54\ub274\uba85\uc744 \uc785\ub825\ud574\uc8fc\uc138\uc694") String,String,String,@jakarta.validation.constraints.NotNull(message="\uac00\uaca9\uc744 \uc785\ub825\ud574\uc8fc\uc138\uc694"),@jakarta.validation.constraints.Min(value=0L, message="\uac00\uaca9\uc740 0\uc6d0 \uc774\uc0c1\uc774\uc5b4\uc57c \ud569\ub2c8\ub2e4") Integer,@jakarta.validation.constraints.NotNull(message="\uce74\ud14c\uace0\ub9ac\ub97c \uc120\ud0dd\ud574\uc8fc\uc138\uc694") Long,Boolean,List<OptionCommand>
+  reason: actual and formal argument lists differ in length
+1 error
+
+> Task :compileJava FAILED
+
+[Incubating] Problems report is available at: file:///home/kang/workspace/ncafeproject/backend/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':compileJava'.
+> Compilation failed; see the compiler output below.
+  /home/kang/workspace/ncafeproject/backend/src/main/java/com/new_cafe/app/backend/admin/menu/adapter/in/web/MenuController.java:69: error: constructor UpdateMenuCommand in record UpdateMenuCommand cannot be applied to given types;
+          UpdateMenuCommand commandWithId = new UpdateMenuCommand(
+                                            ^
+    required: Long,@jakarta.validation.constraints.NotBlank(message="\ud55c\uae00 \uba54\ub274\uba85\uc744 \uc785\ub825\ud574\uc8fc\uc138\uc694") String,@jakarta.validation.constraints.NotBlank(message="\uc601\ubb38 \uba54\ub274\uba85\uc744 \uc785\ub825\ud574\uc8fc\uc138\uc694") String,String,String,@jakarta.validation.constraints.NotNull(message="\uac00\uaca9\uc744 \uc785\ub825\ud574\uc8fc\uc138\uc694"),@jakarta.validation.constraints.Min(value=0L, message="\uac00\uaca9\uc740 0\uc6d0 \uc774\uc0c1\uc774\uc5b4\uc57c \ud569\ub2c8\ub2e4") Integer,@jakarta.validation.constraints.NotNull(message="\uce74\ud14c\uace0\ub9ac\ub97c \uc120\ud0dd\ud574\uc8fc\uc138\uc694") Long,Boolean,Boolean,List<OptionCommand>
+    found:    Long,@jakarta.validation.constraints.NotBlank(message="\ud55c\uae00 \uba54\ub274\uba85\uc744 \uc785\ub825\ud574\uc8fc\uc138\uc694") String,@jakarta.validation.constraints.NotBlank(message="\uc601\ubb38 \uba54\ub274\uba85\uc744 \uc785\ub825\ud574\uc8fc\uc138\uc694") String,String,String,@jakarta.validation.constraints.NotNull(message="\uac00\uaca9\uc744 \uc785\ub825\ud574\uc8fc\uc138\uc694"),@jakarta.validation.constraints.Min(value=0L, message="\uac00\uaca9\uc740 0\uc6d0 \uc774\uc0c1\uc774\uc5b4\uc57c \ud569\ub2c8\ub2e4") Integer,@jakarta.validation.constraints.NotNull(message="\uce74\ud14c\uace0\ub9ac\ub97c \uc120\ud0dd\ud574\uc8fc\uc138\uc694") Long,Boolean,List<OptionCommand>
+    reason: actual and formal argument lists differ in length
+  1 error
+
+* Try:
+> Check your code and dependencies to fix the compilation error(s)
+> Run with --scan to generate a Build Scan (powered by Develocity).
+
+BUILD FAILED in 26s
+1 actionable task: 1 executed

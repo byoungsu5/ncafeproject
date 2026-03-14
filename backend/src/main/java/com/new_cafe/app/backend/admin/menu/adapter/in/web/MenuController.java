@@ -75,6 +75,7 @@ public class MenuController {
                 command.price(),
                 command.categoryId(),
                 command.isAvailable(),
+                command.isSoldOut(),
                 command.options()
         );
         MenuResult result = updateMenuUseCase.updateMenu(commandWithId);

@@ -49,6 +49,7 @@ public class MenuService implements CreateMenuUseCase, UpdateMenuUseCase,
                 .price(menu.getPrice())
                 .categoryId(menu.getCategoryId())
                 .isAvailable(menu.getIsAvailable())
+                .isSoldOut(menu.getIsSoldOut())
                 .options(command.options().stream()
                     .map(o -> com.new_cafe.app.backend.admin.menu.domain.MenuOption.builder()
                         .id(o.id())
@@ -85,7 +86,8 @@ public class MenuService implements CreateMenuUseCase, UpdateMenuUseCase,
                 command.description(),
                 command.price(),
                 command.categoryId(),
-                command.isAvailable()
+                command.isAvailable(),
+                command.isSoldOut()
         );
 
         if (command.options() != null) {
@@ -122,6 +124,7 @@ public class MenuService implements CreateMenuUseCase, UpdateMenuUseCase,
                 .price(menu.getPrice())
                 .categoryId(menu.getCategoryId())
                 .isAvailable(menu.getIsAvailable())
+                .isSoldOut(menu.getIsSoldOut())
                 .categoryName(menu.getCategoryName())
                 .imageSrc(menu.getImageSrc())
                 .createdAt(menu.getCreatedAt())

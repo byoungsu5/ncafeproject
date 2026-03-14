@@ -32,7 +32,7 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
                         price: data.price,
                         categoryId: String(data.categoryId),
                         isAvailable: data.isAvailable,
-                        isSoldOut: false,
+                        isSoldOut: data.isSoldOut,
                         images: [],
                         options: data.options || [],
                     });
@@ -58,6 +58,7 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
                     price: data.price,
                     categoryId: Number(data.categoryId),
                     isAvailable: data.isAvailable,
+                    isSoldOut: data.isSoldOut,
                     slug: data.slug,
                     options: data.options,
                 }),

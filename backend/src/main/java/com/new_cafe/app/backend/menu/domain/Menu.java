@@ -21,6 +21,7 @@ public class Menu {
     private Long categoryId;
     private String categoryName;
     private Boolean isAvailable;
+    private Boolean isSoldOut;
     private String imageSrc;
     private Integer sortOrder;
     private java.time.LocalDateTime createdAt;

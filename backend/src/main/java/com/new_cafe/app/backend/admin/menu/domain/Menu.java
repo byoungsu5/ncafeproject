@@ -21,6 +21,7 @@ public class Menu {
     private Integer price;
     private Long categoryId;
     private Boolean isAvailable;
+    private Boolean isSoldOut;
     private Integer sortOrder;
     private String imageSrc;
     private String categoryName;
@@ -39,11 +40,12 @@ public class Menu {
                 .price(price)
                 .categoryId(categoryId)
                 .isAvailable(isAvailable != null ? isAvailable : true)
+                .isSoldOut(false)
                 .build();
     }
 
     public void update(String korName, String engName, String slug, String description,
-                       Integer price, Long categoryId, Boolean isAvailable) {
+                       Integer price, Long categoryId, Boolean isAvailable, Boolean isSoldOut) {
         this.korName = korName;
         this.engName = engName;
         this.slug = (slug == null || slug.isBlank()) ? generateSlug(engName) : slug;
@@ -51,6 +53,7 @@ public class Menu {
         this.price = price;
         this.categoryId = categoryId;
         this.isAvailable = isAvailable;
+        this.isSoldOut = isSoldOut;
     }
 
     private static String generateSlug(String engName) {

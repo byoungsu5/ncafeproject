@@ -26,6 +26,7 @@ export default function NewMenuPage() {
                     price: data.price,
                     categoryId: Number(data.categoryId),
                     isAvailable: data.isAvailable,
+                    isSoldOut: data.isSoldOut,
                     options: data.options,
                 }),
             });

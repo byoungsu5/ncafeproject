@@ -50,6 +50,9 @@ public class MenuEntity {
     @Column(name = "is_available")
     private java.lang.Boolean isAvailable;
 
+    @Column(name = "is_sold_out")
+    private java.lang.Boolean isSoldOut;
+
     @Column(name = "sort_order")
     private java.lang.Integer sortOrder;
 
@@ -82,6 +85,7 @@ public class MenuEntity {
                 .price(price)
                 .categoryId(categoryId)
                 .isAvailable(isAvailable)
+                .isSoldOut(isSoldOut != null ? isSoldOut : false)
                 .sortOrder(sortOrder)
                 .imageSrc(imageSrc != null ? imageSrc : "blank.png")
                 .categoryName(categoryName)
@@ -115,6 +119,7 @@ public class MenuEntity {
         this.price = menu.getPrice();
         this.categoryId = menu.getCategoryId();
         this.isAvailable = menu.getIsAvailable();
+        this.isSoldOut = menu.getIsSoldOut();
         this.sortOrder = menu.getSortOrder();
         
         syncOptions(menu.getOptions());
@@ -200,6 +205,7 @@ public class MenuEntity {
                 .price(menu.getPrice())
                 .categoryId(menu.getCategoryId())
                 .isAvailable(menu.getIsAvailable())
+                .isSoldOut(menu.getIsSoldOut())
                 .sortOrder(menu.getSortOrder())
                 .createdAt(menu.getCreatedAt())
                 .updatedAt(menu.getUpdatedAt())

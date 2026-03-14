@@ -52,6 +52,9 @@ public class MenuEntity {
     @Column(name = "is_available")
     private Boolean isAvailable;
 
+    @Column(name = "is_sold_out")
+    private Boolean isSoldOut;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
@@ -101,6 +104,7 @@ public class MenuEntity {
                 .categoryId(categoryId)
                 .categoryName(categoryName)
                 .isAvailable(isAvailable != null ? isAvailable : true)
+                .isSoldOut(isSoldOut != null ? isSoldOut : false)
                 .imageSrc(imageSrc != null ? imageSrc : "blank.png")
                 .sortOrder(sortOrder)
                 .createdAt(createdAt)

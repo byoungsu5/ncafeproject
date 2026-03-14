@@ -31,7 +31,7 @@ public record MenuResponse(
                 menu.getCategoryName(),
                 menu.getImageSrc(),
                 menu.getIsAvailable(),
-                menu.getIsAvailable() != null ? !menu.getIsAvailable() : false,
+                menu.getIsSoldOut(),
                 menu.getSortOrder(),
                 menu.getCreatedAt(),
                 menu.getUpdatedAt(),
