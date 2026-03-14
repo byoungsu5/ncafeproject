@@ -1,4 +1,4 @@
-import { ListChecks } from 'lucide-react';
+import { ListChecks, ChevronRight, Check } from 'lucide-react';
 import styles from './MenuOptions.module.css';
 import { useMenuDetail } from '../MenuDetailInfo/useMenuDetail';
 
@@ -8,85 +8,74 @@ export default function MenuOptions({ menuId }: { menuId: string }) {
     if (loading) return <div className={styles.loading}>옵션을 불러오는 중...</div>;
     if (error || !menuDetail) return <div className={styles.error}>옵션을 불러오지 못했습니다.</div>;
 
-    // 디버깅을 위한 로그 추가
-    console.log('[MenuOptions] menuDetail:', menuDetail);
-
-    // 여러 필드명 시도 (options, optionGroups 등)
-    const options = (menuDetail as any).options || (menuDetail as any).optionGroups || [];
-    console.log('[MenuOptions] detected options:', options);
-
+    const options = menuDetail.options || [];
     const hasOptions = Array.isArray(options) && options.length > 0;
 
     return (
         <section className={styles.card}>
             <h2 className={styles.sectionTitle}>
-                <ListChecks size={20} />
-                옵션 {hasOptions ? `(${options.length})` : ''}
+                <span className={styles.titleIconWrap}>
+                    <ListChecks size={18} />
+                </span>
+                옵션
+                {hasOptions && <span className={styles.optionCountBadge}>{options.length}</span>}
             </h2>
 
             {!hasOptions ? (
                 <div className={styles.emptyState}>
-                    등록된 옵션이 없습니다.<br />
-                    <small style={{ opacity: 0.5, fontSize: '0.9em' }}>
-                        (카테고리: {menuDetail.categoryName || '미지정'})
-                    </small>
+                    <div className={styles.emptyIcon}>
+                        <ListChecks size={32} strokeWidth={1.5} />
+                    </div>
+                    <p className={styles.emptyTitle}>등록된 옵션이 없습니다</p>
+                    <p className={styles.emptyDesc}>
+                        옵션 관리 페이지에서 카테고리별 옵션을 추가해보세요.
+                    </p>
                 </div>
             ) : (
-                options.map((option: any, index: number) => {
-                    // 백엔드 필드명(isRequired)과 프론트엔드 필드명(required) 모두 대응
-                    const isRequired = option.required ?? option.isRequired ?? false;
-                    const items = option.items || [];
-                    // 소문자/대문자 타입 모두 대응
-                    const typeLabel = (option.type || '').toLowerCase() === 'multiple' ? '다중 선택' : '단일 선택';
+                <div className={styles.optionsList}>
+                    {options.map((option: any, index: number) => {
+                        const isRequired = option.required ?? option.isRequired ?? false;
+                        const items = option.items || [];
+                        const typeLabel = (option.type || '').toLowerCase() === 'multiple' ? '다중 선택' : '단일 선택';
 
-                    return (
-                        <div key={option.id || `group-${index}`} className={styles.optionGroup}>
-                            <div className={styles.optionGroupHeader}>
-                                <span>{option.name}</span>
-                                <div className={styles.badges}>
-                                    <span className={styles.optionType}>
-                                        {typeLabel}
-                                    </span>
-                                    {isRequired && (
-                                        <span className={`${styles.optionBadge} ${styles.requiredBadge}`}>필수</span>
-                                    )}
+                        return (
+                            <div key={option.id || `group-${index}`} className={styles.optionGroup}>
+                                <div className={styles.optionGroupHeader}>
+                                    <div className={styles.headerLeft}>
+                                        <span className={styles.groupName}>{option.name}</span>
+                                    </div>
+                                    <div className={styles.badges}>
+                                        <span className={styles.typeBadge}>{typeLabel}</span>
+                                        {isRequired && (
+                                            <span className={styles.requiredBadge}>필수</span>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div className={styles.optionItems}>
+                                    {items.map((item: any, itemIndex: number) => (
+                                        <div key={item.id || `item-${itemIndex}`} className={styles.optionItem}>
+                                            <div className={styles.itemLeft}>
+                                                <span className={styles.itemDot} />
+                                                <span className={styles.itemName}>{item.name}</span>
+                                            </div>
+                                            <span className={`${styles.optionPrice} ${
+                                                typeof item.priceDelta === 'number' && item.priceDelta > 0
+                                                    ? styles.pricePositive
+                                                    : styles.priceFree
+                                            }`}>
+                                                {typeof item.priceDelta === 'number' && item.priceDelta > 0
+                                                    ? `+${item.priceDelta.toLocaleString()}원`
+                                                    : '무료'}
+                                            </span>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
-
-                            <div className={styles.optionItems}>
-                                {items.map((item: any, itemIndex: number) => (
-                                    <div key={item.id || `item-${itemIndex}`} className={styles.optionItem}>
-                                        <span>{item.name}</span>
-                                        <span className={styles.optionPrice}>
-                                            {typeof item.priceDelta === 'number' && item.priceDelta > 0 
-                                                ? `+${item.priceDelta.toLocaleString()}원` 
-                                                : '무료'}
-                                        </span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    );
-                })
-            )}
-
-            {/* Debug Section - Automatically open if no options */}
-            <details 
-                open={!hasOptions}
-                style={{ marginTop: '20px', padding: '10px', border: '1px dashed #ccc', borderRadius: '4px' }}
-            >
-                <summary style={{ cursor: 'pointer', fontSize: '12px', color: '#666' }}>
-                    Debug: Raw API Response {!hasOptions ? '(No options detected)' : ''}
-                </summary>
-                <div style={{ marginTop: '10px' }}>
-                    <p style={{ fontSize: '11px', margin: '0 0 5px 0' }}>
-                        <b>Menu ID:</b> {menuId} | <b>Options Count:</b> {options?.length || 0}
-                    </p>
-                    <pre style={{ fontSize: '11px', overflow: 'auto', maxHeight: '300px', backgroundColor: '#f9f9f9', padding: '10px' }}>
-                        {JSON.stringify(menuDetail, null, 2)}
-                    </pre>
+                        );
+                    })}
                 </div>
-            </details>
+            )}
         </section>
     );
 }

@@ -1,91 +1,227 @@
 .card {
-    background-color: var(--bg-primary);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-gray-200);
-    padding: var(--space-6);
-    box-shadow: var(--shadow-sm);
+    background-color: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #f0f0f5;
+    padding: 28px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.02);
     height: 100%;
 }
 
+/* ── Section Title ── */
 .sectionTitle {
-    font-size: var(--text-lg);
-    font-weight: 600;
-    margin-bottom: var(--space-4);
-    color: var(--color-gray-900);
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #1a1a2e;
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: 8px;
+    letter-spacing: -0.3px;
 }
 
-.optionGroup {
-    border: 1px solid var(--color-gray-200);
-    border-radius: var(--radius-md);
-    margin-bottom: var(--space-4);
-    overflow: hidden;
+.titleIconWrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #ffffff;
+    flex-shrink: 0;
 }
 
-.optionGroupHeader {
-    background-color: var(--bg-secondary);
-    padding: var(--space-3) var(--space-4);
+.optionCountBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 7px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #ffffff;
+    font-size: 12px;
     font-weight: 600;
-    color: var(--color-gray-900);
+    margin-left: 4px;
+}
+
+/* ── Options List ── */
+.optionsList {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* ── Option Group ── */
+.optionGroup {
+    border: 1px solid #ededf3;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.optionGroup:hover {
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
+    border-color: #d5d5e0;
+}
+
+/* ── Group Header ── */
+.optionGroupHeader {
+    background: linear-gradient(135deg, #fafafe 0%, #f5f5fa 100%);
+    padding: 14px 18px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--color-gray-200);
+    border-bottom: 1px solid #ededf3;
 }
 
+.headerLeft {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.groupName {
+    font-size: 15px;
+    font-weight: 650;
+    color: #1a1a2e;
+    letter-spacing: -0.2px;
+}
+
+/* ── Badges ── */
 .badges {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: 6px;
 }
 
-.optionBadge {
-    font-size: var(--text-xs);
-    padding: 2px 8px;
-    border-radius: var(--radius-full);
-    background-color: var(--color-gray-200);
-    color: var(--color-gray-600);
+.typeBadge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background-color: #f0f0f7;
+    color: #6b6b80;
+    letter-spacing: -0.1px;
 }
 
 .requiredBadge {
-    background-color: #fee2e2;
-    color: #b91c1c;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #fef2f2, #fee2e2);
+    color: #dc2626;
+    border: 1px solid #fecaca;
 }
 
-.optionType {
-    font-size: var(--text-xs);
-    color: var(--color-gray-500);
-    font-weight: normal;
-}
-
+/* ── Option Items ── */
 .optionItems {
-    padding: var(--space-2) 0;
+    padding: 4px 0;
 }
 
 .optionItem {
-    padding: var(--space-2) var(--space-4);
+    padding: 11px 18px;
     display: flex;
     justify-content: space-between;
-    font-size: var(--text-sm);
-    color: var(--color-gray-700);
+    align-items: center;
+    font-size: 14px;
+    transition: background-color 0.15s ease;
+}
+
+.optionItem:hover {
+    background-color: #fafafd;
 }
 
 .optionItem:not(:last-child) {
-    border-bottom: 1px solid var(--color-gray-100);
-    border-style: dashed;
+    border-bottom: 1px solid #f5f5fa;
 }
 
+.itemLeft {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.itemDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #a5b4fc, #818cf8);
+    flex-shrink: 0;
+}
+
+.itemName {
+    color: #3a3a52;
+    font-weight: 450;
+}
+
+/* ── Price ── */
 .optionPrice {
-    color: var(--color-gray-500);
+    font-size: 13px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
 }
 
+.pricePositive {
+    color: #6366f1;
+    font-weight: 600;
+}
+
+.priceFree {
+    color: #a0a0b4;
+}
+
+/* ── Empty State ── */
 .emptyState {
     text-align: center;
-    padding: var(--space-8);
-    color: var(--color-gray-400);
-    font-size: var(--text-sm);
-    background-color: var(--bg-secondary);
-    border-radius: var(--radius-md);
+    padding: 48px 24px;
+    background: linear-gradient(135deg, #fafafe 0%, #f5f5fa 100%);
+    border-radius: 12px;
+    border: 1px dashed #dddde5;
+}
+
+.emptyIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #ede9fe, #e0e7ff);
+    color: #8b5cf6;
+    margin-bottom: 14px;
+}
+
+.emptyTitle {
+    font-size: 15px;
+    font-weight: 600;
+    color: #4a4a60;
+    margin: 0 0 6px 0;
+}
+
+.emptyDesc {
+    font-size: 13px;
+    color: #9090a5;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ── Loading / Error ── */
+.loading {
+    text-align: center;
+    padding: 40px 20px;
+    color: #9090a5;
+    font-size: 14px;
+}
+
+.error {
+    text-align: center;
+    padding: 40px 20px;
+    color: #ef4444;
+    font-size: 14px;
+    background-color: #fef2f2;
+    border-radius: 12px;
+    border: 1px solid #fecaca;
 }
