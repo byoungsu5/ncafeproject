@@ -27,6 +27,11 @@ export default function NewMenuPage() {
                     categoryId: Number(data.categoryId),
                     isAvailable: data.isAvailable,
                     isSoldOut: data.isSoldOut,
+                    images: data.images.map(img => ({
+                        url: img.url,
+                        isPrimary: img.isPrimary,
+                        sortOrder: img.sortOrder
+                    })),
                     options: data.options,
                 }),
             });

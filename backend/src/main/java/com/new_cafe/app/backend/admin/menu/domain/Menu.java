@@ -27,10 +27,12 @@ public class Menu {
     private String categoryName;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private java.util.List<String> images;
     private java.util.List<MenuOption> options;
 
     public static Menu create(String korName, String engName, String slug, String description,
-                               Integer price, Long categoryId, Boolean isAvailable, Boolean isSoldOut) {
+                               Integer price, Long categoryId, Boolean isAvailable, Boolean isSoldOut,
+                               List<String> images) {
         String finalSlug = (slug == null || slug.isBlank()) ? generateSlug(engName) : slug;
         return Menu.builder()
                 .korName(korName)
@@ -41,11 +43,13 @@ public class Menu {
                 .categoryId(categoryId)
                 .isAvailable(isAvailable != null ? isAvailable : true)
                 .isSoldOut(isSoldOut != null ? isSoldOut : false)
+                .images(images)
                 .build();
     }
 
     public void update(String korName, String engName, String slug, String description,
-                       Integer price, Long categoryId, Boolean isAvailable, Boolean isSoldOut) {
+                       Integer price, Long categoryId, Boolean isAvailable, Boolean isSoldOut,
+                       List<String> images) {
         this.korName = korName;
         this.engName = engName;
         this.slug = (slug == null || slug.isBlank()) ? generateSlug(engName) : slug;
@@ -54,6 +58,7 @@ public class Menu {
         this.categoryId = categoryId;
         this.isAvailable = isAvailable;
         this.isSoldOut = isSoldOut;
+        this.images = images;
     }
 
     private static String generateSlug(String engName) {

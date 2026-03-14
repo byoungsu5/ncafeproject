@@ -37,7 +37,8 @@ public class MenuService implements CreateMenuUseCase, UpdateMenuUseCase,
                 command.price(),
                 command.categoryId(),
                 command.isAvailable(),
-                command.isSoldOut()
+                command.isSoldOut(),
+                command.images() != null ? command.images().stream().map(com.new_cafe.app.backend.admin.menu.application.command.ImageCommand::url).collect(java.util.stream.Collectors.toList()) : java.util.Collections.emptyList()
         );
         
         if (command.options() != null) {
@@ -51,6 +52,7 @@ public class MenuService implements CreateMenuUseCase, UpdateMenuUseCase,
                 .categoryId(menu.getCategoryId())
                 .isAvailable(menu.getIsAvailable())
                 .isSoldOut(menu.getIsSoldOut())
+                .images(menu.getImages())
                 .options(command.options().stream()
                     .map(o -> com.new_cafe.app.backend.admin.menu.domain.MenuOption.builder()
                         .id(o.id())
@@ -88,7 +90,8 @@ public class MenuService implements CreateMenuUseCase, UpdateMenuUseCase,
                 command.price(),
                 command.categoryId(),
                 command.isAvailable(),
-                command.isSoldOut()
+                command.isSoldOut(),
+                command.images() != null ? command.images().stream().map(com.new_cafe.app.backend.admin.menu.application.command.ImageCommand::url).collect(java.util.stream.Collectors.toList()) : java.util.Collections.emptyList()
         );
 
         if (command.options() != null) {
@@ -130,6 +133,7 @@ public class MenuService implements CreateMenuUseCase, UpdateMenuUseCase,
                 .imageSrc(menu.getImageSrc())
                 .createdAt(menu.getCreatedAt())
                 .updatedAt(menu.getUpdatedAt())
+                .images(menu.getImages())
                 .options(options)
                 .build();
         }

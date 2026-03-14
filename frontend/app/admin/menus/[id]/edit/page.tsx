@@ -23,18 +23,22 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
     useEffect(() => {
         const fetchMenu = async () => {
             try {
-                const data = await fetchAPI(`/admin/menus/${id}`, { cache: 'no-store' });
-                if (data) {
+                const [menuData, imageData] = await Promise.all([
+                    fetchAPI(`/admin/menus/${id}`, { cache: 'no-store' }),
+                    fetchAPI(`/admin/menus/${id}/menu-images`, { cache: 'no-store' })
+                ]);
+                
+                if (menuData) {
                     setInitialData({
-                        korName: data.korName,
-                        engName: data.engName,
-                        description: data.description,
-                        price: data.price,
-                        categoryId: String(data.categoryId),
-                        isAvailable: data.isAvailable,
-                        isSoldOut: data.isSoldOut,
-                        images: [],
-                        options: data.options || [],
+                        korName: menuData.korName,
+                        engName: menuData.engName,
+                        description: menuData.description,
+                        price: menuData.price,
+                        categoryId: String(menuData.categoryId),
+                        isAvailable: menuData.isAvailable,
+                        isSoldOut: menuData.isSoldOut,
+                        images: imageData || [],
+                        options: menuData.options || [],
                     });
                 }
             } catch {
@@ -60,6 +64,11 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
                     isAvailable: data.isAvailable,
                     isSoldOut: data.isSoldOut,
                     slug: data.slug,
+                    images: data.images.map(img => ({
+                        url: img.url,
+                        isPrimary: img.isPrimary,
+                        sortOrder: img.sortOrder
+                    })),
                     options: data.options,
                 }),
             });

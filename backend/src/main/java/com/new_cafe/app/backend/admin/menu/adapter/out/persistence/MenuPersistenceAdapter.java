@@ -8,35 +8,52 @@ import com.new_cafe.app.backend.admin.menu.domain.Menu;
 import com.new_cafe.app.backend.admin.menu.adapter.out.persistence.jpa.MenuEntity;
 import com.new_cafe.app.backend.admin.menu.adapter.out.persistence.jpa.MenuJpaRepository;
 import com.new_cafe.app.backend.menu.adapter.out.persistence.MenuImageJpaRepository;
+import com.new_cafe.app.backend.admin.menu.adapter.out.persistence.jpa.MenuImageEntity;
 
 @Component("adminMenuPersistenceAdapter")
 public class MenuPersistenceAdapter implements MenuPort {
 
     private final MenuJpaRepository repository;
-    private final MenuImageJpaRepository menuImageRepository;
+    private final MenuImageJpaRepository userMenuImageRepository;
+    private final com.new_cafe.app.backend.admin.menu.adapter.out.persistence.jpa.MenuImageJpaRepository adminMenuImageRepository;
 
     public MenuPersistenceAdapter(MenuJpaRepository repository,
-                                   MenuImageJpaRepository menuImageRepository) {
+                                   MenuImageJpaRepository userMenuImageRepository,
+                                   com.new_cafe.app.backend.admin.menu.adapter.out.persistence.jpa.MenuImageJpaRepository adminMenuImageRepository) {
         this.repository = repository;
-        this.menuImageRepository = menuImageRepository;
+        this.userMenuImageRepository = userMenuImageRepository;
+        this.adminMenuImageRepository = adminMenuImageRepository;
     }
 
     @Override
+    @org.springframework.transaction.annotation.Transactional
     public Menu save(Menu menu) {
         MenuEntity entity;
         if (menu.getId() != null) {
             entity = repository.findById(menu.getId())
                     .orElseGet(() -> MenuEntity.fromDomain(menu));
-            System.out.println("[MenuPersistenceAdapter] Updating menu " + menu.getId() + " - Input options: " + (menu.getOptions() != null ? menu.getOptions().size() : 0));
             entity.update(menu);
-            System.out.println("[MenuPersistenceAdapter] Entity options after update: " + entity.getOptions().size());
         } else {
-            System.out.println("[MenuPersistenceAdapter] Creating new menu with " + (menu.getOptions() != null ? menu.getOptions().size() : 0) + " options");
             entity = MenuEntity.fromDomain(menu);
         }
         
         MenuEntity saved = repository.saveAndFlush(entity);
-        System.out.println("[MenuPersistenceAdapter] Saved entity options: " + (saved.getOptions() != null ? saved.getOptions().size() : 0));
+        
+        // Handle images
+        if (menu.getImages() != null) {
+            // Simplest approach: Delete existing and re-insert for updates
+            adminMenuImageRepository.deleteByMenuId(saved.getId());
+            for (int i = 0; i < menu.getImages().size(); i++) {
+                MenuImageEntity imageEntity = MenuImageEntity.builder()
+                        .menuId(saved.getId())
+                        .srcUrl(menu.getImages().get(i))
+                        .sortOrder(i)
+                        .isPrimary(i == 0)
+                        .build();
+                adminMenuImageRepository.save(imageEntity);
+            }
+        }
+        
         return findById(saved.getId()).orElseThrow();
     }
 
@@ -44,7 +61,7 @@ public class MenuPersistenceAdapter implements MenuPort {
     public Optional<Menu> findById(Long id) {
         return repository.findById(id)
                 .map(entity -> {
-                    String imageSrc = menuImageRepository.findFirstImageSrcByMenuId(id);
+                    String imageSrc = userMenuImageRepository.findFirstImageSrcByMenuId(id);
                     return entity.toDomain(imageSrc);
                 });
     }
@@ -64,7 +81,7 @@ public class MenuPersistenceAdapter implements MenuPort {
 
         return entities.stream()
                 .map(entity -> {
-                    String imageSrc = menuImageRepository.findFirstImageSrcByMenuId(entity.getId());
+                    String imageSrc = userMenuImageRepository.findFirstImageSrcByMenuId(entity.getId());
                     return entity.toDomain(imageSrc);
                 })
                 .toList();

@@ -16,5 +16,6 @@ public record UpdateMenuCommand(
         @NotNull(message = "카테고리를 선택해주세요") Long categoryId,
         Boolean isAvailable,
         Boolean isSoldOut,
+        List<ImageCommand> images,
         List<OptionCommand> options
 ) {}
