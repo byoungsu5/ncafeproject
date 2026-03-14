@@ -215,7 +215,7 @@ public class MenuEntity {
             List<MenuOptionEntity> optionEntities = menu.getOptions().stream()
                 .map(o -> {
                     MenuOptionEntity optionEntity = MenuOptionEntity.builder()
-                        .id(o.getId())
+                        .id(menu.getId() != null ? o.getId() : null)
                         .menuId(menu.getId())
                         .name(o.getName())
                         .type(o.getType())
@@ -226,7 +226,7 @@ public class MenuEntity {
                     if (o.getItems() != null) {
                         List<OptionItemEntity> itemEntities = o.getItems().stream()
                             .map(i -> OptionItemEntity.builder()
-                                .id(i.getId())
+                                .id(menu.getId() != null ? i.getId() : null)
                                 .name(i.getName())
                                 .priceDelta(i.getPriceDelta())
                                 .sortOrder(i.getSortOrder())

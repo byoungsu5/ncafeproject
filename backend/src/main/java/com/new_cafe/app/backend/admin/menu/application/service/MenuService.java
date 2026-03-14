@@ -36,7 +36,8 @@ public class MenuService implements CreateMenuUseCase, UpdateMenuUseCase,
                 command.description(),
                 command.price(),
                 command.categoryId(),
-                command.isAvailable()
+                command.isAvailable(),
+                command.isSoldOut()
         );
         
         if (command.options() != null) {

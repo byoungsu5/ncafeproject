@@ -30,7 +30,7 @@ public class Menu {
     private java.util.List<MenuOption> options;
 
     public static Menu create(String korName, String engName, String slug, String description,
-                               Integer price, Long categoryId, Boolean isAvailable) {
+                               Integer price, Long categoryId, Boolean isAvailable, Boolean isSoldOut) {
         String finalSlug = (slug == null || slug.isBlank()) ? generateSlug(engName) : slug;
         return Menu.builder()
                 .korName(korName)
@@ -40,7 +40,7 @@ public class Menu {
                 .price(price)
                 .categoryId(categoryId)
                 .isAvailable(isAvailable != null ? isAvailable : true)
-                .isSoldOut(false)
+                .isSoldOut(isSoldOut != null ? isSoldOut : false)
                 .build();
     }
 
