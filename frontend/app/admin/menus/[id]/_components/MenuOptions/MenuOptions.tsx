@@ -1,4 +1,4 @@
-import { ListChecks, ChevronRight, Check } from 'lucide-react';
+import { Flame, ChevronRight, Check } from 'lucide-react';
 import styles from './MenuOptions.module.css';
 import { useMenuDetail } from '../MenuDetailInfo/useMenuDetail';
 
@@ -15,16 +15,16 @@ export default function MenuOptions({ menuId }: { menuId: string }) {
         <section className={styles.card}>
             <h2 className={styles.sectionTitle}>
                 <span className={styles.titleIconWrap}>
-                    <ListChecks size={18} />
+                    <Flame size={18} />
                 </span>
-                옵션
+                카페 옵션
                 {hasOptions && <span className={styles.optionCountBadge}>{options.length}</span>}
             </h2>
 
             {!hasOptions ? (
                 <div className={styles.emptyState}>
                     <div className={styles.emptyIcon}>
-                        <ListChecks size={32} strokeWidth={1.5} />
+                        <Flame size={32} strokeWidth={1.5} />
                     </div>
                     <p className={styles.emptyTitle}>등록된 옵션이 없습니다</p>
                     <p className={styles.emptyDesc}>

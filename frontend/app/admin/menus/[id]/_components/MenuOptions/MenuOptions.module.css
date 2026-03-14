@@ -1,10 +1,23 @@
 .card {
     background-color: #ffffff;
     border-radius: 16px;
-    border: 1px solid #f0f0f5;
+    border: 1px solid #fff5ed;
     padding: 28px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 4px 20px rgba(249, 115, 22, 0.05);
     height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle at top right, rgba(251, 146, 60, 0.05), transparent);
+    pointer-events: none;
 }
 
 /* ── Section Title ── */
@@ -12,7 +25,7 @@
     font-size: 17px;
     font-weight: 700;
     margin-bottom: 20px;
-    color: #1a1a2e;
+    color: #431407;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -26,9 +39,10 @@
     width: 32px;
     height: 32px;
     border-radius: 10px;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    background: linear-gradient(135deg, #f97316, #fb923c);
     color: #ffffff;
     flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(249, 115, 22, 0.2);
 }
 
 .optionCountBadge {
@@ -39,10 +53,11 @@
     height: 22px;
     padding: 0 7px;
     border-radius: 12px;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    color: #ffffff;
+    background: #fff7ed;
+    color: #f97316;
+    border: 1px solid #ffedd5;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 700;
     margin-left: 4px;
 }
 
@@ -55,25 +70,27 @@
 
 /* ── Option Group ── */
 .optionGroup {
-    border: 1px solid #ededf3;
+    border: 1px solid #fed7aa;
     border-radius: 12px;
     overflow: hidden;
-    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background-color: #fff;
 }
 
 .optionGroup:hover {
-    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
-    border-color: #d5d5e0;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(249, 115, 22, 0.08);
+    border-color: #fb923c;
 }
 
 /* ── Group Header ── */
 .optionGroupHeader {
-    background: linear-gradient(135deg, #fafafe 0%, #f5f5fa 100%);
+    background: linear-gradient(135deg, #fffcf0 0%, #fff7ed 100%);
     padding: 14px 18px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #ededf3;
+    border-bottom: 1px solid #fed7aa;
 }
 
 .headerLeft {
@@ -84,8 +101,8 @@
 
 .groupName {
     font-size: 15px;
-    font-weight: 650;
-    color: #1a1a2e;
+    font-weight: 700;
+    color: #7c2d12;
     letter-spacing: -0.2px;
 }
 
@@ -98,22 +115,22 @@
 
 .typeBadge {
     font-size: 11px;
-    font-weight: 500;
+    font-weight: 600;
     padding: 3px 10px;
     border-radius: 20px;
-    background-color: #f0f0f7;
-    color: #6b6b80;
+    background-color: #ea580c10;
+    color: #c2410c;
     letter-spacing: -0.1px;
 }
 
 .requiredBadge {
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 700;
     padding: 3px 10px;
     border-radius: 20px;
-    background: linear-gradient(135deg, #fef2f2, #fee2e2);
-    color: #dc2626;
-    border: 1px solid #fecaca;
+    background: linear-gradient(135deg, #fecaca, #f87171);
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
 }
 
 /* ── Option Items ── */
@@ -131,11 +148,11 @@
 }
 
 .optionItem:hover {
-    background-color: #fafafd;
+    background-color: #fffaf0;
 }
 
 .optionItem:not(:last-child) {
-    border-bottom: 1px solid #f5f5fa;
+    border-bottom: 1px solid #ffedd5;
 }
 
 .itemLeft {
@@ -148,38 +165,38 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #a5b4fc, #818cf8);
+    background: #fb923c;
     flex-shrink: 0;
 }
 
 .itemName {
-    color: #3a3a52;
-    font-weight: 450;
+    color: #431407;
+    font-weight: 500;
 }
 
 /* ── Price ── */
 .optionPrice {
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 600;
     font-variant-numeric: tabular-nums;
 }
 
 .pricePositive {
-    color: #6366f1;
-    font-weight: 600;
+    color: #ea580c;
 }
 
 .priceFree {
-    color: #a0a0b4;
+    color: #9a3412aa;
+    font-weight: 400;
 }
 
 /* ── Empty State ── */
 .emptyState {
     text-align: center;
     padding: 48px 24px;
-    background: linear-gradient(135deg, #fafafe 0%, #f5f5fa 100%);
+    background: #fffcf0;
     border-radius: 12px;
-    border: 1px dashed #dddde5;
+    border: 1px dashed #fdba74;
 }
 
 .emptyIcon {
@@ -189,30 +206,31 @@
     width: 56px;
     height: 56px;
     border-radius: 16px;
-    background: linear-gradient(135deg, #ede9fe, #e0e7ff);
-    color: #8b5cf6;
+    background: #ffedd5;
+    color: #f97316;
     margin-bottom: 14px;
 }
 
 .emptyTitle {
     font-size: 15px;
-    font-weight: 600;
-    color: #4a4a60;
+    font-weight: 700;
+    color: #7c2d12;
     margin: 0 0 6px 0;
 }
 
 .emptyDesc {
     font-size: 13px;
-    color: #9090a5;
+    color: #9a3412;
     margin: 0;
     line-height: 1.5;
+    opacity: 0.8;
 }
 
 /* ── Loading / Error ── */
 .loading {
     text-align: center;
     padding: 40px 20px;
-    color: #9090a5;
+    color: #f97316;
     font-size: 14px;
 }
 
