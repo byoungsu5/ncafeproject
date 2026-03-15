@@ -14,7 +14,7 @@ interface MenuListProps {
 
 export default function MenuList({ selectedCategory, searchQuery, onDataFetch }: MenuListProps) {
 
-    const { menus, total } = useMenus(selectedCategory, searchQuery);
+    const { menus, total, deleteMenu } = useMenus(selectedCategory, searchQuery);
 
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -37,6 +37,7 @@ export default function MenuList({ selectedCategory, searchQuery, onDataFetch }:
                     <MenuCard
                         key={menu.id}
                         menu={menu}
+                        onDelete={deleteMenu}
                     />
                 ))}
             </div>

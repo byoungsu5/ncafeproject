@@ -5,13 +5,29 @@ import Button from '@/components/common/Button';
 import { Edit, Trash, Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
 import { MenuResponse } from '../MenuList/useMenus';
+import { toast } from 'react-hot-toast';
 
 interface MenuCardProps {
     menu: MenuResponse;
+    onDelete: (id: number) => Promise<boolean>;
 }
 
-export default function MenuCard({ menu }: MenuCardProps) {
+export default function MenuCard({ menu, onDelete }: MenuCardProps) {
     const baseUrl = '/images';
+
+    const handleDelete = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (confirm(`'${menu.korName}' 메뉴를 삭제하시겠습니까?`)) {
+            const success = await onDelete(menu.id);
+            if (success) {
+                toast.success('메뉴가 삭제되었습니다.');
+            } else {
+                toast.error('삭제에 실패했습니다.');
+            }
+        }
+    };
 
     return (
         <div className={styles.card}>
@@ -68,6 +84,7 @@ export default function MenuCard({ menu }: MenuCardProps) {
                         variant="ghost"
                         size="sm"
                         className={styles.deleteButton}
+                        onClick={handleDelete}
                     >
                         <Trash size={18} />
                     </Button>

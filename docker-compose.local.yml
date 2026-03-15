@@ -1,12 +1,12 @@
 services:
   backend:
-    ports:
-      - "8036:8080"
+    # ports:
+    #   - "8036:8080"
       
   db:
-    ports:
-      - "5432:5432"
+    # ports:
+    #   - "5432:5432"
 
   ai-agent:
-    ports:
-      - "8136:8000"
+    # ports:
+    #   - "8136:8000"

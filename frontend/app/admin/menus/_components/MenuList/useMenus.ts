@@ -59,5 +59,24 @@ export function useMenus(selectedCategory: number | undefined, searchQuery: stri
         fetchMenus();
     }, [selectedCategory, searchQuery]);
 
-    return { menus, total, setMenus };
+    const deleteMenu = async (menuId: number) => {
+        try {
+            const response = await fetch(`/api/admin/menus/${menuId}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete menu');
+            }
+
+            setMenus((prev) => prev.filter((m) => m.id !== menuId));
+            setTotal((prev) => prev - 1);
+            return true;
+        } catch (error) {
+            console.error('Error deleting menu:', error);
+            return false;
+        }
+    };
+
+    return { menus, total, deleteMenu };
 }
