@@ -38,6 +38,28 @@ export default function OrderModal() {
         
         setIsProcessing(true);
         try {
+            // KakaoPay needs initiation (ready) step
+            if (selectedMethod === 'KAKAO') {
+                const response = await fetch('/api/payments/initiate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        orderId,
+                        amount,
+                        paymentMethod: selectedMethod,
+                    }),
+                });
+
+                if (!response.ok) throw new Error('카카오페이 초기화 중 오류가 발생했습니다.');
+                
+                const { redirectUrl } = await response.json();
+                if (redirectUrl) {
+                    window.location.href = redirectUrl;
+                    return;
+                }
+            }
+
+            // Others or Standard flow
             const response = await fetch('/api/payments/confirm', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -56,7 +78,7 @@ export default function OrderModal() {
             }
         } catch (error: any) {
             console.error('Payment failed:', error);
-            // Handle error (e.g., show error message)
+            // Optional: show error modal or message
         } finally {
             setIsProcessing(false);
         }
@@ -101,7 +123,7 @@ export default function OrderModal() {
                                     </div>
                                 </div>
                                 <div 
-                                    className={`${styles.paymentMethod} ${selectedMethod === 'TOSS' ? styles.paymentMethodSelected : ''}`}
+                                    className={`${styles.paymentMethod} ${styles.toss} ${selectedMethod === 'TOSS' ? styles.paymentMethodSelected : ''}`}
                                     onClick={() => setSelectedMethod('TOSS')}
                                 >
                                     <div className={styles.methodIcon}>🪙</div>
@@ -111,7 +133,7 @@ export default function OrderModal() {
                                     </div>
                                 </div>
                                 <div 
-                                    className={`${styles.paymentMethod} ${selectedMethod === 'KAKAO' ? styles.paymentMethodSelected : ''}`}
+                                    className={`${styles.paymentMethod} ${styles.kakao} ${selectedMethod === 'KAKAO' ? styles.paymentMethodSelected : ''}`}
                                     onClick={() => setSelectedMethod('KAKAO')}
                                 >
                                     <div className={styles.methodIcon}>🟡</div>

@@ -12,7 +12,8 @@ import {
     Package,
     LogOut,
     FileText,
-    ListChecks
+    ListChecks,
+    Home
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import styles from './AdminSidebar.module.css';
@@ -22,6 +23,7 @@ const navItems = [
         section: '메인',
         items: [
             { href: '/admin', label: '대시보드', icon: LayoutDashboard },
+            { href: '/', label: '사용자 페이지', icon: Home },
         ],
     },
     {

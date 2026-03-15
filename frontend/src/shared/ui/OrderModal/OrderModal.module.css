@@ -214,6 +214,26 @@
     background: #f0f7ff;
 }
 
+.paymentMethod.toss:hover {
+    border-color: #3182f6;
+    background: #f0f7ff;
+}
+
+.paymentMethodSelected.toss {
+    border-color: #3182f6;
+    background: #f0f7ff;
+}
+
+.paymentMethod.kakao:hover {
+    border-color: #fae100;
+    background: #fffdf0;
+}
+
+.paymentMethodSelected.kakao {
+    border-color: #fae100;
+    background: #fffdf0;
+}
+
 .methodIcon {
     width: 32px;
     height: 32px;

@@ -14,5 +14,6 @@ public class Payment {
     private String paymentMethod;
     private PaymentStatus status;
     private String transactionId;
+    private String redirectUrl;
     private LocalDateTime paymentTime;
 }
