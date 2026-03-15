@@ -41,16 +41,15 @@ public class MenuController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/menus/{id}")
-    public ResponseEntity<MenuResponse> getMenu(@PathVariable Long id) {
-        MenuResponse response = getMenuUseCase.getMenu(id);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/menus/slug/{slug}")
-    public ResponseEntity<MenuResponse> getMenuBySlug(@PathVariable String slug) {
-        MenuResponse response = getMenuUseCase.getMenuBySlug(slug);
-        return ResponseEntity.ok(response);
+    @GetMapping("/menus/{idOrSlug}")
+    public ResponseEntity<MenuResponse> getMenu(@PathVariable String idOrSlug) {
+        try {
+            Long id = Long.parseLong(idOrSlug);
+            return ResponseEntity.ok(getMenuUseCase.getMenu(id));
+        } catch (IllegalArgumentException e) {
+            // Try as slug if not a valid ID or if ID not found
+            return ResponseEntity.ok(getMenuUseCase.getMenuBySlug(idOrSlug));
+        }
     }
 
     @GetMapping("/admin/menus/{id}/menu-images")

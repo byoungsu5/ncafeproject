@@ -33,26 +33,27 @@ export function useMenu(id: string) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        if (!id) return;
+
         const fetchMenu = async () => {
             setLoading(true);
             try {
-                // If it's a number, it might be an ID, otherwise it's definitely a slug.
-                // But we want to use slugs by default now.
-                const response = await fetch(`/api/menus/slug/${id}`);
-                if (!response.ok) {
-                    // Fallback to ID if slug not found (for backward compatibility or if id is actually an ID)
-                    const fallbackResponse = await fetch(`/api/menus/${id}`);
-                    if (!fallbackResponse.ok) {
-                        throw new Error('Failed to fetch menu');
-                    }
-                    const data = await fallbackResponse.json();
+                const encodedId = encodeURIComponent(id);
+                console.log(`[useMenu] Fetching menu details for: ${id}`);
+                
+                const response = await fetch(`/api/menus/${encodedId}`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log(`[useMenu] Successfully fetched menu:`, data.korName);
                     setMenu(data);
-                    return;
+                } else {
+                    console.error(`[useMenu] Fetch failed (${response.status}) for: ${id}`);
+                    setMenu(null);
                 }
-                const data = await response.json();
-                setMenu(data);
             } catch (error) {
-                console.error('Error fetching menu:', error);
+                console.error('[useMenu] Error fetching menu:', error);
+                setMenu(null);
             } finally {
                 setLoading(false);
             }
