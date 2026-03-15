@@ -34,7 +34,7 @@ export default function MenuCard({ menu }: MenuCardProps) {
 
     return (
         <div className={styles.card}>
-            <Link href={`/menus/${menu.slug}`} className={styles.cardLink}>
+            <Link href={`/menus/${menu.slug || menu.id}`} className={styles.cardLink}>
                 <div className={styles.topCurve}></div>
                 
                 <div className={styles.imageContainer}>
