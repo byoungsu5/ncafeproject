@@ -60,7 +60,7 @@ export default function MenuCard({ menu }: MenuCardProps) {
                     <h3 className={styles.korName}>{menu.korName}</h3>
                     <p className={styles.engName}>{menu.engName || menu.categoryName}</p>
                     <p className={styles.description}>
-                        시원하고 깔끔한 파이리표 특제 {menu.korName}입니다. 매력적인 맛을 즐겨보세요!
+                        {menu.description || `시원하고 깔끔한 파이리표 특제 ${menu.korName}입니다. 매력적인 맛을 즐겨보세요!`}
                     </p>
                 </div>
             </Link>
