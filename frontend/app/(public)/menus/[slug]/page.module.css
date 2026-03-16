@@ -72,25 +72,17 @@
 .backLink {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
-    font-size: 0.95rem;
+    gap: 0.25rem;
+    font-size: 1rem;
     font-weight: 700;
-    color: #4b5563;
-    padding: 0.6rem 1.25rem;
-    border-radius: 50px;
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    color: #f97316;
+    text-decoration: none;
+    transition: all 0.2s ease;
 }
 
 .backLink:hover {
-    color: #f97316;
-    background: #ffffff;
-    border-color: #fdba74;
+    color: #ea580c;
     transform: translateX(-4px);
-    box-shadow: 0 8px 20px rgba(249, 115, 22, 0.15);
 }
 
 .layout {

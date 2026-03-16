@@ -2,7 +2,7 @@
 
 import { use } from 'react';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import styles from './page.module.css';
 import { MenuDetailHero, MenuDetailContent, useMenu } from '../_components/MenuDetail';
 
@@ -19,8 +19,8 @@ export default function MenuDetailPage({ params }: { params: Promise<{ slug: str
                 <div className={styles.detailWrapper}>
                     <div className={styles.backRow}>
                         <Link href="/menus" className={styles.backLink}>
-                            <ArrowLeft size={16} />
-                            목록으로
+                            <ChevronLeft size={20} />
+                            목록으로 돌아가기
                         </Link>
                     </div>
                     <div className={styles.layout}>
@@ -46,8 +46,8 @@ export default function MenuDetailPage({ params }: { params: Promise<{ slug: str
                 <div className={styles.detailWrapper}>
                     <div className={styles.backRow}>
                         <Link href="/menus" className={styles.backLink}>
-                            <ArrowLeft size={16} />
-                            목록으로
+                            <ChevronLeft size={20} />
+                            목록으로 돌아가기
                         </Link>
                     </div>
                     <div className={styles.notFound}>
@@ -66,8 +66,8 @@ export default function MenuDetailPage({ params }: { params: Promise<{ slug: str
             <div className={styles.detailWrapper}>
                 <div className={styles.backRow}>
                     <Link href="/menus" className={styles.backLink}>
-                        <ArrowLeft size={16} />
-                        목록으로
+                        <ChevronLeft size={20} />
+                        목록으로 돌아가기
                     </Link>
                 </div>
                 <div className={styles.layout}>
