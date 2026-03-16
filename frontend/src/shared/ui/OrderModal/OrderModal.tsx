@@ -155,24 +155,6 @@ export default function OrderModal() {
                                 </div>
                             </div>
 
-                            {qrUrl && selectedMethod === 'KAKAO' && (
-                                <div className={styles.qrSection}>
-                                    <div className={styles.qrWrapper}>
-                                        <img 
-                                            src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(qrUrl)}`} 
-                                            alt="Kakao Pay QR" 
-                                            className={styles.qrImage}
-                                        />
-                                        <div className={styles.qrOverlay}>
-                                            <img src="/images/kakao-pay-logo.png" alt="" className={styles.qrCenterLogo} />
-                                        </div>
-                                    </div>
-                                    <p className={styles.qrHelp}>
-                                        스마트폰 카메라로 <strong>QR코드</strong>를 스캔하거나<br/>
-                                        새로 열린 <strong>결제 팝업창</strong>에서 완료해주세요.
-                                    </p>
-                                </div>
-                            )}
                            </>
                         )}
 
