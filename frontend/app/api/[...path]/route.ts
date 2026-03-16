@@ -19,7 +19,7 @@ async function proxyRequest(req: NextRequest) {
         }
 
         const headers = new Headers();
-        const skipHeaders = new Set(['host', 'connection', 'upgrade', 'keep-alive', 'transfer-encoding']);
+        const skipHeaders = new Set(['host', 'connection', 'upgrade', 'keep-alive', 'transfer-encoding', 'content-length']);
 
         req.headers.forEach((value, key) => {
             if (!skipHeaders.has(key.toLowerCase())) {
@@ -40,7 +40,18 @@ async function proxyRequest(req: NextRequest) {
         });
 
         if (proxyRes.status >= 400) {
+            const errorText = await proxyRes.text().catch(() => 'No error body');
             console.error(`[API Proxy] ${req.method} ${pathname} -> Backend returned ${proxyRes.status} ${proxyRes.statusText}`);
+            console.error(`[API Proxy] Error Body: ${errorText.substring(0, 200)}`);
+            
+            // Re-create the response since we consumed the body
+            return new NextResponse(errorText, {
+                status: proxyRes.status,
+                statusText: proxyRes.statusText,
+                headers: {
+                    'Content-Type': proxyRes.headers.get('content-type') || 'text/plain'
+                },
+            });
         }
 
         if (proxyRes.status === 401 && token) {
