@@ -29,6 +29,7 @@ function SuccessContent() {
             }
 
             try {
+                const amount = searchParams.get('amount');
                 const response = await fetch('/api/payments/confirm', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -36,7 +37,7 @@ function SuccessContent() {
                         orderId: Number(orderId),
                         pgToken: pgToken,
                         paymentMethod: 'KAKAO', // Assumed for this redirect
-                        amount: 0, // Backend might not need it if it verifies with Kakao
+                        amount: Number(amount) || 0,
                     }),
                 });
 

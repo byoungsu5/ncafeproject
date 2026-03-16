@@ -95,9 +95,9 @@ public class KakaoPayAdapter implements PaymentGateway {
             body.put("quantity", 1);
             body.put("total_amount", amount);
             body.put("tax_free_amount", 0);
-            body.put("approval_url", successUrl + "?orderId=" + orderId);
-            body.put("cancel_url", successUrl.replace("success", "cancel") + "?orderId=" + orderId);
-            body.put("fail_url", successUrl.replace("success", "fail") + "?orderId=" + orderId);
+            body.put("approval_url", successUrl + "?orderId=" + orderId + "&amount=" + amount);
+            body.put("cancel_url", successUrl.replace("success", "cancel") + "?orderId=" + orderId + "&amount=" + amount);
+            body.put("fail_url", successUrl.replace("success", "fail") + "?orderId=" + orderId + "&amount=" + amount);
 
             java.util.Map result = webClient.post()
                     .uri("/payment/ready")
