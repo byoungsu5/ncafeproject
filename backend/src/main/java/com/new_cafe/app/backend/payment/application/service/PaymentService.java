@@ -33,7 +33,7 @@ public class PaymentService implements PaymentUseCase {
 
         Payment payment;
         if (gateway != null) {
-            payment = gateway.confirmPayment(command.orderId(), command.amount(), command.paymentMethod());
+            payment = gateway.confirmPayment(command.orderId(), command.amount(), command.paymentMethod(), command.pgToken());
         } else {
             // Fallback for generic methods or MOCK
             String transactionId = "MOCK-" + UUID.randomUUID().toString().substring(0, 8);
@@ -64,10 +64,17 @@ public class PaymentService implements PaymentUseCase {
 
     @Override
     public String initiatePayment(Long orderId, Integer amount, String paymentMethod) {
-        return gateways.stream()
+        String redirectUrl = gateways.stream()
                 .filter(g -> g.supports(paymentMethod))
                 .map(g -> g.initiatePayment(orderId, amount))
                 .findFirst()
                 .orElse(null);
+        
+        if (redirectUrl != null) {
+            // Optional: Store PENDING payment here
+            System.out.println("[PaymentService] Initiated " + paymentMethod + " for order " + orderId + ", redirect: " + redirectUrl);
+        }
+        
+        return redirectUrl;
     }
 }

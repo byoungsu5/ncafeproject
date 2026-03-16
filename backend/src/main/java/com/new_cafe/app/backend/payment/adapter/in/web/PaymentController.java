@@ -23,7 +23,8 @@ public class PaymentController {
         PaymentUseCase.ConfirmPaymentCommand command = new PaymentUseCase.ConfirmPaymentCommand(
                 request.orderId(),
                 request.amount(),
-                request.paymentMethod()
+                request.paymentMethod(),
+                request.pgToken()
         );
         
         Payment payment = paymentUseCase.processPayment(command);
@@ -36,5 +37,5 @@ public class PaymentController {
         return ResponseEntity.ok(Map.of("redirectUrl", redirectUrl != null ? redirectUrl : ""));
     }
 
-    public record PaymentRequest(Long orderId, Integer amount, String paymentMethod) {}
+    public record PaymentRequest(Long orderId, Integer amount, String paymentMethod, String pgToken) {}
 }

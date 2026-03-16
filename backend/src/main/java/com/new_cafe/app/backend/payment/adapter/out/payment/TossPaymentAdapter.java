@@ -22,7 +22,7 @@ public class TossPaymentAdapter implements PaymentGateway {
     }
 
     @Override
-    public Payment confirmPayment(Long orderId, Integer amount, String paymentMethod) {
+    public Payment confirmPayment(Long orderId, Integer amount, String paymentMethod, String pgToken) {
         // In a real Toss integration, the frontend would provide 'paymentKey'.
         // For actual implementation, you would use WebClient to call Toss API.
         

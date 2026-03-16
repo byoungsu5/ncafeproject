@@ -10,6 +10,7 @@ public interface PaymentUseCase {
     record ConfirmPaymentCommand(
             Long orderId,
             Integer amount,
-            String paymentMethod
+            String paymentMethod,
+            String pgToken
     ) {}
 }
