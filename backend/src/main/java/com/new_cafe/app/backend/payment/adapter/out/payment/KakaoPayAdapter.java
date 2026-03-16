@@ -24,7 +24,7 @@ public class KakaoPayAdapter implements PaymentGateway {
     private String successUrl;
 
     public KakaoPayAdapter(org.springframework.web.reactive.function.client.WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("https://kapi.kakao.com").build();
+        this.webClient = webClientBuilder.baseUrl("https://open-api.kakaopay.com").build();
     }
 
     @Override
@@ -46,18 +46,18 @@ public class KakaoPayAdapter implements PaymentGateway {
         }
 
         try {
-            org.springframework.util.MultiValueMap<String, String> formData = new org.springframework.util.LinkedMultiValueMap<>();
-            formData.add("cid", cid);
-            formData.add("tid", tid);
-            formData.add("partner_order_id", String.valueOf(orderId));
-            formData.add("partner_user_id", "user_" + orderId);
-            formData.add("pg_token", pgToken);
+            Map<String, Object> requestBody = new java.util.HashMap<>();
+            requestBody.put("cid", cid);
+            requestBody.put("tid", tid);
+            requestBody.put("partner_order_id", String.valueOf(orderId));
+            requestBody.put("partner_user_id", "user_" + orderId);
+            requestBody.put("pg_token", pgToken);
 
             Map<String, Object> result = webClient.post()
-                    .uri("/v1/payment/approve")
-                    .header("Authorization", "KakaoAK " + secretKey)
-                    .header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
-                    .body(org.springframework.web.reactive.function.BodyInserters.fromFormData(formData))
+                    .uri("/online/v1/payment/approve")
+                    .header("Authorization", "SECRET_KEY " + secretKey)
+                    .header("Content-Type", "application/json;charset=utf-8")
+                    .bodyValue(requestBody)
                     .retrieve()
                     .bodyToMono(new org.springframework.core.ParameterizedTypeReference<Map<String, Object>>() {})
                     .block();
@@ -88,25 +88,25 @@ public class KakaoPayAdapter implements PaymentGateway {
     @Override
     public String initiatePayment(Long orderId, Integer amount) {
         try {
-            org.springframework.util.MultiValueMap<String, String> formData = new org.springframework.util.LinkedMultiValueMap<>();
-            formData.add("cid", cid);
-            formData.add("partner_order_id", String.valueOf(orderId));
-            formData.add("partner_user_id", "user_" + orderId);
-            formData.add("item_name", "Cafe Order #" + orderId);
-            formData.add("quantity", "1");
-            formData.add("total_amount", String.valueOf(amount));
-            formData.add("tax_free_amount", "0");
-            formData.add("approval_url", successUrl + "?orderId=" + orderId + "&amount=" + amount);
-            formData.add("cancel_url", successUrl.replace("success", "cancel") + "?orderId=" + orderId + "&amount=" + amount);
-            formData.add("fail_url", successUrl.replace("success", "fail") + "?orderId=" + orderId + "&amount=" + amount);
+            Map<String, Object> requestBody = new java.util.HashMap<>();
+            requestBody.put("cid", cid);
+            requestBody.put("partner_order_id", String.valueOf(orderId));
+            requestBody.put("partner_user_id", "user_" + orderId);
+            requestBody.put("item_name", "Cafe Order #" + orderId);
+            requestBody.put("quantity", 1);
+            requestBody.put("total_amount", amount);
+            requestBody.put("tax_free_amount", 0);
+            requestBody.put("approval_url", successUrl + "?orderId=" + orderId + "&amount=" + amount);
+            requestBody.put("cancel_url", successUrl.replace("success", "cancel") + "?orderId=" + orderId + "&amount=" + amount);
+            requestBody.put("fail_url", successUrl.replace("success", "fail") + "?orderId=" + orderId + "&amount=" + amount);
 
-            System.out.println("[KakaoPay] Ready Request (Legacy): " + formData);
+            System.out.println("[KakaoPay] Ready Request (New v1): " + requestBody);
 
             Map<String, Object> result = webClient.post()
-                    .uri("/v1/payment/ready")
-                    .header("Authorization", "KakaoAK " + secretKey)
-                    .header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
-                    .body(org.springframework.web.reactive.function.BodyInserters.fromFormData(formData))
+                    .uri("/online/v1/payment/ready")
+                    .header("Authorization", "SECRET_KEY " + secretKey)
+                    .header("Content-Type", "application/json;charset=utf-8")
+                    .bodyValue(requestBody)
                     .retrieve()
                     .bodyToMono(new org.springframework.core.ParameterizedTypeReference<Map<String, Object>>() {})
                     .block();
@@ -119,7 +119,7 @@ public class KakaoPayAdapter implements PaymentGateway {
                 return (String) result.get("next_redirect_pc_url");
             }
         } catch (org.springframework.web.reactive.function.client.WebClientResponseException e) {
-            System.err.println("[KakaoPay] Ready failed (Legacy): " + e.getResponseBodyAsString());
+            System.err.println("[KakaoPay] Ready failed (New v1): " + e.getResponseBodyAsString());
             throw new RuntimeException("카카오페이 API 오류: " + e.getResponseBodyAsString());
         } catch (Exception e) {
             System.err.println("[KakaoPay] Ready failed: " + e.getMessage());
