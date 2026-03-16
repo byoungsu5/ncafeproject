@@ -9,6 +9,8 @@ async function proxyRequest(req: NextRequest) {
         const token = session.token;
 
         const { pathname, search } = req.nextUrl;
+        console.log(`[API Proxy] Incoming: ${req.method} ${pathname}${search}`);
+
         const AI_AGENT_BASE = process.env.AI_AGENT_URL || 'http://localhost:8136';
 
         let targetUrl;
@@ -17,6 +19,8 @@ async function proxyRequest(req: NextRequest) {
         } else {
             targetUrl = `${API_BASE}${pathname}${search}`;
         }
+
+        console.log(`[API Proxy] Forwarding to: ${targetUrl}`);
 
         const headers = new Headers();
         const skipHeaders = new Set(['host', 'connection', 'upgrade', 'keep-alive', 'transfer-encoding', 'content-length']);
@@ -55,8 +59,11 @@ async function proxyRequest(req: NextRequest) {
         }
 
         if (proxyRes.status === 401 && token) {
+            console.log(`[API Proxy] Unauthorized - Destroying session`);
             session.destroy();
         }
+
+        console.log(`[API Proxy] Success: ${req.method} ${pathname} -> ${proxyRes.status}`);
 
         const responseHeaders = new Headers();
         const resContentType = proxyRes.headers.get('content-type');
