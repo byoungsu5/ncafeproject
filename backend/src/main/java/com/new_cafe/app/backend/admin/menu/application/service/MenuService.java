@@ -21,6 +21,7 @@ public class MenuService implements CreateMenuUseCase, UpdateMenuUseCase,
                                      DeleteMenuUseCase, GetMenuUseCase,
                                      GetMenuListUseCase {
 
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(MenuService.class);
     private final MenuPort menuPort;
 
     public MenuService(MenuPort menuPort) {
@@ -29,6 +30,7 @@ public class MenuService implements CreateMenuUseCase, UpdateMenuUseCase,
 
     @Override
     public MenuResult createMenu(CreateMenuCommand command) {
+        log.info("[MenuService] Creating menu: {}", command);
         Menu menu = Menu.create(
                 command.korName(),
                 command.engName(),
