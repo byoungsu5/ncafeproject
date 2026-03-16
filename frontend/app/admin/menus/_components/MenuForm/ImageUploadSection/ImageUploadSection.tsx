@@ -5,6 +5,7 @@ import { useFormContext, useFieldArray } from 'react-hook-form';
 import Image from 'next/image';
 import { Upload, X, Star, Image as ImageIcon } from 'lucide-react';
 import { MenuFormData } from '@/types';
+import { resizeImage } from '@/app/lib/image-utils';
 import styles from './ImageUploadSection.module.css';
 
 export default function ImageUploadSection() {
@@ -25,14 +26,19 @@ export default function ImageUploadSection() {
         e.target.value = '';
     };
 
-    const processFiles = (files: File[]) => {
+    const processFiles = async (files: File[]) => {
         const imageFiles = files.filter(file => file.type.startsWith('image/'));
 
         if (imageFiles.length === 0) return;
 
-        const newImages = imageFiles.map((file, index) => {
-            const previewUrl = URL.createObjectURL(file);
-            // 기존 이미지가 없고, 현재 배치의 첫 번째 이미지인 경우 대표 이미지로 설정
+        const newImages = await Promise.all(imageFiles.map(async (file, index) => {
+            // Nginx 413 오류 방지를 위해 클라이언트 사이드 리사이징 수행
+            const processedFile = await resizeImage(file).catch(err => {
+                console.error('Image resizing failed:', err);
+                return file; // 실패 시 원본 사용
+            });
+
+            const previewUrl = URL.createObjectURL(processedFile);
             const isFirstImage = fields.length === 0 && index === 0;
 
             return {
@@ -40,9 +46,9 @@ export default function ImageUploadSection() {
                 url: previewUrl,
                 isPrimary: isFirstImage,
                 sortOrder: fields.length + index,
-                file: file
+                file: processedFile
             };
-        });
+        }));
 
         append(newImages);
     };
