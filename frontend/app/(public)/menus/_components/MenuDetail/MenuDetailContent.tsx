@@ -81,8 +81,21 @@ export default function MenuDetailContent({
 
     const totalPrice = price + extraPrice;
 
+    const validateOptions = () => {
+        const missingRequired = options.filter(opt => 
+            opt.required && (!selectedOptions[opt.id] || selectedOptions[opt.id].length === 0)
+        );
+
+        if (missingRequired.length > 0) {
+            alert(`필수 옵션을 선택해주세요: ${missingRequired.map(opt => opt.name).join(', ')}`);
+            return false;
+        }
+        return true;
+    };
+
     const handleAddToCart = () => {
         if (!isAvailable || isSoldOut) return;
+        if (!validateOptions()) return;
 
         addItem({
             id,
@@ -96,6 +109,7 @@ export default function MenuDetailContent({
 
     const handleOrderNow = async () => {
         if (!isAvailable || isSoldOut || isOrdering) return;
+        if (!validateOptions()) return;
 
         openOrderModal({
             type: 'confirm',
