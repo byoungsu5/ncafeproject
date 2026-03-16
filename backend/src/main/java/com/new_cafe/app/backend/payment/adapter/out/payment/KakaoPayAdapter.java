@@ -57,7 +57,7 @@ public class KakaoPayAdapter implements PaymentGateway {
                     .uri("/v1/payment/approve")
                     .header("Authorization", "KakaoAK " + secretKey)
                     .header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
-                    .body(org.springframework.web.functions.client.BodyInserters.fromFormData(formData))
+                    .body(org.springframework.web.reactive.function.BodyInserters.fromFormData(formData))
                     .retrieve()
                     .bodyToMono(java.util.Map.class)
                     .block();
@@ -106,7 +106,7 @@ public class KakaoPayAdapter implements PaymentGateway {
                     .uri("/v1/payment/ready")
                     .header("Authorization", "KakaoAK " + secretKey)
                     .header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
-                    .body(org.springframework.web.reactive.function.client.BodyInserters.fromFormData(formData))
+                    .body(org.springframework.web.reactive.function.BodyInserters.fromFormData(formData))
                     .retrieve()
                     .bodyToMono(Map.class)
                     .block();
