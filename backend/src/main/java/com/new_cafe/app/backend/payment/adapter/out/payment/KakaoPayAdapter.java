@@ -59,7 +59,7 @@ public class KakaoPayAdapter implements PaymentGateway {
                     .header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
                     .body(org.springframework.web.reactive.function.BodyInserters.fromFormData(formData))
                     .retrieve()
-                    .bodyToMono(java.util.Map.class)
+                    .bodyToMono(new org.springframework.core.ParameterizedTypeReference<Map<String, Object>>() {})
                     .block();
 
             tidMap.remove(orderId);
@@ -108,7 +108,7 @@ public class KakaoPayAdapter implements PaymentGateway {
                     .header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
                     .body(org.springframework.web.reactive.function.BodyInserters.fromFormData(formData))
                     .retrieve()
-                    .bodyToMono(Map.class)
+                    .bodyToMono(new org.springframework.core.ParameterizedTypeReference<Map<String, Object>>() {})
                     .block();
             
             System.out.println("[KakaoPay] Ready Response: " + result);

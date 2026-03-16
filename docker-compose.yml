@@ -22,6 +22,7 @@ services:
       - PAYMENT_FAIL_URL=${FRONTEND_BASE_URL:-https://kang.newlecture.com}/orders/fail
       - PAYMENT_CANCEL_URL=${FRONTEND_BASE_URL:-https://kang.newlecture.com}/orders/cancel
       - REST_API_KEY=${REST_API_KEY}
+      - ADMIN_KEY=${ADMIN_KEY}
     restart: unless-stopped
     depends_on:
       - db

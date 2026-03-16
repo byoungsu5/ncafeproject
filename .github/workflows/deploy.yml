@@ -27,7 +27,8 @@ jobs:
           echo "AI_AGENT_PORT=${AI_AGENT_PORT}" >> .env
           echo "GEMINI_API_KEY=${GEMINI_API_KEY}" >> .env
           echo "PAYMENT_SUCCESS_URL=https://kang.newlecture.com/orders/success" >> .env
-          echo  "REST_API_KEY=${REST_API_KEY}" >> .env
+          echo "REST_API_KEY=${REST_API_KEY}" >> .env
+          echo "ADMIN_KEY=${ADMIN_KEY}" >> .env
         env:
           COMPOSE_PROJECT_NAME: ${{ secrets.COMPOSE_PROJECT_NAME }}
           USER_ID: ${{ secrets.USER_ID }}
@@ -41,6 +42,7 @@ jobs:
           INITIAL_DATA_PASSWORD: ${{ secrets.INITIAL_DATA_PASSWORD }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           REST_API_KEY: ${{ secrets.REST_API_KEY }}
+          ADMIN_KEY: ${{ secrets.ADMIN_KEY }}
 
       - name: Build and Deploy
         run: docker compose up --build -d
