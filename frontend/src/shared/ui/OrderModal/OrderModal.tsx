@@ -41,6 +41,7 @@ export default function OrderModal() {
         try {
             // KakaoPay needs initiation (ready) step
             if (selectedMethod === 'KAKAO') {
+                console.log('[OrderModal] Initiating KakaoPay with OrderID:', orderId);
                 const response = await fetch('/api/payments/initiate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -51,16 +52,19 @@ export default function OrderModal() {
                     }),
                 });
 
+                const data = await response.json();
+                console.log('[OrderModal] Server response:', data);
+
                 if (!response.ok) throw new Error('카카오페이 초기화 중 오류가 발생했습니다.');
                 
-                const { redirectUrl } = await response.json();
+                const { redirectUrl } = data;
                 if (redirectUrl) {
                     setQrUrl(redirectUrl);
-                    // Open in popup for better UX if possible
                     window.open(redirectUrl, 'kakaoPayPopup', 'width=500,height=650,resizable=yes,scrollbars=yes');
                     return;
                 } else {
-                    throw new Error('결제 준비 데이터를 받지 못했습니다.');
+                    console.error('[OrderModal] Redirect URL is missing in response');
+                    throw new Error('결제 준비 데이터를 받지 못했습니다. 서버 로그를 확인하세요.');
                 }
             }
 
