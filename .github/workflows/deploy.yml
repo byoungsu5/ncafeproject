@@ -27,6 +27,7 @@ jobs:
           echo "AI_AGENT_PORT=${AI_AGENT_PORT}" >> .env
           echo "GEMINI_API_KEY=${GEMINI_API_KEY}" >> .env
           echo "KAKAO_SECRET_KEY=${KAKAO_SECRET_KEY}" >> .env
+          echo "PAYMENT_SUCCESS_URL=https://kang.newlecture.com/orders/success" >> .env
         env:
           COMPOSE_PROJECT_NAME: ${{ secrets.COMPOSE_PROJECT_NAME }}
           USER_ID: ${{ secrets.USER_ID }}
