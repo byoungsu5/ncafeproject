@@ -11,18 +11,24 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
     const { id } = use(params);
 
     return (
-        <main>
-            <MenuDetailHeader
-                id={id}
-                title="메뉴 상세"
-            />
-            <div className={styles.pageLayout}>
-                <div className={styles.column}>
-                    <MenuImages menuId={id} />
-                    <MenuDetailInfo id={id} />
-                </div>
-                <div className={styles.column}>
-                    <MenuOptions menuId={id} />
+        <main className={styles.page}>
+            <div className={styles.bgGlow1} />
+            <div className={styles.bgGlow2} />
+            <div className={styles.bgGrid} />
+
+            <div className={styles.container}>
+                <MenuDetailHeader
+                    id={id}
+                    title="메뉴 상세"
+                />
+                <div className={styles.pageLayout}>
+                    <div className={styles.column}>
+                        <MenuImages menuId={id} />
+                        <MenuDetailInfo id={id} />
+                    </div>
+                    <div className={styles.column}>
+                        <MenuOptions menuId={id} />
+                    </div>
                 </div>
             </div>
         </main>

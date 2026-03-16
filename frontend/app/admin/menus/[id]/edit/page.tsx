@@ -115,20 +115,28 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
     }
 
     return (
-        <main className={styles.container}>
-            <header className={styles.header}>
-                <Link href={`/admin/menus/${id}`} className={styles.backButton} aria-label="상세 페이지로 돌아가기">
-                    <ArrowLeft size={24} />
-                </Link>
-                <h1 className={styles.title}>메뉴 수정</h1>
-            </header>
+        <main className={styles.page}>
+            <div className={styles.bgGlow1} />
+            <div className={styles.bgGlow2} />
+            <div className={styles.bgGrid} />
 
-            <MenuForm
-                defaultValues={initialData}
-                onSubmit={handleSubmit}
-                isSubmitting={isSubmitting}
-                submitLabel="수정사항 저장"
-            />
+            <div className={styles.container}>
+                <div className={styles.content}>
+                    <header className={styles.header}>
+                        <Link href={`/admin/menus/${id}`} className={styles.backButton} aria-label="상세 페이지로 돌아가기">
+                            <ArrowLeft size={24} />
+                        </Link>
+                        <h1 className={styles.title}>메뉴 수정</h1>
+                    </header>
+
+                    <MenuForm
+                        defaultValues={initialData}
+                        onSubmit={handleSubmit}
+                        isSubmitting={isSubmitting}
+                        submitLabel="수정사항 저장"
+                    />
+                </div>
+            </div>
         </main>
     );
 }

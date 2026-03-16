@@ -59,19 +59,27 @@ export default function NewMenuPage() {
     };
 
     return (
-        <main className={styles.container}>
-            <header className={styles.header}>
-                <Link href="/admin/menus" className={styles.backButton} aria-label="목록으로 돌아가기">
-                    <ArrowLeft size={24} />
-                </Link>
-                <h1 className={styles.title}>새 메뉴 등록</h1>
-            </header>
+        <main className={styles.page}>
+            <div className={styles.bgGlow1} />
+            <div className={styles.bgGlow2} />
+            <div className={styles.bgGrid} />
 
-            <MenuForm
-                onSubmit={handleSubmit}
-                isSubmitting={isSubmitting}
-                submitLabel="메뉴 등록하기"
-            />
+            <div className={styles.container}>
+                <div className={styles.content}>
+                    <header className={styles.header}>
+                        <Link href="/admin/menus" className={styles.backButton} aria-label="목록으로 돌아가기">
+                            <ArrowLeft size={24} />
+                        </Link>
+                        <h1 className={styles.title}>새 메뉴 등록</h1>
+                    </header>
+
+                    <MenuForm
+                        onSubmit={handleSubmit}
+                        isSubmitting={isSubmitting}
+                        submitLabel="메뉴 등록하기"
+                    />
+                </div>
+            </div>
         </main>
     );
 }
