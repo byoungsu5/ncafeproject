@@ -89,11 +89,13 @@
     gap: 2rem;
 }
 
-/* Left Panel */
-.leftPanel {
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+/* Panels */
+.leftPanel, .rightPanel {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
@@ -222,16 +224,6 @@
 }
 
 /* Right Panel */
-.rightPanel {
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    height: 600px;
-}
-
 .formGroup {
     margin-bottom: 1rem;
 }

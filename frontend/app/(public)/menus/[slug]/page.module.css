@@ -72,21 +72,25 @@
 .backLink {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--color-gray-500);
-    padding: 0.5rem 1rem;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #4b5563;
+    padding: 0.6rem 1.25rem;
     border-radius: 50px;
-    transition: all 0.25s ease;
-    border: 1px solid transparent;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .backLink:hover {
-    color: var(--color-primary-700);
-    background: white;
-    border-color: var(--color-gray-200);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    color: #f97316;
+    background: #ffffff;
+    border-color: #fdba74;
+    transform: translateX(-4px);
+    box-shadow: 0 8px 20px rgba(249, 115, 22, 0.15);
 }
 
 .layout {
