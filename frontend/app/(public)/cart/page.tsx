@@ -34,7 +34,7 @@ export default function CartPage() {
 
     const performOrder = async () => {
         setIsOrdering(true);
-        closeOrderModal();
+        // Do not close modal here to avoid flickering and onClose triggers
 
         try {
             const orderRequest = {

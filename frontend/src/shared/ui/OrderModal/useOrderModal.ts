@@ -31,7 +31,15 @@ export const useOrderModal = create<OrderModalState>((set) => ({
     type: 'confirm',
     title: '',
     message: '',
-    open: (params) => set({ isOpen: true, ...params }),
+    open: (params) => set({ 
+        isOpen: true, 
+        orderId: undefined, 
+        amount: undefined, 
+        onConfirm: undefined, 
+        onPaymentSuccess: undefined, 
+        onClose: undefined,
+        ...params 
+    }),
     close: () => set((state) => {
         if (state.onClose) state.onClose();
         return { isOpen: false };

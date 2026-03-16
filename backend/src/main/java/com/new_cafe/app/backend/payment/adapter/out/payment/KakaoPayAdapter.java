@@ -5,14 +5,14 @@ import com.new_cafe.app.backend.payment.domain.Payment;
 import com.new_cafe.app.backend.payment.domain.PaymentStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import java.util.UUID;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class KakaoPayAdapter implements PaymentGateway {
 
     private final org.springframework.web.reactive.function.client.WebClient webClient;
-    private final java.util.Map<Long, String> tidMap = new ConcurrentHashMap<>();
+    private final Map<Long, String> tidMap = new ConcurrentHashMap<>();
     
     @Value("${payment.kakao.secret-key}")
     private String secretKey;
@@ -49,7 +49,7 @@ public class KakaoPayAdapter implements PaymentGateway {
             body.put("partner_user_id", "user_" + orderId);
             body.put("pg_token", pgToken);
 
-            java.util.Map result = webClient.post()
+            Map<String, Object> result = webClient.post()
                     .uri("/payment/approve")
                     .header("Authorization", "SECRET_KEY " + secretKey)
                     .header("Content-Type", "application/json")
@@ -99,7 +99,7 @@ public class KakaoPayAdapter implements PaymentGateway {
             body.put("cancel_url", successUrl.replace("success", "cancel") + "?orderId=" + orderId + "&amount=" + amount);
             body.put("fail_url", successUrl.replace("success", "fail") + "?orderId=" + orderId + "&amount=" + amount);
 
-            java.util.Map result = webClient.post()
+            Map<String, Object> result = webClient.post()
                     .uri("/payment/ready")
                     .header("Authorization", "SECRET_KEY " + secretKey)
                     .header("Content-Type", "application/json")

@@ -121,7 +121,7 @@ export default function MenuDetailContent({
 
     const performOrder = async () => {
         setIsOrdering(true);
-        closeOrderModal();
+        // Do not close modal here, just proceed to creation
         
         try {
             const orderRequest = {

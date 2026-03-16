@@ -88,7 +88,19 @@ function SuccessContent() {
                     <>
                         <CheckCircle2 size={64} color="#22c55e" style={{ margin: '0 auto 1.5rem' }} />
                         <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>결제 완료!</h1>
-                        <p style={{ color: '#6b7280', marginBottom: '2rem' }}>{message}</p>
+                        <p style={{ color: '#6b7280', marginBottom: '1.5rem' }}>{message}</p>
+                        <div style={{ 
+                            backgroundColor: '#fff7ed', 
+                            color: '#f97316',
+                            padding: '0.5rem 1rem',
+                            borderRadius: '2rem',
+                            fontSize: '0.875rem',
+                            fontWeight: 600,
+                            display: 'inline-block',
+                            marginBottom: '2rem'
+                        }}>
+                            주문번호: <span style={{ fontWeight: 800 }}>{searchParams.get('orderId')}</span>
+                        </div>
                         <Link 
                             href="/orders"
                             style={{ 
