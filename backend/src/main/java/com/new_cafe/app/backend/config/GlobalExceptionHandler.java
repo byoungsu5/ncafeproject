@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
         log.error("Unhandled runtime exception occurred", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                 "status", 500,
-                "message", "서버 내부 오류가 발생했습니다."
+                "message", "서버 내부 오류: " + ex.getMessage()
         ));
     }
 }

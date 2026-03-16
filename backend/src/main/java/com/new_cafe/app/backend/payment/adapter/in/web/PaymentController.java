@@ -33,6 +33,7 @@ public class PaymentController {
 
     @PostMapping("/initiate")
     public ResponseEntity<Map<String, String>> initiatePayment(@RequestBody PaymentRequest request) {
+        System.out.println("[PaymentController] Initiate request received: " + request);
         String redirectUrl = paymentUseCase.initiatePayment(request.orderId(), request.amount(), request.paymentMethod());
         return ResponseEntity.ok(Map.of("redirectUrl", redirectUrl != null ? redirectUrl : ""));
     }

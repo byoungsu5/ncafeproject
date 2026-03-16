@@ -90,40 +90,36 @@ public class KakaoPayAdapter implements PaymentGateway {
     @Override
     public String initiatePayment(Long orderId, Integer amount) {
         // Kakao Pay Ready API Call
-        try {
-            java.util.Map<String, Object> body = new java.util.HashMap<>();
-            body.put("cid", cid);
-            body.put("partner_order_id", String.valueOf(orderId));
-            body.put("partner_user_id", "user_" + orderId);
-            body.put("item_name", "Cafe Order #" + orderId);
-            body.put("quantity", 1);
-            body.put("total_amount", amount);
-            body.put("tax_free_amount", 0);
-            body.put("approval_url", successUrl + "?orderId=" + orderId + "&amount=" + amount);
-            body.put("cancel_url", successUrl.replace("success", "cancel") + "?orderId=" + orderId + "&amount=" + amount);
-            body.put("fail_url", successUrl.replace("success", "fail") + "?orderId=" + orderId + "&amount=" + amount);
+        java.util.Map<String, Object> body = new java.util.HashMap<>();
+        body.put("cid", cid);
+        body.put("partner_order_id", String.valueOf(orderId));
+        body.put("partner_user_id", "user_" + orderId);
+        body.put("item_name", "Cafe Order #" + orderId);
+        body.put("quantity", 1);
+        body.put("total_amount", amount);
+        body.put("tax_free_amount", 0);
+        body.put("approval_url", successUrl + "?orderId=" + orderId + "&amount=" + amount);
+        body.put("cancel_url", successUrl.replace("success", "cancel") + "?orderId=" + orderId + "&amount=" + amount);
+        body.put("fail_url", successUrl.replace("success", "fail") + "?orderId=" + orderId + "&amount=" + amount);
 
-            System.out.println("[KakaoPay] Ready Request Body: " + body);
+        System.out.println("[KakaoPay] Ready Request Body: " + body);
 
-            Map<String, Object> result = webClient.post()
-                    .uri("/payment/ready")
-                    .header("Authorization", "SECRET_KEY " + secretKey)
-                    .header("Content-Type", "application/json")
-                    .bodyValue(body)
-                    .retrieve()
-                    .bodyToMono(Map.class)
-                    .block();
-            
-            System.out.println("[KakaoPay] Ready Response: " + result);
+        Map<String, Object> result = webClient.post()
+                .uri("/payment/ready")
+                .header("Authorization", "SECRET_KEY " + secretKey)
+                .header("Content-Type", "application/json")
+                .bodyValue(body)
+                .retrieve()
+                .bodyToMono(Map.class)
+                .block();
+        
+        System.out.println("[KakaoPay] Ready Response: " + result);
 
-            if (result != null && result.containsKey("next_redirect_pc_url")) {
-                String tid = (String) result.get("tid");
-                tidMap.put(orderId, tid);
-                System.out.println("[KakaoPay] Ready success, tid: " + tid);
-                return (String) result.get("next_redirect_pc_url");
-            }
-        } catch (Exception e) {
-            System.err.println("[KakaoPay] Ready failed: " + e.getMessage());
+        if (result != null && result.containsKey("next_redirect_pc_url")) {
+            String tid = (String) result.get("tid");
+            tidMap.put(orderId, tid);
+            System.out.println("[KakaoPay] Ready success, tid: " + tid);
+            return (String) result.get("next_redirect_pc_url");
         }
 
         // Fail if no redirect URL obtained

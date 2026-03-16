@@ -55,7 +55,9 @@ export default function OrderModal() {
                 const data = await response.json();
                 console.log('[OrderModal] Server response:', data);
 
-                if (!response.ok) throw new Error('카카오페이 초기화 중 오류가 발생했습니다.');
+                if (!response.ok) {
+                    throw new Error(data.message || '카카오페이 초기화 중 오류가 발생했습니다.');
+                }
                 
                 const { redirectUrl } = data;
                 if (redirectUrl) {
