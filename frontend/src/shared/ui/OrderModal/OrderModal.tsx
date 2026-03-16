@@ -59,6 +59,8 @@ export default function OrderModal() {
                     // Open in popup for better UX if possible
                     window.open(redirectUrl, 'kakaoPayPopup', 'width=500,height=650,resizable=yes,scrollbars=yes');
                     return;
+                } else {
+                    throw new Error('결제 준비 데이터를 받지 못했습니다.');
                 }
             }
 

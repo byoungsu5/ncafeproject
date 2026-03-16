@@ -103,14 +103,18 @@ public class KakaoPayAdapter implements PaymentGateway {
             body.put("cancel_url", successUrl.replace("success", "cancel") + "?orderId=" + orderId + "&amount=" + amount);
             body.put("fail_url", successUrl.replace("success", "fail") + "?orderId=" + orderId + "&amount=" + amount);
 
+            System.out.println("[KakaoPay] Ready Request Body: " + body);
+
             Map<String, Object> result = webClient.post()
                     .uri("/payment/ready")
                     .header("Authorization", "SECRET_KEY " + secretKey)
                     .header("Content-Type", "application/json")
                     .bodyValue(body)
                     .retrieve()
-                    .bodyToMono(java.util.Map.class)
+                    .bodyToMono(Map.class)
                     .block();
+            
+            System.out.println("[KakaoPay] Ready Response: " + result);
 
             if (result != null && result.containsKey("next_redirect_pc_url")) {
                 String tid = (String) result.get("tid");
