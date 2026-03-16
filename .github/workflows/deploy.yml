@@ -26,7 +26,7 @@ jobs:
           echo "INITIAL_DATA_PASSWORD=${INITIAL_DATA_PASSWORD}" >> .env
           echo "AI_AGENT_PORT=${AI_AGENT_PORT}" >> .env
           echo "GEMINI_API_KEY=${GEMINI_API_KEY}" >> .env
-          echo "KAKAO_PAY_SECRET_KEY=${KAKAO_PAY_SECRET_KEY}" >> .env
+          echo "KAKAO_SECRET_KEY=${KAKAO_SECRET_KEY}" >> .env
         env:
           COMPOSE_PROJECT_NAME: ${{ secrets.COMPOSE_PROJECT_NAME }}
           USER_ID: ${{ secrets.USER_ID }}
@@ -39,7 +39,7 @@ jobs:
           JWT_EXPIRATION: ${{ vars.JWT_EXPIRATION }}
           INITIAL_DATA_PASSWORD: ${{ secrets.INITIAL_DATA_PASSWORD }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          KAKAO_PAY_SECRET_KEY: ${{ secrets.KAKAO_PAY_SECRET_KEY }}
+          KAKAO_SECRET_KEY: ${{ secrets.KAKAO_SECRET_KEY }}
 
       - name: Build and Deploy
         run: docker compose up --build -d
