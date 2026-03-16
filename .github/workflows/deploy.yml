@@ -27,6 +27,8 @@ jobs:
           echo "AI_AGENT_PORT=${AI_AGENT_PORT}" >> .env
           echo "GEMINI_API_KEY=${GEMINI_API_KEY}" >> .env
           echo "PAYMENT_SUCCESS_URL=https://kang.newlecture.com/orders/success" >> .env
+          echo "KAKAO_SECRET_KEY=${KAKAO_SECRET_KEY}" >> .env
+          echo "CLIENT_SECRET=${CLIENT_SECRET}" >> .env
           echo "REST_API_KEY=${REST_API_KEY}" >> .env
           echo "ADMIN_KEY=${ADMIN_KEY}" >> .env
         env:
@@ -41,6 +43,8 @@ jobs:
           JWT_EXPIRATION: ${{ vars.JWT_EXPIRATION }}
           INITIAL_DATA_PASSWORD: ${{ secrets.INITIAL_DATA_PASSWORD }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          KAKAO_SECRET_KEY: ${{ secrets.KAKAO_SECRET_KEY }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
           REST_API_KEY: ${{ secrets.REST_API_KEY }}
           ADMIN_KEY: ${{ secrets.ADMIN_KEY }}
 
