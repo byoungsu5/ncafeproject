@@ -18,9 +18,9 @@ services:
       - JWT_EXPIRATION=${JWT_EXPIRATION}
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - INITIAL_DATA_PASSWORD=${INITIAL_DATA_PASSWORD:-1234}
-      - PAYMENT_SUCCESS_URL=${FRONTEND_BASE_URL:-http://localhost:3036}/orders/success
-      - PAYMENT_FAIL_URL=${FRONTEND_BASE_URL:-http://localhost:3036}/orders/fail
-      - PAYMENT_CANCEL_URL=${FRONTEND_BASE_URL:-http://localhost:3036}/orders/cancel
+      - PAYMENT_SUCCESS_URL=${FRONTEND_BASE_URL:-https://kang.newlecture.com}/orders/success
+      - PAYMENT_FAIL_URL=${FRONTEND_BASE_URL:-https://kang.newlecture.com}/orders/fail
+      - PAYMENT_CANCEL_URL=${FRONTEND_BASE_URL:-https://kang.newlecture.com}/orders/cancel
     restart: unless-stopped
     depends_on:
       - db

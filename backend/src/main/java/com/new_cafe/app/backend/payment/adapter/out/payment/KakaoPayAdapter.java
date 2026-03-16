@@ -37,8 +37,12 @@ public class KakaoPayAdapter implements PaymentGateway {
         String tid = tidMap.get(orderId);
         if (tid == null) {
             System.err.println("[KakaoPay] No TID found for order: " + orderId);
-            // Fallback for demo if tid is missing (though it shouldn't be)
-            tid = "MOCK_TID_" + orderId;
+            return Payment.builder()
+                    .orderId(orderId)
+                    .amount(amount)
+                    .paymentMethod("KAKAO")
+                    .status(PaymentStatus.CANCELLED)
+                    .build();
         }
 
         try {
@@ -118,7 +122,7 @@ public class KakaoPayAdapter implements PaymentGateway {
             System.err.println("[KakaoPay] Ready failed: " + e.getMessage());
         }
 
-        // Fallback or Error
-        return successUrl + "?orderId=" + orderId;
+        // Fail if no redirect URL obtained
+        return null;
     }
 }

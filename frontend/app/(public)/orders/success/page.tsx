@@ -42,8 +42,14 @@ function SuccessContent() {
                 });
 
                 if (response.ok) {
-                    setStatus('success');
-                    setMessage('결제가 성공적으로 완료되었습니다!');
+                    const payment = await response.json();
+                    if (payment.status === 'PAID') {
+                        setStatus('success');
+                        setMessage('결제가 성공적으로 완료되었습니다!');
+                    } else {
+                        setStatus('error');
+                        setMessage('결제가 완료되지 않았거나 취소되었습니다.');
+                    }
                 } else {
                     const error = await response.json();
                     setStatus('error');
