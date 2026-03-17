@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const API_BASE = process.env.API_BASE_URL || 'http://localhost:8036';
-
 export async function GET(
     req: NextRequest,
     { params }: { params: Promise<{ path: string[] }> }
 ) {
     const { path } = await params;
     const imagePath = path.join('/');
-    const targetUrl = `${API_BASE}/${imagePath}`;
+    
+    const API_BASE = process.env.API_BASE_URL || 'http://localhost:8036';
+    const targetUrl = `${API_BASE}/upload/${imagePath}`;
 
     try {
         const res = await fetch(targetUrl);

@@ -33,6 +33,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/login", "/api/auth/signup").permitAll()
                 .requestMatchers("/api/admin/images/upload").permitAll()
+                .requestMatchers("/upload/**").permitAll()
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("/api/auth/me").authenticated()
                 .anyRequest().permitAll()
