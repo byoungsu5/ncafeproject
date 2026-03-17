@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
+import styles from './page.module.css';
 
 function SuccessContent() {
     const searchParams = useSearchParams();
@@ -20,7 +21,7 @@ function SuccessContent() {
                 // If it's a mock flow, it might only have orderId
                 if (orderId && !pgToken) {
                      setStatus('success');
-                     setMessage('결제가 완료되었습니다!');
+                     setMessage('결제가 성공적으로 확인되었습니다!');
                      return;
                 }
                 setStatus('error');
@@ -36,7 +37,7 @@ function SuccessContent() {
                     body: JSON.stringify({
                         orderId: Number(orderId),
                         pgToken: pgToken,
-                        paymentMethod: 'KAKAO', // Assumed for this redirect
+                        paymentMethod: 'KAKAO',
                         amount: Number(amount) || 0,
                     }),
                 });
@@ -65,61 +66,33 @@ function SuccessContent() {
     }, [searchParams]);
 
     return (
-        <div style={{ 
-            minHeight: '100vh', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center',
-            backgroundColor: '#f9fafb',
-            padding: '1rem'
-        }}>
-            <div style={{ 
-                maxWidth: '400px', 
-                width: '100%', 
-                backgroundColor: 'white', 
-                padding: '2rem', 
-                borderRadius: '1rem',
-                boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)',
-                textAlign: 'center'
-            }}>
+        <main className={styles.page}>
+            <div className={styles.bgGlow1} />
+            <div className={styles.bgGlow2} />
+            <div className={styles.bgGrid} />
+
+            <div className={styles.card}>
                 {status === 'loading' && (
                     <>
-                        <Loader2 size={64} color="#f97316" className="animate-spin" style={{ margin: '0 auto 1.5rem' }} />
-                        <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>결제 확인 중</h1>
-                        <p style={{ color: '#6b7280' }}>{message}</p>
+                        <div className={`${styles.iconWrapper} ${styles.loading}`}>
+                            <Loader2 size={48} className="animate-spin" />
+                        </div>
+                        <h1 className={styles.title}>결제 확인 중</h1>
+                        <p className={styles.description}>{message}</p>
                     </>
                 )}
 
                 {status === 'success' && (
                     <>
-                        <CheckCircle2 size={64} color="#22c55e" style={{ margin: '0 auto 1.5rem' }} />
-                        <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>결제 완료!</h1>
-                        <p style={{ color: '#6b7280', marginBottom: '1.5rem' }}>{message}</p>
-                        <div style={{ 
-                            backgroundColor: '#fff7ed', 
-                            color: '#f97316',
-                            padding: '0.5rem 1rem',
-                            borderRadius: '2rem',
-                            fontSize: '0.875rem',
-                            fontWeight: 600,
-                            display: 'inline-block',
-                            marginBottom: '2rem'
-                        }}>
-                            주문번호: <span style={{ fontWeight: 800 }}>{searchParams.get('orderId')}</span>
+                        <div className={`${styles.iconWrapper} ${styles.success}`}>
+                            <CheckCircle2 size={48} />
                         </div>
-                        <Link 
-                            href="/orders"
-                            style={{ 
-                                display: 'block',
-                                width: '100%',
-                                padding: '0.75rem',
-                                backgroundColor: '#f97316',
-                                color: 'white',
-                                borderRadius: '0.5rem',
-                                textDecoration: 'none',
-                                fontWeight: 600
-                            }}
-                        >
+                        <h1 className={styles.title}>결제 완료!</h1>
+                        <p className={styles.description}>{message}</p>
+                        <div className={styles.orderIdBadge}>
+                            주문번호: <span>{searchParams.get('orderId')}</span>
+                        </div>
+                        <Link href="/orders" className={styles.primaryButton}>
                             주문 내역 확인하기
                         </Link>
                     </>
@@ -127,28 +100,18 @@ function SuccessContent() {
 
                 {status === 'error' && (
                     <>
-                        <AlertCircle size={64} color="#ef4444" style={{ margin: '0 auto 1.5rem' }} />
-                        <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>결제 실패</h1>
-                        <p style={{ color: '#6b7280', marginBottom: '2rem' }}>{message}</p>
-                        <Link 
-                            href="/menus"
-                            style={{ 
-                                display: 'block',
-                                width: '100%',
-                                padding: '0.75rem',
-                                backgroundColor: '#1f2937',
-                                color: 'white',
-                                borderRadius: '0.5rem',
-                                textDecoration: 'none',
-                                fontWeight: 600
-                            }}
-                        >
+                        <div className={`${styles.iconWrapper} ${styles.error}`}>
+                            <AlertCircle size={48} />
+                        </div>
+                        <h1 className={styles.title}>결제 실패</h1>
+                        <p className={styles.description}>{message}</p>
+                        <Link href="/menus" className={styles.secondaryButton}>
                             메뉴로 돌아가기
                         </Link>
                     </>
                 )}
             </div>
-        </div>
+        </main>
     );
 }
 

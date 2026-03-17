@@ -62,7 +62,7 @@ export default function OrderModal() {
                 const { redirectUrl } = data;
                 if (redirectUrl) {
                     setQrUrl(redirectUrl);
-                    window.open(redirectUrl, 'kakaoPayPopup', 'width=500,height=650,resizable=yes,scrollbars=yes');
+                    window.location.href = redirectUrl;
                     return;
                 } else {
                     console.error('[OrderModal] Redirect URL is missing in response');
