@@ -80,3 +80,31 @@ def delete_document(doc_id: int):
     cur.close()
     conn.close()
     return True
+
+def search_documents(query: str, limit: int = 3):
+    # E5 model requires 'query: ' prefix for queries
+    query_embedding = model.encode(f"query: {query}").tolist()
+    
+    conn = get_db_connection()
+    cur = conn.cursor()
+    
+    # Cosine distance (<=>) for similarity search
+    search_query = """
+        SELECT title, content, 1 - (embedding <=> %s::vector) AS similarity
+        FROM rag_documents
+        ORDER BY similarity DESC
+        LIMIT %s
+    """
+    cur.execute(search_query, (query_embedding, limit))
+    rows = cur.fetchall()
+    cur.close()
+    conn.close()
+    
+    results = []
+    for row in rows:
+        results.append({
+            "title": row[0],
+            "content": row[1],
+            "similarity": float(row[2])
+        })
+    return results

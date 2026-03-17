@@ -69,9 +69,13 @@ def execute_function(name: str, args: dict):
     return {"error": f"알 수 없는 함수: {name}"}, None
 
 
-def chat(messages: list[dict]) -> dict:
+def chat(messages: list[dict], context: str = "") -> dict:
+    full_system_prompt = SYSTEM_PROMPT
+    if context:
+        full_system_prompt += f"\n\n{context}"
+
     config_params = types.GenerateContentConfig(
-        system_instruction=SYSTEM_PROMPT,
+        system_instruction=full_system_prompt,
         tools=[AGENT_TOOLS],
     )
 
@@ -97,14 +101,18 @@ def chat(messages: list[dict]) -> dict:
     return res_data
 
 
-async def chat_stream(messages: list[dict]):
+async def chat_stream(messages: list[dict], context: str = ""):
     """
     Function Calling 루프가 포함된 스트리밍.
     - 텍스트 청크 → str로 yield
     - 액션 → dict로 yield (텍스트 완료 후 마지막에)
     """
+    full_system_prompt = SYSTEM_PROMPT
+    if context:
+        full_system_prompt += f"\n\n{context}"
+
     config_params = types.GenerateContentConfig(
-        system_instruction=SYSTEM_PROMPT,
+        system_instruction=full_system_prompt,
         tools=[AGENT_TOOLS],
     )
 
