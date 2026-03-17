@@ -47,9 +47,13 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ user: session.user });
     } catch (error) {
         const message = error instanceof Error ? error.message : 'Unknown error';
-        console.error('[Login] failed:', message);
+        console.error(`[Login] Backend connection failed to ${API_BASE} for ${req.url}:`, message);
         return NextResponse.json(
-            { message: `Backend connection failed: ${message}` },
+            { 
+                message: '백엔드 서버 연결 실패 (502).',
+                error: message,
+                target: API_BASE
+            },
             { status: 502 }
         );
     }

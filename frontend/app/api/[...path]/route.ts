@@ -4,6 +4,7 @@ import { getSession } from '@/app/lib/session';
 const API_BASE = process.env.API_BASE_URL || 'http://localhost:8036';
 
 async function proxyRequest(req: NextRequest) {
+    let targetUrl = '';
     try {
         const session = await getSession();
         const token = session.token;
@@ -13,7 +14,6 @@ async function proxyRequest(req: NextRequest) {
 
         const AI_AGENT_BASE = process.env.AI_AGENT_URL || 'http://localhost:8136';
 
-        let targetUrl;
         if (pathname === '/api/ai' || pathname.startsWith('/api/ai/')) {
             targetUrl = `${AI_AGENT_BASE}${pathname}${search}`;
         } else {
@@ -78,9 +78,13 @@ async function proxyRequest(req: NextRequest) {
         });
     } catch (error) {
         const message = error instanceof Error ? error.message : 'Unknown error';
-        console.error(`[API Proxy] ${req.method} ${req.nextUrl.pathname} -> ${API_BASE} failed:`, message);
+        console.error(`[API Proxy] ${req.method} ${req.nextUrl.pathname} -> ${targetUrl || API_BASE} failed:`, message);
         return NextResponse.json(
-            { message: `Backend connection failed: ${message}` },
+            { 
+                message: '백엔드 서버 연결 실패 (502).',
+                error: message,
+                target: targetUrl || API_BASE
+            },
             { status: 502 }
         );
     }
