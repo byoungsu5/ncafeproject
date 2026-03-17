@@ -25,6 +25,8 @@ public class OrderService implements OrderUseCase {
                 .mapToInt(item -> item.price() * item.quantity())
                 .sum();
 
+        System.out.println("[OrderService] placeOrder request for: " + command.nickname() + ", total: " + totalPrice + ", items: " + command.items().size());
+
         Order order = Order.builder()
                 .nickname(command.nickname())
                 .status(OrderStatus.PENDING)
@@ -39,7 +41,9 @@ public class OrderService implements OrderUseCase {
                         .collect(Collectors.toList()))
                 .build();
 
-        return orderPort.save(order);
+        Order savedOrder = orderPort.save(order);
+        System.out.println("[OrderService] Order saved successfully with ID: " + savedOrder.getId());
+        return savedOrder;
     }
 
     @Override

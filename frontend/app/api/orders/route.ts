@@ -4,6 +4,7 @@ import { getSession } from '@/app/lib/session';
 const API_BASE = process.env.API_BASE_URL || 'http://localhost:8036';
 
 export async function POST(req: NextRequest) {
+    console.log('[BFF] POST /api/orders request received');
     try {
         const session = await getSession();
         const body = await req.json();
@@ -14,24 +15,34 @@ export async function POST(req: NextRequest) {
 
         if (session.token) {
             headers['Authorization'] = `Bearer ${session.token}`;
+            console.log('[BFF] Token found for POST');
+        } else {
+            console.warn('[BFF] No token found for POST - will be saved as Guest');
         }
 
-        const res = await fetch(`${API_BASE}/api/orders`, {
+        const targetUrl = `${API_BASE}/api/orders`;
+        console.log('[BFF] Forwarding POST to:', targetUrl);
+
+        const res = await fetch(targetUrl, {
             method: 'POST',
             headers,
             body: JSON.stringify(body),
         });
 
+        console.log('[BFF] Backend POST response status:', res.status);
+
         if (!res.ok) {
             const error = await res.json().catch(() => ({ message: '주문 요청에 실패했습니다.' }));
+            console.error('[BFF] Backend POST error:', error);
             return NextResponse.json(error, { status: res.status });
         }
 
         const data = await res.json();
+        console.log('[BFF] Order created successfully, id:', data?.id);
         return NextResponse.json(data);
     } catch (error) {
         const message = error instanceof Error ? error.message : 'Unknown error';
-        console.error('[Orders API] error:', message);
+        console.error('[BFF] POST unexpected error:', message);
         return NextResponse.json(
             { message: `Internal server error: ${message}` },
             { status: 500 }
@@ -40,25 +51,37 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
+    console.log('[BFF] GET /api/orders request received');
     try {
         const session = await getSession();
+        console.log('[BFF] Session token present:', !!session.token);
+        
         if (!session.token) {
+            console.warn('[BFF] No session token found, returning 401');
             return NextResponse.json({ message: '로그인이 필요합니다.' }, { status: 401 });
         }
 
-        const res = await fetch(`${API_BASE}/api/orders/me`, {
+        const targetUrl = `${API_BASE}/api/orders`;
+        console.log('[BFF] Forwarding GET to:', targetUrl);
+
+        const res = await fetch(targetUrl, {
             headers: { Authorization: `Bearer ${session.token}` },
         });
 
+        console.log('[BFF] Backend response status:', res.status);
+
         if (!res.ok) {
             const error = await res.json().catch(() => ({ message: '주문 내역을 가져오는데 실패했습니다.' }));
+            console.error('[BFF] Backend error:', error);
             return NextResponse.json(error, { status: res.status });
         }
 
         const data = await res.json();
+        console.log('[BFF] Successfully fetched', data?.length, 'orders');
         return NextResponse.json(data);
     } catch (error) {
         const message = error instanceof Error ? error.message : 'Unknown error';
+        console.error('[BFF] Unexpected error:', message);
         return NextResponse.json({ message }, { status: 500 });
     }
 }

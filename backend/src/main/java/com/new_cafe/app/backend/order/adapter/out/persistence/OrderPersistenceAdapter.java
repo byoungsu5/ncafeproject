@@ -42,6 +42,7 @@ public class OrderPersistenceAdapter implements OrderPort {
                 );
                 entity.addItem(itemEntity);
             });
+            entity.setOrderTime(java.time.LocalDateTime.now());
         }
 
         OrderEntity savedEntity = orderJpaRepository.save(entity);

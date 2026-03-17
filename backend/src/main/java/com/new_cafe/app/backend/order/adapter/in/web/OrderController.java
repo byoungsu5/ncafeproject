@@ -42,21 +42,32 @@ public class OrderController {
         return ResponseEntity.ok(order);
     }
 
-    @GetMapping
+    @GetMapping(value = {"", "/me"})
     public ResponseEntity<List<Order>> getMyOrders() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("[OrderController] getMyOrders request. Auth: " + auth);
-        
-        if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
-            System.err.println("[OrderController] Unauthenticated request to getMyOrders");
+        String currentNickname = (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal()))
+                ? auth.getName()
+                : null;
+
+        System.out.println("[OrderController] getMyOrders request. Current User: " + currentNickname);
+
+        if (currentNickname == null) {
+            System.err.println("[OrderController] Unauthorized access attempt to getMyOrders");
             return ResponseEntity.status(401).build();
         }
 
-        System.out.println("[OrderController] Fetching orders for user: " + auth.getName());
-        List<Order> orders = orderUseCase.getOrdersByNickname(auth.getName());
-        System.out.println("[OrderController] Found " + orders.size() + " orders for " + auth.getName());
+        List<Order> orders = orderUseCase.getOrdersByNickname(currentNickname);
+        System.out.println("[OrderController] Returning " + orders.size() + " orders for " + currentNickname);
         
         return ResponseEntity.ok(orders);
+    }
+
+    @GetMapping("/all-debug")
+    public ResponseEntity<List<Order>> getAllOrdersDebug() {
+        System.out.println("[OrderController] DEBUG: Requesting ALL orders from DB");
+        List<Order> allOrders = orderUseCase.getAllOrders(); // UseCase에 메서드 추가 필요
+        System.out.println("[OrderController] DEBUG: Found " + allOrders.size() + " total orders in DB");
+        return ResponseEntity.ok(allOrders);
     }
 
     public record OrderRequest(List<OrderItemRequest> items) {}
