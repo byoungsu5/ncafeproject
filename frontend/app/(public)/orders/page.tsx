@@ -38,9 +38,13 @@ export default function OrdersPage() {
         const fetchOrders = async () => {
             try {
                 const response = await fetch('/api/orders');
+                console.log('[OrdersPage] fetch /api/orders status:', response.status);
                 if (response.ok) {
                     const data = await response.json();
+                    console.log('[OrdersPage] count:', data?.length);
                     setOrders(data || []);
+                } else {
+                    console.error('[OrdersPage] fetch failed:', response.status, response.statusText);
                 }
             } catch (error) {
                 console.error('주문 내역 로딩 실패:', error);

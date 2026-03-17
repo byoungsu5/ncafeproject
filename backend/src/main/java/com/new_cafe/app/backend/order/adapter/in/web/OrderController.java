@@ -45,11 +45,17 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<List<Order>> getMyOrders() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("[OrderController] getMyOrders request. Auth: " + auth);
+        
         if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
+            System.err.println("[OrderController] Unauthenticated request to getMyOrders");
             return ResponseEntity.status(401).build();
         }
 
+        System.out.println("[OrderController] Fetching orders for user: " + auth.getName());
         List<Order> orders = orderUseCase.getOrdersByNickname(auth.getName());
+        System.out.println("[OrderController] Found " + orders.size() + " orders for " + auth.getName());
+        
         return ResponseEntity.ok(orders);
     }
 
