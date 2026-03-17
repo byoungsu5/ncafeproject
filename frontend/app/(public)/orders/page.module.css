@@ -58,29 +58,89 @@
     pointer-events: none;
 }
 
-.container {
+/* Hero Section */
+.hero {
+    position: relative;
+    padding: 6rem 2rem 3rem;
+    text-align: center;
+    z-index: 10;
+}
+
+.heroContent {
+    max-width: 800px;
+    margin: 0 auto;
+    animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseGlow {
+    0% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.05); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 0.5; }
+}
+
+.heroLabel {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.25rem;
+    background: rgba(254, 243, 199, 0.8);
+    border: 1px solid rgba(252, 211, 77, 0.5);
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #b45309;
+    backdrop-filter: blur(8px);
+    margin-bottom: 1.5rem;
+}
+
+.heroDot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #f59e0b;
+    box-shadow: 0 0 10px #f59e0b;
+    animation: pulseGlow 2s infinite;
+}
+
+.heroTitle {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    color: #431407;
+}
+
+.heroHighlight {
+    background: linear-gradient(135deg, #7c2d12 0%, #f97316 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.heroDescription {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: #525252;
+}
+
+/* Content Section */
+.content {
     position: relative;
     max-width: 1000px;
     margin: 0 auto;
+    padding: 0 2rem 6rem;
+    z-index: 10;
+}
+
+.container {
+    position: relative;
+    width: 100%;
     z-index: 1;
-}
-
-.header {
-    margin-bottom: 3rem;
-    text-align: center;
-}
-
-.title {
-    font-size: 2.5rem;
-    font-weight: 900;
-    color: #1a1a1a;
-    letter-spacing: -0.05em;
-    margin-bottom: 0.75rem;
-}
-
-.subtitle {
-    font-size: 1.1rem;
-    color: #4b5563;
 }
 
 .orderList {

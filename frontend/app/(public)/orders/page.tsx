@@ -101,15 +101,30 @@ export default function OrdersPage() {
             <div className={styles.bgGlow2} />
             <div className={styles.bgGrid} />
 
-            <div className={styles.container}>
-                <Link href="/" className={styles.backLink} style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#f97316', marginBottom: '1rem', textDecoration: 'none', fontWeight: 700 }}>
-                    <ChevronLeft size={20} /> 홈으로 돌아가기
-                </Link>
+            {/* Hero Section */}
+            <section className={styles.hero}>
+                <div className={styles.heroContent}>
+                    <span className={styles.heroLabel}>
+                        <span className={styles.heroDot}></span>
+                        나의 주문
+                    </span>
+                    <h1 className={styles.heroTitle}>
+                        주문 <span className={styles.heroHighlight}>현황</span>
+                    </h1>
+                    <p className={styles.heroDescription}>
+                        파이리가 준비 중인 메뉴의 상태를 실시간으로 확인하세요!
+                        <br />
+                        맛있는 냄새가 여기까지 나는 것 같아요 🔥
+                    </p>
+                </div>
+            </section>
 
-                <header className={styles.header}>
-                    <h1 className={styles.title}>내 주문 현황 🔥</h1>
-                    <p className={styles.subtitle}>파이리가 준비 중인 메뉴의 상태를 실시간으로 확인하세요!</p>
-                </header>
+            {/* Content Section */}
+            <section className={styles.content}>
+                <div className={styles.container}>
+                    <Link href="/" className={styles.backLink} style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#f97316', marginBottom: '2rem', textDecoration: 'none', fontWeight: 700 }}>
+                        <ChevronLeft size={20} /> 홈으로 돌아가기
+                    </Link>
 
                 {orders.length === 0 ? (
                     <div className={styles.emptyState}>
@@ -157,7 +172,8 @@ export default function OrdersPage() {
                         ))}
                     </div>
                 )}
-            </div>
+                </div>
+            </section>
         </main>
     );
 }
