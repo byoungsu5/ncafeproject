@@ -91,9 +91,13 @@ public class MenuService implements CreateMenuUseCase, UpdateMenuUseCase,
                 command.description(),
                 command.price(),
                 command.categoryId(),
-                command.isAvailable(),
-                command.isSoldOut(),
-                command.images() != null ? command.images().stream().map(com.new_cafe.app.backend.admin.menu.application.command.ImageCommand::url).collect(java.util.stream.Collectors.toList()) : java.util.Collections.emptyList()
+                command.isAvailable() != null ? command.isAvailable() : menu.getIsAvailable(),
+                command.isSoldOut() != null ? command.isSoldOut() : menu.getIsSoldOut(),
+                command.images() != null 
+                    ? command.images().stream()
+                        .map(com.new_cafe.app.backend.admin.menu.application.command.ImageCommand::url)
+                        .collect(java.util.stream.Collectors.toList()) 
+                    : menu.getImages()
         );
 
         if (command.options() != null) {

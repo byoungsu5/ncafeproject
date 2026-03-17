@@ -259,6 +259,7 @@ export default function OptionsPage() {
                         price: menuData.price,
                         categoryId: menuData.categoryId,
                         isAvailable: menuData.isAvailable,
+                        isSoldOut: menuData.isSoldOut,
                         options: optionsPayload,
                     }),
                 });
