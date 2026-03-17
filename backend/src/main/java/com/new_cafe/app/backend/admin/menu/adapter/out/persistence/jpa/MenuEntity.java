@@ -74,7 +74,7 @@ public class MenuEntity {
     @Builder.Default
     private List<MenuOptionEntity> options = new ArrayList<>();
 
-    public Menu toDomain(String imageSrc) {
+    public Menu toDomain(String imageSrc, List<String> images) {
         String categoryName = (category != null) ? category.getName() : "미지정";
         return Menu.builder()
                 .id(id)
@@ -88,6 +88,7 @@ public class MenuEntity {
                 .isSoldOut(isSoldOut != null ? isSoldOut : false)
                 .sortOrder(sortOrder)
                 .imageSrc(imageSrc != null ? imageSrc : "blank.png")
+                .images(images != null ? images : new ArrayList<>())
                 .categoryName(categoryName)
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)

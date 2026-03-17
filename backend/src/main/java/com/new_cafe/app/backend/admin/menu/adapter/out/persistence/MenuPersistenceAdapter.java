@@ -29,6 +29,7 @@ public class MenuPersistenceAdapter implements MenuPort {
     @Override
     @org.springframework.transaction.annotation.Transactional
     public Menu save(Menu menu) {
+        System.out.println("[MenuPersistenceAdapter] Saving menu " + menu.getId() + " (images null=" + (menu.getImages() == null) + (menu.getImages() != null ? ", size=" + menu.getImages().size() : "") + ")");
         MenuEntity entity;
         if (menu.getId() != null) {
             entity = repository.findById(menu.getId())
@@ -62,8 +63,10 @@ public class MenuPersistenceAdapter implements MenuPort {
     public Optional<Menu> findById(Long id) {
         return repository.findById(id)
                 .map(entity -> {
-                    String imageSrc = userMenuImageRepository.findFirstImageSrcByMenuId(id);
-                    return entity.toDomain(imageSrc);
+                    List<MenuImageEntity> imageEntities = adminMenuImageRepository.findByMenuId(id);
+                    List<String> images = imageEntities.stream().map(MenuImageEntity::getSrcUrl).toList();
+                    String imageSrc = images.isEmpty() ? "blank.png" : images.get(0);
+                    return entity.toDomain(imageSrc, images);
                 });
     }
 
@@ -82,8 +85,10 @@ public class MenuPersistenceAdapter implements MenuPort {
 
         return entities.stream()
                 .map(entity -> {
-                    String imageSrc = userMenuImageRepository.findFirstImageSrcByMenuId(entity.getId());
-                    return entity.toDomain(imageSrc);
+                    List<MenuImageEntity> imageEntities = adminMenuImageRepository.findByMenuId(entity.getId());
+                    List<String> images = imageEntities.stream().map(MenuImageEntity::getSrcUrl).toList();
+                    String imageSrc = images.isEmpty() ? "blank.png" : images.get(0);
+                    return entity.toDomain(imageSrc, images);
                 })
                 .toList();
     }
