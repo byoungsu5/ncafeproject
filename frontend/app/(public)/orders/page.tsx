@@ -51,6 +51,9 @@ export default function OrdersPage() {
 
         if (user) {
             fetchOrders();
+            // 10초마다 실시간 업데이트 (폴링)
+            const interval = setInterval(fetchOrders, 10000);
+            return () => clearInterval(interval);
         }
     }, [user, isAuthLoading, router]);
 

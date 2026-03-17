@@ -42,7 +42,7 @@ public class OrderController {
         return ResponseEntity.ok(order);
     }
 
-    @GetMapping("/me")
+    @GetMapping
     public ResponseEntity<List<Order>> getMyOrders() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
