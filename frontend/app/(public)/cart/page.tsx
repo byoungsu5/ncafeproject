@@ -96,9 +96,27 @@ export default function CartPage() {
             <div className={styles.bgGlow2} />
             <div className={styles.bgGrid} />
 
-            <div className={styles.cartWrapper}>
-                <h1 className={styles.title}>장바구니</h1>
-                <p className={styles.subtitle}>담아둔 메뉴를 한 번에 확인하고 주문할 수 있어요.</p>
+            {/* Hero Section */}
+            <section className={styles.hero}>
+                <div className={styles.heroContent}>
+                    <span className={styles.heroLabel}>
+                        <span className={styles.heroDot}></span>
+                        주문 대기 중
+                    </span>
+                    <h1 className={styles.heroTitle}>
+                        나의 <span className={styles.heroHighlight}>장바구니</span>
+                    </h1>
+                    <p className={styles.heroDescription}>
+                        담아둔 메뉴를 한 번에 확인하고 주문할 수 있어요.
+                        <br />
+                        파이리가 맛있게 구워줄 메뉴들을 확인해보세요!
+                    </p>
+                </div>
+            </section>
+
+            {/* Cart Content */}
+            <section className={styles.content}>
+                <div className={styles.cartWrapper}>
 
                 {items.length === 0 ? (
                     <div className={styles.empty}>장바구니가 비어 있어요. 메뉴를 먼저 담아주세요.</div>
@@ -172,7 +190,8 @@ export default function CartPage() {
                         </div>
                     </>
                 )}
-            </div>
+                </div>
+            </section>
         </main>
     );
 }
