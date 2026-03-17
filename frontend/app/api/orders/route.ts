@@ -54,21 +54,25 @@ export async function GET(req: NextRequest) {
     console.log('[BFF] GET /api/orders request received');
     try {
         const session = await getSession();
-        console.log('[BFF] Session token present:', !!session.token);
+        console.log('[BFF] Session user:', session.user?.username, 'Token present:', !!session.token);
         
         if (!session.token) {
-            console.warn('[BFF] No session token found, returning 401');
+            console.warn('[BFF] Unauthorized: No session token found');
             return NextResponse.json({ message: '로그인이 필요합니다.' }, { status: 401 });
         }
 
         const targetUrl = `${API_BASE}/api/orders`;
-        console.log('[BFF] Forwarding GET to:', targetUrl);
+        console.log('[BFF] Forwarding GET to Backend:', targetUrl);
 
         const res = await fetch(targetUrl, {
-            headers: { Authorization: `Bearer ${session.token}` },
+            headers: { 
+                'Authorization': `Bearer ${session.token}`,
+                'Accept': 'application/json'
+            },
+            cache: 'no-store'
         });
 
-        console.log('[BFF] Backend response status:', res.status);
+        console.log('[BFF] Backend Response:', res.status, res.statusText);
 
         if (!res.ok) {
             const error = await res.json().catch(() => ({ message: '주문 내역을 가져오는데 실패했습니다.' }));

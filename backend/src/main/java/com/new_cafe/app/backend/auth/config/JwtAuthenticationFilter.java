@@ -33,6 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
+            System.out.println("[JwtAuthenticationFilter] Token received for path: " + request.getRequestURI());
 
             if (jwtTokenProvider.validateToken(token)) {
                 String username = jwtTokenProvider.getUsername(token);
@@ -44,7 +45,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new UsernamePasswordAuthenticationToken(user.getUsername(), null, Collections.singletonList(authority));
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+                    System.out.println("[JwtAuthenticationFilter] Authenticated user: " + username);
                 });
+            } else {
+                System.err.println("[JwtAuthenticationFilter] Invalid token for path: " + request.getRequestURI());
             }
         }
 

@@ -38,6 +38,7 @@ public class OrderController {
                         .collect(Collectors.toList())
         );
 
+        System.out.println("[OrderController] POST /api/orders - Items: " + (request.items() != null ? request.items().size() : 0) + ", User: " + nickname);
         Order order = orderUseCase.placeOrder(command);
         return ResponseEntity.ok(order);
     }
@@ -45,19 +46,23 @@ public class OrderController {
     @GetMapping(value = {"", "/me"})
     public ResponseEntity<List<Order>> getMyOrders() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String currentNickname = (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal()))
-                ? auth.getName()
-                : null;
+        String currentNickname = null;
 
-        System.out.println("[OrderController] getMyOrders request. Current User: " + currentNickname);
+        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
+            currentNickname = auth.getName();
+        }
+
+        System.out.println("[OrderController] GET /api/orders - Auth: " + (auth != null ? auth.getClass().getSimpleName() : "null") 
+            + ", Name: " + (auth != null ? auth.getName() : "null")
+            + ", Principal: " + (auth != null ? auth.getPrincipal() : "null"));
 
         if (currentNickname == null) {
-            System.err.println("[OrderController] Unauthorized access attempt to getMyOrders");
+            System.err.println("[OrderController] 401 Unauthorized: currentNickname is null");
             return ResponseEntity.status(401).build();
         }
 
         List<Order> orders = orderUseCase.getOrdersByNickname(currentNickname);
-        System.out.println("[OrderController] Returning " + orders.size() + " orders for " + currentNickname);
+        System.out.println("[OrderController] Returning " + orders.size() + " orders for: " + currentNickname);
         
         return ResponseEntity.ok(orders);
     }
