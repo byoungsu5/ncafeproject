@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSession } from '@/app/lib/session';
 
-const API_BASE = process.env.API_BASE_URL || 'http://localhost:8036';
-
 async function proxyRequest(req: NextRequest) {
     let targetUrl = '';
+    const API_BASE = process.env.API_BASE_URL || 'http://localhost:8036';
     try {
         const session = await getSession();
         const token = session.token;

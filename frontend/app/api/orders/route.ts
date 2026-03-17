@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSession } from '@/app/lib/session';
 
-const API_BASE = process.env.API_BASE_URL || 'http://localhost:8036';
-
 export async function POST(req: NextRequest) {
+    const API_BASE = process.env.API_BASE_URL || 'http://localhost:8036';
     console.log('[BFF] POST /api/orders request received');
     try {
         const session = await getSession();
@@ -51,6 +50,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
+    const API_BASE = process.env.API_BASE_URL || 'http://localhost:8036';
     console.log('[BFF] GET /api/orders request received');
     try {
         const session = await getSession();
